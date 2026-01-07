@@ -568,9 +568,6 @@
         }
 
         .print-btn {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
             background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
             color: white;
             border: none;
@@ -584,12 +581,41 @@
             gap: 0.5rem;
             box-shadow: 0 4px 20px rgba(20, 184, 166, 0.4);
             transition: transform 0.2s, box-shadow 0.2s;
-            z-index: 1000;
+            text-decoration: none;
         }
 
         .print-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 25px rgba(20, 184, 166, 0.5);
+        }
+
+        .excel-btn {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 20px rgba(34, 197, 94, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+        }
+
+        .excel-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(34, 197, 94, 0.5);
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem 0;
         }
 
         /* PDF Summary Styles */
@@ -1304,6 +1330,16 @@
             </div>
         </div>
 
+        <!-- Export Buttons -->
+        <div class="export-buttons">
+            <a href="https://docs.google.com/spreadsheets/d/1vC4g5GC8DfM-E15MRpkWZz1-L9SxtOjtXp31Yd6eYE0/edit?usp=sharing" class="excel-btn" target="_blank">
+                <span>📊</span> Download Excel Template
+            </a>
+            <button class="print-btn" onclick="generatePDF()">
+                <span>📄</span> Export PDF
+            </button>
+        </div>
+
         <footer>
             Real Estate Underwriting Calculator • All calculations are estimates only
         </footer>
@@ -1774,11 +1810,6 @@ Please be direct and specific with your analysis.`;
             }, 1000);
         }
     </script>
-
-    <!-- Print Button -->
-    <button class="print-btn" onclick="generatePDF()">
-        <span>📄</span> Export PDF Summary
-    </button>
 
     <!-- PDF Summary Template -->
     <div id="pdf-summary">
