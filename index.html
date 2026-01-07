@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Estate Underwriting Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0f1a;
+            --bg-secondary: #111827;
+            --bg-card: #1a2234;
+            --bg-input: #0d1421;
+            --accent-teal: #14b8a6;
+            --accent-teal-dim: #0d9488;
+            --accent-amber: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-green: #22c55e;
+            --accent-blue: #3b82f6;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-color: #2d3a4f;
+            --input-border: #3d4f6a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .info-bar {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .info-bar {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .info-section-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--bg-input);
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: 'DM Sans', sans-serif;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .info-input:focus {
+            outline: none;
+            border-color: var(--accent-teal);
+            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.15);
+        }
+
+        .info-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .info-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @media (max-width: 700px) {
+            .info-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 1400px) {
+            .main-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .icon-teal { background: rgba(20, 184, 166, 0.15); color: var(--accent-teal); }
+        .icon-amber { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); }
+        .icon-blue { background: rgba(59, 130, 246, 0.15); color: var(--accent-blue); }
+        .icon-green { background: rgba(34, 197, 94, 0.15); color: var(--accent-green); }
+        .icon-red { background: rgba(239, 68, 68, 0.15); color: var(--accent-red); }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 0.4rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--bg-input);
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: 'Space Mono', monospace;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent-teal);
+            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.15);
+        }
+
+        input.input-highlight {
+            border-color: var(--accent-teal);
+            background: rgba(20, 184, 166, 0.05);
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1.25rem;
+            padding-right: 2.5rem;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .result-item {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .result-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.25rem;
+        }
+
+        .result-value {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .result-value.positive { color: var(--accent-green); }
+        .result-value.negative { color: var(--accent-red); }
+        .result-value.highlight { color: var(--accent-teal); }
+        .result-value.amber { color: var(--accent-amber); }
+
+        .result-item.full-width {
+            grid-column: span 2;
+        }
+
+        .section-divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 1.25rem 0;
+        }
+
+        .mini-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .summary-card {
+            grid-column: span 1;
+        }
+
+        .summary-card .result-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .loi-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0.5rem;
+        }
+
+        .loi-table td {
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9rem;
+        }
+
+        .loi-table td:first-child {
+            color: var(--text-secondary);
+        }
+
+        .loi-table td:last-child {
+            text-align: right;
+            font-family: 'Space Mono', monospace;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .loi-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .cash-breakdown {
+            background: linear-gradient(135deg, rgba(20, 184, 166, 0.1), rgba(59, 130, 246, 0.1));
+            border: 1px solid var(--accent-teal);
+            padding: 1.25rem;
+            border-radius: 12px;
+            margin-top: 1rem;
+        }
+
+        .cash-breakdown-title {
+            font-size: 0.8rem;
+            color: var(--accent-teal);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .expense-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        .expense-row:not(:last-child) {
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .expense-label {
+            color: var(--text-secondary);
+        }
+
+        .expense-value {
+            font-family: 'Space Mono', monospace;
+            color: var(--text-primary);
+        }
+
+        .total-row {
+            margin-top: 0.5rem;
+            padding-top: 0.75rem;
+            border-top: 2px solid var(--accent-teal);
+            font-weight: 700;
+        }
+
+        .total-row .expense-value {
+            color: var(--accent-teal);
+            font-size: 1.1rem;
+        }
+
+        .helper-text {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-success { background: rgba(34, 197, 94, 0.15); color: var(--accent-green); }
+        .badge-warning { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); }
+        .badge-danger { background: rgba(239, 68, 68, 0.15); color: var(--accent-red); }
+
+        .percentage-inputs {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+
+        .percentage-inputs .form-group {
+            margin-bottom: 0.5rem;
+        }
+
+        .card.wide {
+            grid-column: span 2;
+        }
+
+        @media (max-width: 900px) {
+            .card.wide {
+                grid-column: span 1;
+            }
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .print-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 20px rgba(20, 184, 166, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            z-index: 1000;
+        }
+
+        .print-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(20, 184, 166, 0.5);
+        }
+
+        /* PDF Summary Styles */
+        #pdf-summary {
+            display: none;
+        }
+
+        @media print {
+            body {
+                background: white;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body > *:not(#pdf-summary) {
+                display: none !important;
+            }
+            
+            #pdf-summary {
+                display: block !important;
+                position: relative;
+                width: 100%;
+                background: white;
+                color: #1a1a1a;
+                padding: 20px 40px;
+                font-family: 'DM Sans', Arial, sans-serif;
+                margin: 0;
+            }
+
+            .print-btn {
+                display: none !important;
+            }
+
+            .container, .main-grid, .card, header, footer, .info-bar {
+                display: none !important;
+            }
+
+            .pdf-two-col {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+
+            .pdf-section {
+                page-break-inside: avoid;
+                margin-bottom: 15px;
+            }
+
+            .pdf-highlight-box {
+                page-break-inside: avoid;
+            }
+        }
+
+        #pdf-summary {
+            background: white;
+            color: #1a1a1a;
+            padding: 40px;
+            font-family: 'DM Sans', Arial, sans-serif;
+        }
+
+        .pdf-header {
+            text-align: center;
+            border-bottom: 3px solid #14b8a6;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .pdf-header h1 {
+            font-size: 28px;
+            color: #1a1a1a;
+            margin-bottom: 5px;
+            background: none;
+            -webkit-text-fill-color: #1a1a1a;
+        }
+
+        .pdf-header .pdf-subtitle {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .pdf-header .pdf-date {
+            color: #888;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        .pdf-header .pdf-address {
+            font-size: 18px;
+            color: #333;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        .pdf-preparer-box {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pdf-preparer-title {
+            font-size: 11px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .pdf-preparer-info {
+            text-align: right;
+        }
+
+        .pdf-preparer-info span {
+            display: block;
+        }
+
+        #pdf-preparer-name {
+            font-weight: 600;
+            color: #1a1a1a;
+            font-size: 14px;
+        }
+
+        #pdf-preparer-contact {
+            color: #666;
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        .pdf-section {
+            margin-bottom: 25px;
+            page-break-inside: avoid;
+        }
+
+        .pdf-section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #14b8a6;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .pdf-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .pdf-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dotted #e0e0e0;
+        }
+
+        .pdf-row:last-child {
+            border-bottom: none;
+        }
+
+        .pdf-label {
+            color: #555;
+            font-size: 13px;
+        }
+
+        .pdf-value {
+            font-weight: 600;
+            color: #1a1a1a;
+            font-family: 'Space Mono', monospace;
+            font-size: 13px;
+        }
+
+        .pdf-value.positive { color: #16a34a; }
+        .pdf-value.negative { color: #dc2626; }
+        .pdf-value.highlight { color: #0d9488; }
+
+        .pdf-highlight-box {
+            background: #f0fdfa;
+            border: 2px solid #14b8a6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            text-align: center;
+        }
+
+        .pdf-highlight-item h3 {
+            font-size: 11px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .pdf-highlight-item .value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0d9488;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .pdf-two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .pdf-footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #888;
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Real Estate Underwriting Calculator</h1>
+            <p class="subtitle">Comprehensive deal analysis with seller financing & equity carry</p>
+        </header>
+
+        <!-- Property & Preparer Info -->
+        <div class="info-bar">
+            <div class="info-section">
+                <div class="info-section-title">📍 Property Address</div>
+                <input type="text" id="propertyAddress" placeholder="Enter property address..." class="info-input">
+            </div>
+            <div class="info-section">
+                <div class="info-section-title">👤 Prepared By</div>
+                <div class="info-row">
+                    <input type="text" id="preparerName" placeholder="Your name" class="info-input">
+                    <input type="email" id="preparerEmail" placeholder="Email address" class="info-input">
+                    <input type="tel" id="preparerPhone" placeholder="Phone number" class="info-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <!-- LOAN CONFIGURATION -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon icon-teal">⚙️</div>
+                    <h2 class="card-title">Loan Configuration</h2>
+                </div>
+
+                <div class="form-group">
+                    <label>Category / Property Type</label>
+                    <select id="category" class="input-highlight" onchange="calculate()">
+                        <option value="Mixed Use">Mixed Use</option>
+                        <option value="DSCR Residential">DSCR Residential</option>
+                        <option value="12+Residential">12+ Residential</option>
+                        <option value="Commercial">Commercial</option>
+                        <option value="RV Park">RV Park</option>
+                    </select>
+                </div>
+
+                <div class="input-row">
+                    <div class="form-group">
+                        <label>First Loan % / LTV</label>
+                        <input type="number" id="firstLoanLTV" value="70" step="1" min="0" max="100" class="input-highlight" onchange="calculate()">
+                        <span class="helper-text">% of purchase price</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Seller Carry %</label>
+                        <input type="number" id="sellerCarryPct" value="40" step="1" min="0" max="100" class="input-highlight" onchange="calculate()">
+                        <span class="helper-text">% of purchase price</span>
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div class="form-group">
+                        <label>Interest Only? (First Loan)</label>
+                        <select id="interestOnly" class="input-highlight" onchange="calculate()">
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Interest @ Balloon?</label>
+                        <select id="interestAtBalloon" class="input-highlight" onchange="calculate()">
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div class="form-group">
+                        <label>Months to Stabilize</label>
+                        <input type="number" id="monthsToStabilize" value="0" step="1" min="0" class="input-highlight" onchange="calculate()">
+                    </div>
+                    <div class="form-group">
+                        <label>% Revenue During Stabilization</label>
+                        <input type="number" id="revenueDuringStab" value="100" step="1" min="0" max="100" class="input-highlight" onchange="calculate()">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Years to Balloon</label>
+                    <input type="number" id="yearsToBalloon" value="8" step="1" min="1" class="input-highlight" onchange="calculate()">
+                </div>
+            </div>
+
+            <!-- PURCHASE & PRICING -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon icon-amber">💰</div>
+                    <h2 class="card-title">Purchase & Pricing</h2>
+                </div>
+
+                <div class="form-group">
+                    <label>Purchase Price ($)</label>
+                    <input type="number" id="purchasePrice" value="25000000" step="1000" class="input-highlight" onchange="calculate()">
+                </div>
+
+                <div class="form-group">
+                    <label>Asking Price ($)</label>
+                    <input type="number" id="askingPrice" value="25000000" step="1000" class="input-highlight" onchange="calculate()">
+                </div>
+
+                <div class="result-grid">
+                    <div class="result-item full-width">
+                        <div class="result-label">Over/Under Asking</div>
+                        <div class="result-value" id="overUnderAsking">0.00%</div>
+                    </div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <div class="form-group">
+                    <label>Annual Rental Revenue ($)</label>
+                    <input type="number" id="rentalRevenue" value="2435916" step="100" class="input-highlight" onchange="calculate()">
+                    <span class="helper-text">Monthly: <span id="monthlyRevenue">$202,993</span></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Appreciation per Year (%)</label>
+                    <input type="number" id="appreciationRate" value="3.5" step="0.1" min="0" class="input-highlight" onchange="calculate()">
+                </div>
+            </div>
+
+            <!-- CASH TO BUYER -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon icon-green">🏦</div>
+                    <h2 class="card-title">Cash to Buyer Analysis</h2>
+                </div>
+
+                <div class="input-row">
+                    <div class="form-group">
+                        <label>Agent Fee ($)</label>
+                        <input type="number" id="agentFee" value="0" step="100" class="input-highlight" onchange="calculate()">
+                    </div>
+                    <div class="form-group">
+                        <label>Rehab Cost ($)</label>
+                        <input type="number" id="rehabCost" value="0" step="100" class="input-highlight" onchange="calculate()">
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div class="form-group">
+                        <label>Assignment Fee (%)</label>
+                        <input type="number" id="assignmentFeePct" value="5" step="0.5" min="0" class="input-highlight" onchange="calculate()">
+                    </div>
+                    <div class="form-group">
+                        <label>Commercial Appraisal ($)</label>
+                        <input type="number" id="appraisalCost" value="0" step="100" class="input-highlight" onchange="calculate()">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Closing & Bridge Loan Cost (%)</label>
+                    <input type="number" id="closingCostPct" value="5" step="0.5" min="0" class="input-highlight" onchange="calculate()">
+                </div>
+
+                <div class="cash-breakdown">
+                    <div class="cash-breakdown-title">Cash Breakdown</div>
+                    <div class="expense-row">
+                        <span class="expense-label">Residual (Equity Gain)</span>
+                        <span class="expense-value" id="residualValue">$0</span>
+                    </div>
+                    <div class="expense-row">
+                        <span class="expense-label">Agent Fee</span>
+                        <span class="expense-value" id="agentFeeDisplay">$0</span>
+                    </div>
+                    <div class="expense-row">
+                        <span class="expense-label">Rehab</span>
+                        <span class="expense-value" id="rehabDisplay">$0</span>
+                    </div>
+                    <div class="expense-row">
+                        <span class="expense-label">Assignment Fee</span>
+                        <span class="expense-value" id="assignmentFeeDisplay">$0</span>
+                    </div>
+                    <div class="expense-row">
+                        <span class="expense-label">Reserves for Stabilization</span>
+                        <span class="expense-value" id="stabReserves">$0</span>
+                    </div>
+                    <div class="expense-row">
+                        <span class="expense-label">Commercial Appraisal</span>
+                        <span class="expense-value" id="appraisalDisplay">$0</span>
+                    </div>
+                    <div class="expense-row">
+                        <span class="expense-label">Closing & Bridge Loan</span>
+                        <span class="expense-value" id="closingCostDisplay">$0</span>
+                    </div>
+                    <div class="expense-row total-row">
+                        <span class="expense-label">Cash to Buyer</span>
+                        <span class="expense-value" id="cashToBuyer">$0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FINANCING OVERVIEW -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon icon-blue">📊</div>
+                    <h2 class="card-title">Financing Overview</h2>
+                </div>
+
+                <div class="result-grid">
+                    <div class="result-item">
+                        <div class="result-label">First Position Loan</div>
+                        <div class="result-value highlight" id="firstPositionLoan">$0</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Interest Rate</div>
+                        <div class="result-value" id="firstPositionRate">0%</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Amortization</div>
+                        <div class="result-value" id="firstPositionAmort">0 yrs</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Monthly Payment</div>
+                        <div class="result-value" id="firstPositionPayment">$0</div>
+                    </div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <div class="result-grid">
+                    <div class="result-item">
+                        <div class="result-label">Seller Carry</div>
+                        <div class="result-value highlight" id="sellerCarryAmount">$0</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Seller Carry Rate</div>
+                        <input type="number" id="sellerCarryRate" value="0" step="0.1" min="0" max="20" style="width:100%;padding:0.5rem;font-size:1rem;" onchange="calculate()">
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Amortization</div>
+                        <input type="number" id="sellerCarryAmort" value="30" step="1" min="1" max="40" style="width:100%;padding:0.5rem;font-size:1rem;" onchange="calculate()">
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Monthly Payment</div>
+                        <div class="result-value" id="sellerCarryPayment">$0</div>
+                    </div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <div class="result-grid">
+                    <div class="result-item">
+                        <div class="result-label">Down Payment</div>
+                        <div class="result-value amber" id="downPayment">$0</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Total Financing %</div>
+                        <div class="result-value" id="totalFinancingPct">0%</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OPERATING EXPENSES -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon icon-red">📋</div>
+                    <h2 class="card-title">Operating Expenses</h2>
+                </div>
+
+                <div class="percentage-inputs">
+                    <div class="form-group">
+                        <label>Property Tax ($/yr)</label>
+                        <input type="number" id="propertyTax" value="0" step="100" onchange="calculate()">
+                    </div>
+                    <div class="form-group">
+                        <label>Insurance ($/yr)</label>
+                        <input type="number" id="insurance" value="0" step="100" onchange="calculate()">
+                    </div>
+                    <div class="form-group">
+                        <label>HOA ($/yr)</label>
+                        <input type="number" id="hoa" value="0" step="100" onchange="calculate()">
+                    </div>
+                    <div class="form-group">
+                        <label>Other Expenses ($/yr)</label>
+                        <input type="number" id="otherExpenses" value="0" step="100" onchange="calculate()">
+                    </div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <div class="percentage-inputs">
+                    <div class="form-group">
+                        <label>CapEx & Maint (% Revenue)</label>
+                        <input type="number" id="capexPct" value="0" step="1" min="0" max="50" onchange="calculate()">
+                    </div>
+                    <div class="form-group">
+                        <label>Management (% Revenue)</label>
+                        <input type="number" id="managementPct" value="0" step="1" min="0" max="50" onchange="calculate()">
+                    </div>
+                    <div class="form-group">
+                        <label>Vacancy (% Revenue)</label>
+                        <input type="number" id="vacancyPct" value="0" step="1" min="0" max="50" onchange="calculate()">
+                    </div>
+                </div>
+
+                <div class="result-grid" style="margin-top:1rem;">
+                    <div class="result-item full-width">
+                        <div class="result-label">Total Operating Expenses (Annual)</div>
+                        <div class="result-value negative" id="totalOpExpenses">$0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CASH FLOW ANALYSIS -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon icon-green">💵</div>
+                    <h2 class="card-title">Cash Flow Analysis</h2>
+                </div>
+
+                <div class="result-grid">
+                    <div class="result-item">
+                        <div class="result-label">Annual Revenue</div>
+                        <div class="result-value" id="annualRevenue">$0</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Operating Expenses</div>
+                        <div class="result-value negative" id="opExpensesDisplay">$0</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">First Position P&I</div>
+                        <div class="result-value negative" id="firstPIPayout">$0</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Seller Carry Payment</div>
+                        <div class="result-value negative" id="sellerCarryPayout">$0</div>
+                    </div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <div class="result-grid">
+                    <div class="result-item">
+                        <div class="result-label">Annual Cash Flow</div>
+                        <div class="result-value positive" id="annualCashFlow">$0</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Monthly Cash Flow</div>
+                        <div class="result-value positive" id="monthlyCashFlow">$0</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Cash-on-Cash Return</div>
+                        <div class="result-value highlight" id="cocReturn">0%</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">CF to Purchase Price</div>
+                        <div class="result-value" id="cfToPurchase">0%</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NOI & CAP RATE -->
+            <div class="card summary-card">
+                <div class="card-header">
+                    <div class="card-icon icon-amber">📈</div>
+                    <h2 class="card-title">NOI & Cap Rate</h2>
+                </div>
+
+                <div class="result-grid">
+                    <div class="result-item">
+                        <div class="result-label">Net Operating Income (NOI)</div>
+                        <div class="result-value positive" id="noiValue">$0</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Cap Rate</div>
+                        <div class="result-value highlight" id="capRate">0%</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BALLOON & EQUITY -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon icon-blue">🎈</div>
+                    <h2 class="card-title">Balloon & Equity Analysis</h2>
+                </div>
+
+                <div class="result-grid">
+                    <div class="result-item">
+                        <div class="result-label">Value @ Balloon</div>
+                        <div class="result-value highlight" id="valueAtBalloon">$0</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Total Balance @ Balloon</div>
+                        <div class="result-value negative" id="balanceAtBalloon">$0</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Equity @ Balloon</div>
+                        <div class="result-value positive" id="equityAtBalloon">$0</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Equity % @ Balloon</div>
+                        <div class="result-value" id="equityPctBalloon">0%</div>
+                    </div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <div class="result-grid">
+                    <div class="result-item">
+                        <div class="result-label">First Position Balance</div>
+                        <div class="result-value" id="firstPositionBalance">$0</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Seller Carry Balance</div>
+                        <div class="result-value" id="sellerCarryBalance">$0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LOI SUMMARY -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon icon-teal">📝</div>
+                    <h2 class="card-title">LOI Summary</h2>
+                </div>
+
+                <table class="loi-table">
+                    <tr>
+                        <td>Purchase Price</td>
+                        <td id="loiPurchasePrice">$0</td>
+                    </tr>
+                    <tr>
+                        <td>Down Payment to Seller</td>
+                        <td id="loiDownPayment">$0</td>
+                    </tr>
+                    <tr>
+                        <td>Seller Equity Agreement</td>
+                        <td id="loiSellerEquity">$0</td>
+                    </tr>
+                    <tr>
+                        <td>Amortization (Years)</td>
+                        <td id="loiAmortization">0</td>
+                    </tr>
+                    <tr>
+                        <td># Years to Balloon</td>
+                        <td id="loiYearsBalloon">0</td>
+                    </tr>
+                    <tr>
+                        <td>Months to Stabilize</td>
+                        <td id="loiMonthsStabilize">0</td>
+                    </tr>
+                    <tr>
+                        <td>Monthly Payments to Seller</td>
+                        <td id="loiMonthlyPayment">$0</td>
+                    </tr>
+                    <tr>
+                        <td>Interest Rate to Seller</td>
+                        <td id="loiInterestRate">0%</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <footer>
+            Real Estate Underwriting Calculator • All calculations are estimates only
+        </footer>
+    </div>
+
+    <script>
+        // Utility functions
+        function formatCurrency(num) {
+            if (isNaN(num) || !isFinite(num)) return '$0';
+            const absNum = Math.abs(num);
+            if (absNum >= 1000000) {
+                return (num < 0 ? '-' : '') + '$' + (absNum / 1000000).toFixed(2) + 'M';
+            }
+            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(num);
+        }
+
+        function formatPercent(num, decimals = 2) {
+            if (isNaN(num) || !isFinite(num)) return '0%';
+            return (num * 100).toFixed(decimals) + '%';
+        }
+
+        // PMT function (Excel equivalent)
+        function PMT(rate, nper, pv, fv = 0, type = 0) {
+            if (rate === 0) return -(pv + fv) / nper;
+            const pvif = Math.pow(1 + rate, nper);
+            let pmt = rate / (pvif - 1) * -(pv * pvif + fv);
+            if (type === 1) pmt /= (1 + rate);
+            return pmt;
+        }
+
+        // Calculate remaining balance after n payments
+        function remainingBalance(principal, rate, totalPayments, paymentsMade) {
+            if (rate === 0) return principal - (principal / totalPayments) * paymentsMade;
+            const monthlyRate = rate / 12;
+            const balance = principal * Math.pow(1 + monthlyRate, paymentsMade) - 
+                            PMT(monthlyRate, totalPayments, -principal) * 
+                            (Math.pow(1 + monthlyRate, paymentsMade) - 1) / monthlyRate;
+            return Math.max(0, balance);
+        }
+
+        // Get interest rate based on category
+        function getInterestRate(category) {
+            switch(category) {
+                case 'DSCR Residential': return 0.08;
+                case '12+Residential': return 0.09;
+                case 'Commercial': return 0.10;
+                case 'RV Park': return 0.11;
+                case 'Mixed Use': return 0.10;
+                default: return 0.10;
+            }
+        }
+
+        // Get amortization based on category
+        function getAmortization(category) {
+            switch(category) {
+                case 'DSCR Residential': return 30;
+                case '12+Residential': return 30;
+                case 'Commercial': return 25;
+                case 'RV Park': return 25;
+                case 'Mixed Use': return 25;
+                default: return 25;
+            }
+        }
+
+        function calculate() {
+            // Get all inputs
+            const category = document.getElementById('category').value;
+            const firstLoanLTV = parseFloat(document.getElementById('firstLoanLTV').value) / 100 || 0;
+            const sellerCarryPct = parseFloat(document.getElementById('sellerCarryPct').value) / 100 || 0;
+            const interestOnly = document.getElementById('interestOnly').value;
+            const interestAtBalloon = document.getElementById('interestAtBalloon').value;
+            const monthsToStabilize = parseInt(document.getElementById('monthsToStabilize').value) || 0;
+            const revenueDuringStab = parseFloat(document.getElementById('revenueDuringStab').value) / 100 || 1;
+            const yearsToBalloon = parseInt(document.getElementById('yearsToBalloon').value) || 8;
+
+            const purchasePrice = parseFloat(document.getElementById('purchasePrice').value) || 0;
+            const askingPrice = parseFloat(document.getElementById('askingPrice').value) || 0;
+            const rentalRevenueAnnual = parseFloat(document.getElementById('rentalRevenue').value) || 0;
+            const rentalRevenueMonthly = rentalRevenueAnnual / 12;
+            const appreciationRate = parseFloat(document.getElementById('appreciationRate').value) / 100 || 0;
+
+            const agentFee = parseFloat(document.getElementById('agentFee').value) || 0;
+            const rehabCost = parseFloat(document.getElementById('rehabCost').value) || 0;
+            const assignmentFeePct = parseFloat(document.getElementById('assignmentFeePct').value) / 100 || 0;
+            const appraisalCost = parseFloat(document.getElementById('appraisalCost').value) || 0;
+            const closingCostPct = parseFloat(document.getElementById('closingCostPct').value) / 100 || 0;
+
+            const sellerCarryRate = parseFloat(document.getElementById('sellerCarryRate').value) / 100 || 0;
+            const sellerCarryAmort = parseInt(document.getElementById('sellerCarryAmort').value) || 30;
+
+            const propertyTax = parseFloat(document.getElementById('propertyTax').value) || 0;
+            const insurance = parseFloat(document.getElementById('insurance').value) || 0;
+            const hoa = parseFloat(document.getElementById('hoa').value) || 0;
+            const otherExpenses = parseFloat(document.getElementById('otherExpenses').value) || 0;
+            const capexPct = parseFloat(document.getElementById('capexPct').value) / 100 || 0;
+            const managementPct = parseFloat(document.getElementById('managementPct').value) / 100 || 0;
+            const vacancyPct = parseFloat(document.getElementById('vacancyPct').value) / 100 || 0;
+
+            // Get rates from category
+            const firstPositionRate = getInterestRate(category);
+            const firstPositionAmort = getAmortization(category);
+
+            // Calculate financing
+            const firstPositionLoan = purchasePrice * firstLoanLTV;
+            const sellerCarryAmount = purchasePrice * sellerCarryPct;
+            const totalFinancingPct = firstLoanLTV + sellerCarryPct;
+            const downPayment = purchasePrice * (1 - totalFinancingPct);
+
+            // Calculate payments
+            let firstPositionPaymentMonthly;
+            if (interestOnly === 'Yes') {
+                firstPositionPaymentMonthly = (firstPositionLoan * firstPositionRate) / 12;
+            } else {
+                firstPositionPaymentMonthly = -PMT(firstPositionRate / 12, firstPositionAmort * 12, firstPositionLoan);
+            }
+
+            let sellerCarryPaymentMonthly;
+            if (interestAtBalloon === 'Yes' || sellerCarryRate === 0) {
+                sellerCarryPaymentMonthly = -PMT(0, sellerCarryAmort * 12, sellerCarryAmount);
+            } else {
+                sellerCarryPaymentMonthly = -PMT(sellerCarryRate / 12, sellerCarryAmort * 12, sellerCarryAmount);
+            }
+
+            // Operating expenses
+            const percentageExpenses = rentalRevenueAnnual * (capexPct + managementPct + vacancyPct);
+            const fixedExpenses = propertyTax + insurance + hoa + otherExpenses;
+            const totalOpExpenses = percentageExpenses + fixedExpenses;
+            const totalOpExpensesMonthly = totalOpExpenses / 12;
+
+            // Cash flow calculations
+            const firstPIAnnual = firstPositionPaymentMonthly * 12;
+            const sellerCarryAnnual = sellerCarryPaymentMonthly * 12;
+            const annualCashFlow = rentalRevenueAnnual - totalOpExpenses - firstPIAnnual - sellerCarryAnnual;
+            const monthlyCashFlow = annualCashFlow / 12;
+
+            // Cash to buyer calculations
+            const residual = (purchasePrice * totalFinancingPct) - purchasePrice;
+            const assignmentFee = purchasePrice * assignmentFeePct;
+            const closingCost = purchasePrice * closingCostPct;
+            
+            // Reserves for stabilization
+            let stabReserves = 0;
+            if (monthsToStabilize > 0) {
+                stabReserves = -monthsToStabilize * ((rentalRevenueMonthly * revenueDuringStab) - totalOpExpensesMonthly + sellerCarryPaymentMonthly);
+            }
+
+            const cashToBuyer = residual - agentFee - rehabCost - assignmentFee - stabReserves - appraisalCost - closingCost;
+
+            // NOI (before debt service, but after operating expenses)
+            const noi = rentalRevenueAnnual - totalOpExpenses;
+            const capRate = purchasePrice > 0 ? noi / purchasePrice : 0;
+
+            // Cash on Cash return
+            const cashInvested = Math.abs(cashToBuyer) > 0 ? Math.abs(cashToBuyer) : downPayment;
+            const cocReturn = cashInvested > 0 ? annualCashFlow / cashInvested : 0;
+            const cfToPurchase = purchasePrice > 0 ? annualCashFlow / purchasePrice : 0;
+
+            // Balloon calculations
+            const valueAtBalloon = (askingPrice + rehabCost) * Math.pow(1 + appreciationRate, yearsToBalloon);
+            
+            // Calculate remaining balances
+            const monthsToBalloon = yearsToBalloon * 12;
+            let firstPositionBalance;
+            if (interestOnly === 'Yes') {
+                firstPositionBalance = firstPositionLoan;
+            } else {
+                firstPositionBalance = remainingBalance(firstPositionLoan, firstPositionRate, firstPositionAmort * 12, monthsToBalloon);
+            }
+
+            const sellerPaymentMonths = monthsToBalloon - monthsToStabilize;
+            let sellerCarryBalance;
+            if (interestAtBalloon === 'Yes') {
+                // Principal only payments, so calculate remaining
+                const principalPayment = sellerCarryAmount / (sellerCarryAmort * 12);
+                sellerCarryBalance = sellerCarryAmount - (principalPayment * sellerPaymentMonths);
+                // Add accumulated interest if interest at balloon
+                if (sellerCarryRate > 0) {
+                    // This is a simplification - actual would compound
+                    sellerCarryBalance += sellerCarryAmount * sellerCarryRate * (sellerPaymentMonths / 12);
+                }
+            } else {
+                sellerCarryBalance = remainingBalance(sellerCarryAmount, sellerCarryRate, sellerCarryAmort * 12, sellerPaymentMonths);
+            }
+
+            const totalBalance = firstPositionBalance + sellerCarryBalance;
+            const equityAtBalloon = valueAtBalloon - totalBalance;
+            const equityPctBalloon = valueAtBalloon > 0 ? equityAtBalloon / valueAtBalloon : 0;
+
+            // Over/Under asking
+            const overUnderAsking = askingPrice > 0 ? (purchasePrice - askingPrice) / askingPrice : 0;
+
+            // Update UI
+            document.getElementById('monthlyRevenue').textContent = formatCurrency(rentalRevenueMonthly);
+            document.getElementById('overUnderAsking').textContent = formatPercent(overUnderAsking);
+            document.getElementById('overUnderAsking').className = 'result-value ' + (overUnderAsking < 0 ? 'positive' : overUnderAsking > 0 ? 'negative' : '');
+
+            // Financing
+            document.getElementById('firstPositionLoan').textContent = formatCurrency(firstPositionLoan);
+            document.getElementById('firstPositionRate').textContent = formatPercent(firstPositionRate, 1);
+            document.getElementById('firstPositionAmort').textContent = firstPositionAmort + ' yrs';
+            document.getElementById('firstPositionPayment').textContent = formatCurrency(firstPositionPaymentMonthly);
+            document.getElementById('sellerCarryAmount').textContent = formatCurrency(sellerCarryAmount);
+            document.getElementById('sellerCarryPayment').textContent = formatCurrency(sellerCarryPaymentMonthly);
+            document.getElementById('downPayment').textContent = formatCurrency(downPayment);
+            document.getElementById('totalFinancingPct').textContent = formatPercent(totalFinancingPct, 0);
+
+            // Cash to buyer breakdown
+            document.getElementById('residualValue').textContent = formatCurrency(residual);
+            document.getElementById('agentFeeDisplay').textContent = formatCurrency(agentFee);
+            document.getElementById('rehabDisplay').textContent = formatCurrency(rehabCost);
+            document.getElementById('assignmentFeeDisplay').textContent = formatCurrency(assignmentFee);
+            document.getElementById('stabReserves').textContent = formatCurrency(stabReserves);
+            document.getElementById('appraisalDisplay').textContent = formatCurrency(appraisalCost);
+            document.getElementById('closingCostDisplay').textContent = formatCurrency(closingCost);
+            document.getElementById('cashToBuyer').textContent = formatCurrency(cashToBuyer);
+
+            // Operating expenses
+            document.getElementById('totalOpExpenses').textContent = formatCurrency(totalOpExpenses);
+
+            // Cash flow
+            document.getElementById('annualRevenue').textContent = formatCurrency(rentalRevenueAnnual);
+            document.getElementById('opExpensesDisplay').textContent = formatCurrency(totalOpExpenses);
+            document.getElementById('firstPIPayout').textContent = formatCurrency(firstPIAnnual);
+            document.getElementById('sellerCarryPayout').textContent = formatCurrency(sellerCarryAnnual);
+            document.getElementById('annualCashFlow').textContent = formatCurrency(annualCashFlow);
+            document.getElementById('annualCashFlow').className = 'result-value ' + (annualCashFlow >= 0 ? 'positive' : 'negative');
+            document.getElementById('monthlyCashFlow').textContent = formatCurrency(monthlyCashFlow);
+            document.getElementById('monthlyCashFlow').className = 'result-value ' + (monthlyCashFlow >= 0 ? 'positive' : 'negative');
+            document.getElementById('cocReturn').textContent = formatPercent(cocReturn);
+            document.getElementById('cfToPurchase').textContent = formatPercent(cfToPurchase);
+
+            // NOI
+            document.getElementById('noiValue').textContent = formatCurrency(noi);
+            document.getElementById('capRate').textContent = formatPercent(capRate);
+
+            // Balloon
+            document.getElementById('valueAtBalloon').textContent = formatCurrency(valueAtBalloon);
+            document.getElementById('balanceAtBalloon').textContent = formatCurrency(totalBalance);
+            document.getElementById('equityAtBalloon').textContent = formatCurrency(equityAtBalloon);
+            document.getElementById('equityPctBalloon').textContent = formatPercent(equityPctBalloon);
+            document.getElementById('firstPositionBalance').textContent = formatCurrency(firstPositionBalance);
+            document.getElementById('sellerCarryBalance').textContent = formatCurrency(sellerCarryBalance);
+
+            // LOI Summary
+            document.getElementById('loiPurchasePrice').textContent = formatCurrency(purchasePrice);
+            document.getElementById('loiDownPayment').textContent = formatCurrency(downPayment);
+            document.getElementById('loiSellerEquity').textContent = formatCurrency(sellerCarryAmount);
+            document.getElementById('loiAmortization').textContent = sellerCarryAmort;
+            document.getElementById('loiYearsBalloon').textContent = yearsToBalloon;
+            document.getElementById('loiMonthsStabilize').textContent = monthsToStabilize;
+            document.getElementById('loiMonthlyPayment').textContent = formatCurrency(sellerCarryPaymentMonthly);
+            document.getElementById('loiInterestRate').textContent = formatPercent(sellerCarryRate, 1);
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', calculate);
+
+        // PDF Print functionality
+        function generatePDF() {
+            // Get property address and preparer info
+            const propertyAddress = document.getElementById('propertyAddress').value || 'Address not specified';
+            const preparerName = document.getElementById('preparerName').value || '';
+            const preparerEmail = document.getElementById('preparerEmail').value || '';
+            const preparerPhone = document.getElementById('preparerPhone').value || '';
+            
+            // Update PDF header with address
+            document.getElementById('pdf-address').textContent = propertyAddress;
+            
+            // Update preparer info
+            document.getElementById('pdf-preparer-name').textContent = preparerName || 'Not specified';
+            
+            // Build contact string
+            let contactParts = [];
+            if (preparerEmail) contactParts.push(preparerEmail);
+            if (preparerPhone) contactParts.push(preparerPhone);
+            document.getElementById('pdf-preparer-contact').textContent = contactParts.join(' • ') || '';
+            
+            // Show/hide preparer box based on whether any info was provided
+            const preparerBox = document.getElementById('pdf-preparer-box');
+            if (preparerName || preparerEmail || preparerPhone) {
+                preparerBox.style.display = 'flex';
+            } else {
+                preparerBox.style.display = 'none';
+            }
+            
+            // Update PDF summary content
+            const purchasePrice = parseFloat(document.getElementById('purchasePrice').value) || 0;
+            const category = document.getElementById('category').value;
+            
+            document.getElementById('pdf-purchase-price').textContent = document.getElementById('loiPurchasePrice').textContent;
+            document.getElementById('pdf-property-type').textContent = category;
+            document.getElementById('pdf-asking-price').textContent = formatCurrency(parseFloat(document.getElementById('askingPrice').value) || 0);
+            document.getElementById('pdf-over-under').textContent = document.getElementById('overUnderAsking').textContent;
+            
+            // Key metrics
+            document.getElementById('pdf-coc').textContent = document.getElementById('cocReturn').textContent;
+            document.getElementById('pdf-cap-rate').textContent = document.getElementById('capRate').textContent;
+            document.getElementById('pdf-annual-cf').textContent = document.getElementById('annualCashFlow').textContent;
+            document.getElementById('pdf-noi').textContent = document.getElementById('noiValue').textContent;
+            
+            // Financing
+            document.getElementById('pdf-first-position').textContent = document.getElementById('firstPositionLoan').textContent;
+            document.getElementById('pdf-first-rate').textContent = document.getElementById('firstPositionRate').textContent;
+            document.getElementById('pdf-first-amort').textContent = document.getElementById('firstPositionAmort').textContent;
+            document.getElementById('pdf-first-payment').textContent = document.getElementById('firstPositionPayment').textContent;
+            document.getElementById('pdf-seller-carry').textContent = document.getElementById('sellerCarryAmount').textContent;
+            document.getElementById('pdf-seller-rate').textContent = document.getElementById('loiInterestRate').textContent;
+            document.getElementById('pdf-seller-amort').textContent = document.getElementById('loiAmortization').textContent + ' yrs';
+            document.getElementById('pdf-seller-payment').textContent = document.getElementById('sellerCarryPayment').textContent;
+            document.getElementById('pdf-down-payment').textContent = document.getElementById('downPayment').textContent;
+            document.getElementById('pdf-total-financing').textContent = document.getElementById('totalFinancingPct').textContent;
+            
+            // Cash to Buyer
+            document.getElementById('pdf-residual').textContent = document.getElementById('residualValue').textContent;
+            document.getElementById('pdf-assignment').textContent = document.getElementById('assignmentFeeDisplay').textContent;
+            document.getElementById('pdf-closing').textContent = document.getElementById('closingCostDisplay').textContent;
+            document.getElementById('pdf-cash-to-buyer').textContent = document.getElementById('cashToBuyer').textContent;
+            
+            // Cash Flow
+            document.getElementById('pdf-revenue').textContent = document.getElementById('annualRevenue').textContent;
+            document.getElementById('pdf-expenses').textContent = document.getElementById('totalOpExpenses').textContent;
+            document.getElementById('pdf-first-pi').textContent = document.getElementById('firstPIPayout').textContent;
+            document.getElementById('pdf-seller-pi').textContent = document.getElementById('sellerCarryPayout').textContent;
+            document.getElementById('pdf-monthly-cf').textContent = document.getElementById('monthlyCashFlow').textContent;
+            document.getElementById('pdf-cf-purchase').textContent = document.getElementById('cfToPurchase').textContent;
+            
+            // Balloon
+            document.getElementById('pdf-years-balloon').textContent = document.getElementById('yearsToBalloon').value + ' years';
+            document.getElementById('pdf-value-balloon').textContent = document.getElementById('valueAtBalloon').textContent;
+            document.getElementById('pdf-balance-balloon').textContent = document.getElementById('balanceAtBalloon').textContent;
+            document.getElementById('pdf-equity-balloon').textContent = document.getElementById('equityAtBalloon').textContent;
+            document.getElementById('pdf-equity-pct').textContent = document.getElementById('equityPctBalloon').textContent;
+            
+            // Date
+            document.getElementById('pdf-date').textContent = new Date().toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            // Show PDF summary and print
+            document.getElementById('pdf-summary').style.display = 'block';
+            window.print();
+            
+            // Hide after print dialog closes
+            setTimeout(() => {
+                document.getElementById('pdf-summary').style.display = 'none';
+            }, 1000);
+        }
+    </script>
+
+    <!-- Print Button -->
+    <button class="print-btn" onclick="generatePDF()">
+        <span>📄</span> Export PDF Summary
+    </button>
+
+    <!-- PDF Summary Template -->
+    <div id="pdf-summary">
+        <div class="pdf-header">
+            <h1>Real Estate Underwriting Summary</h1>
+            <div class="pdf-address" id="pdf-address"></div>
+            <div class="pdf-date" id="pdf-date"></div>
+        </div>
+
+        <div class="pdf-preparer-box" id="pdf-preparer-box">
+            <div class="pdf-preparer-title">Prepared By</div>
+            <div class="pdf-preparer-info">
+                <span id="pdf-preparer-name"></span>
+                <span id="pdf-preparer-contact"></span>
+            </div>
+        </div>
+
+        <div class="pdf-highlight-box">
+            <div class="pdf-highlight-item">
+                <h3>Cash-on-Cash Return</h3>
+                <div class="value" id="pdf-coc">0%</div>
+            </div>
+            <div class="pdf-highlight-item">
+                <h3>Cap Rate</h3>
+                <div class="value" id="pdf-cap-rate">0%</div>
+            </div>
+            <div class="pdf-highlight-item">
+                <h3>Annual Cash Flow</h3>
+                <div class="value" id="pdf-annual-cf">$0</div>
+            </div>
+            <div class="pdf-highlight-item">
+                <h3>NOI</h3>
+                <div class="value" id="pdf-noi">$0</div>
+            </div>
+        </div>
+
+        <div class="pdf-two-col">
+            <div>
+                <div class="pdf-section">
+                    <div class="pdf-section-title">Deal Overview</div>
+                    <div class="pdf-row">
+                        <span class="pdf-label">Purchase Price</span>
+                        <span class="pdf-value highlight" id="pdf-purchase-price">$0</span>
+                    </div>
+                    <div class="pdf-row">
+                        <span class="pdf-label">Asking Price</span>
+                        <span class="pdf-value" id="pdf-asking-price">$0</span>
+                    </div>
+                    <div class="pdf-row">
+                        <span class="pdf-label">Over/Under Asking</span>
+                        <span class="pdf-value" id="pdf-over-under">0%</span>
+                    </div>
+                    <div class="pdf-row">
+                        <span class="pdf-label">Property Type</span>
+                        <span class="pdf-value" id="pdf-property-type">Mixed Use</span>
+                    </div>
+                </div>
+
+                <div class="pdf-section">
+                    <div class="pdf-section-title">First Position Loan</div>
+                    <div class="pdf-row">
+                        <span class="pdf-label">Loan Amount</span>
+                        <span class="pdf-value" id="pdf-first-position">$0</span>
+                    </div>
+                    <div class="pdf-row">
+                        <span class="pdf-label">Interest Rate</span>
+                        <span class="pdf-value" id="pdf-first-rate">0%</span>
+                    </div>
+                    <div class="pdf-row">
+                        <span class="pdf-label">Amortization</span>
+                        <span class="pdf-value" id="pdf-first-amort">0 yrs</span>
+                    </div>
+                    <div class="pdf-row">
+                        <span class="pdf-label">Monthly Payment</span>
+                        <span class="pdf-value" id="pdf-first-payment">$0</span>
+                    </div>
+                </div>
+
+                <div class="pdf-section">
+                    <div class="pdf-section-title">Seller Financing</div>
+                    <div class="pdf-row">
+                        <span class="pdf-label">Seller Carry Amount</span>
+                        <span class="pdf-value" id="pdf-seller-carry">$0</span>
+                    </div>
+                    <div class="pdf-row">
+                        <span class="pdf-label">Interest Rate</span>
+                        <span class="pdf-value" id="pdf-seller-rate">0%</span>
+                    </div>
+                    <div class="pdf-row">
+                        <span class="pdf-label">Amortization</span>
+                        <span class="pdf-value" id="pdf-seller-amort">0 yrs</span>
+                    </div>
+                    <div class="pdf-row">
+                        <span class="pdf-label">Monthly Payment</span>
+                        <span class="pdf-value" id="pdf-seller-payment">$0</span>
+                    </div>
+                    <div class="pdf-row">
+                        <span class="pdf-label">Down Payment</span>
+                        <span class="pdf-value" id="pdf-down-payment">$0</span>
+                    </div>
+                    <div class="pdf-row">
+                        <span class="pdf-label">Total Financing</span>
+                        <span class="pdf-value" id="pdf-total-financing">0%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="pdf-section">
+                    <div class="pdf-section-title">Cash to Buyer</div>
+                    <div class="pdf-row">
+                        <span class="pdf-label">Residual (Equity Gain)</span>
+                        <span class="pdf-value" id="pdf-residual">$0</span>
+                    </div>
+                    <div class="pdf-row">
+                        <span class="pdf-label">Assignment Fee</span>
+                        <span class="pdf-value" id="pdf-assignment">$0</span>
+                    </div>
+                    <div class="pdf-row">
+                        <span class="pdf-label">Closing & Bridge Costs</span>
+                        <span class="pdf-value" id="pdf-closing">$0</span>
+                    </div>
+                    <div class="pdf-row">
+                        <span class="pdf-label"><strong>Net Cash to Buyer</strong></span>
+                        <span class="pdf-value highlight" id="pdf-cash-to-buyer">$0</span>
+                    </div>
+                </div>
+
+                <div class="pdf-section">
+                    <div class="pdf-section-title">Cash Flow Analysis</div>
+                    <div class="pdf-row">
+                        <span class="pdf-label">Annual Revenue</span>
+                        <span class="pdf-value" id="pdf-revenue">$0</span>
+                    </div>
+                    <div class="pdf-row">
+                        <span class="pdf-label">Operating Expenses</span>
+                        <span class="pdf-value negative" id="pdf-expenses">$0</span>
+                    </div>
+                    <div class="pdf-row">
+                        <span class="pdf-label">First Position P&I (Annual)</span>
+                        <span class="pdf-value negative" id="pdf-first-pi">$0</span>
+                    </div>
+                    <div class="pdf-row">
+                        <span class="pdf-label">Seller Carry (Annual)</span>
+                        <span class="pdf-value negative" id="pdf-seller-pi">$0</span>
+                    </div>
+                    <div class="pdf-row">
+                        <span class="pdf-label">Monthly Cash Flow</span>
+                        <span class="pdf-value positive" id="pdf-monthly-cf">$0</span>
+                    </div>
+                    <div class="pdf-row">
+                        <span class="pdf-label">CF to Purchase Price</span>
+                        <span class="pdf-value" id="pdf-cf-purchase">0%</span>
+                    </div>
+                </div>
+
+                <div class="pdf-section">
+                    <div class="pdf-section-title">Balloon & Equity Projection</div>
+                    <div class="pdf-row">
+                        <span class="pdf-label">Years to Balloon</span>
+                        <span class="pdf-value" id="pdf-years-balloon">0 years</span>
+                    </div>
+                    <div class="pdf-row">
+                        <span class="pdf-label">Projected Value</span>
+                        <span class="pdf-value" id="pdf-value-balloon">$0</span>
+                    </div>
+                    <div class="pdf-row">
+                        <span class="pdf-label">Remaining Balance</span>
+                        <span class="pdf-value negative" id="pdf-balance-balloon">$0</span>
+                    </div>
+                    <div class="pdf-row">
+                        <span class="pdf-label">Equity at Balloon</span>
+                        <span class="pdf-value positive" id="pdf-equity-balloon">$0</span>
+                    </div>
+                    <div class="pdf-row">
+                        <span class="pdf-label">Equity Percentage</span>
+                        <span class="pdf-value highlight" id="pdf-equity-pct">0%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pdf-footer">
+            This analysis is for informational purposes only. All projections are estimates and actual results may vary.
+            <br>Generated by Real Estate Underwriting Calculator
+        </div>
+    </div>
+</body>
+</html>
