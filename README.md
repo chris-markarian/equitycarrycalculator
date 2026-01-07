@@ -8,7 +8,7 @@ A comprehensive web-based tool for analyzing real estate investment deals with s
 
 ## 🔗 Live Demo
 
-**[Try the Calculator →](https://your-demo-link.netlify.app)**
+**[Try the Calculator →](https://equitycarrycalculator.netlify.app/)**
 
 ## Overview
 
