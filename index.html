@@ -126,6 +126,119 @@
             }
         }
 
+        /* Market Analysis Styles */
+        .market-analysis-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .market-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .market-header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .generate-prompt-btn {
+            background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .generate-prompt-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(20, 184, 166, 0.4);
+        }
+
+        .prompt-section {
+            margin-top: 0.5rem;
+        }
+
+        .prompt-instructions {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .prompt-output-container {
+            margin-top: 1rem;
+        }
+
+        .prompt-output {
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.25rem;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .prompt-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .copy-btn {
+            background: var(--accent-teal);
+            border: none;
+            color: white;
+            padding: 0.6rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .copy-btn:hover {
+            background: var(--accent-teal-dim);
+        }
+
+        .copy-btn.copied {
+            background: var(--accent-green);
+        }
+
+        .prompt-tip {
+            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid var(--accent-blue);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: var(--accent-blue);
+        }
+
         .main-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -510,7 +623,7 @@
                 display: none !important;
             }
 
-            .container, .main-grid, .card, header, footer, .info-bar {
+            .container, .main-grid, .card, header, footer, .info-bar, .market-analysis-section {
                 display: none !important;
             }
 
@@ -1174,6 +1287,23 @@
             </div>
         </div>
 
+        <!-- AI Prompt Generator Section -->
+        <div class="market-analysis-section" style="margin-top: 2rem;">
+            <div class="market-header">
+                <div class="market-header-left">
+                    <div class="card-icon icon-blue">🤖</div>
+                    <h2 class="card-title">AI Deal Analysis</h2>
+                </div>
+                <button class="generate-prompt-btn" onclick="generatePrompt()">
+                    <span>✨ Generate AI Prompt</span>
+                </button>
+            </div>
+
+            <div class="prompt-section" id="promptSection">
+                <p class="prompt-instructions">Click "Generate AI Prompt" to create a prompt with all your deal data that you can paste into ChatGPT, Claude, or any AI assistant for a detailed deal and market analysis.</p>
+            </div>
+        </div>
+
         <footer>
             Real Estate Underwriting Calculator • All calculations are estimates only
         </footer>
@@ -1452,7 +1582,102 @@
         }
 
         // Initialize on load
-        document.addEventListener('DOMContentLoaded', calculate);
+        document.addEventListener('DOMContentLoaded', function() {
+            calculate();
+        });
+
+        // Generate AI Prompt
+        function generatePrompt() {
+            const address = document.getElementById('propertyAddress').value.trim() || '[ADDRESS NOT ENTERED]';
+            const category = document.getElementById('category').value;
+            const purchasePrice = parseFloat(document.getElementById('purchasePrice').value) || 0;
+            const askingPrice = parseFloat(document.getElementById('askingPrice').value) || 0;
+            const rentalRevenue = parseFloat(document.getElementById('rentalRevenue').value) || 0;
+            const firstLoanLTV = parseFloat(document.getElementById('firstLoanLTV').value) || 0;
+            const sellerCarryPct = parseFloat(document.getElementById('sellerCarryPct').value) || 0;
+            const sellerCarryRate = parseFloat(document.getElementById('sellerCarryRate').value) || 0;
+            const yearsToBalloon = parseInt(document.getElementById('yearsToBalloon').value) || 0;
+            
+            // Get calculated values
+            const capRate = document.getElementById('capRate').textContent;
+            const blendedRate = document.getElementById('blendedRate').textContent;
+            const spread = document.getElementById('capBlendedSpread').textContent;
+            const cashFlow = document.getElementById('annualCashFlow').textContent;
+            const cocReturn = document.getElementById('cocReturn').textContent;
+            const cashToBuyer = document.getElementById('cashToBuyer').textContent;
+
+            const prompt = `I'm analyzing a real estate deal using an equity carry / capital stacking strategy. Please help me evaluate this deal and research the local market.
+
+PROPERTY & DEAL DETAILS:
+- Address: ${address}
+- Property Type: ${category}
+- Purchase Price: $${purchasePrice.toLocaleString()}
+- Asking Price: $${askingPrice.toLocaleString()}
+- Expected Annual Rent: $${rentalRevenue.toLocaleString()} ($${Math.round(rentalRevenue/12).toLocaleString()}/month)
+
+FINANCING STRUCTURE:
+- First Position Loan: ${firstLoanLTV}% LTV (from traditional lender)
+- Seller Carry: ${sellerCarryPct}% of purchase price at ${sellerCarryRate}% interest
+- Years to Balloon: ${yearsToBalloon}
+
+CALCULATED METRICS:
+- Cap Rate: ${capRate}
+- Blended Interest Rate: ${blendedRate}
+- Spread (Cap Rate - Blended Rate): ${spread}
+- Annual Cash Flow: ${cashFlow}
+- Cash-on-Cash Return: ${cocReturn}
+- Cash to Buyer at Close: ${cashToBuyer}
+
+PLEASE ANALYZE:
+
+1. DEAL VIABILITY
+- Does this deal make sense from a capital stacking perspective?
+- Is the spread between cap rate and blended rate healthy?
+- Are the returns acceptable for this strategy?
+- What are the risks?
+
+2. MARKET RESEARCH (please search for current data)
+- What are typical rents for similar properties in this area?
+- Is my expected rent realistic, too high, or too low?
+- What's the rental vacancy rate in this market?
+- Is this area appreciating, stable, or declining?
+- Is it currently a buyer's or seller's market?
+
+3. RECOMMENDATION
+- Would you proceed with this deal? Why or why not?
+- What terms would you try to negotiate differently?
+- Any red flags I should investigate further?
+
+Please be direct and specific with your analysis.`;
+
+            const promptSection = document.getElementById('promptSection');
+            promptSection.innerHTML = `
+                <div class="prompt-output-container">
+                    <div class="prompt-output">${prompt}</div>
+                    <div class="prompt-actions">
+                        <button class="copy-btn" onclick="copyPrompt()">
+                            <span>📋</span> Copy to Clipboard
+                        </button>
+                    </div>
+                    <div class="prompt-tip">
+                        💡 Paste this into ChatGPT, Claude, or any AI assistant with web search for the best results.
+                    </div>
+                </div>
+            `;
+        }
+
+        function copyPrompt() {
+            const promptText = document.querySelector('.prompt-output').textContent;
+            navigator.clipboard.writeText(promptText).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.innerHTML = '<span>✓</span> Copied!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.innerHTML = '<span>📋</span> Copy to Clipboard';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
 
         // PDF Print functionality
         function generatePDF() {
