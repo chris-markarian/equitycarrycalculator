@@ -102,6 +102,14 @@ Contributions are welcome! Feel free to open an issue or submit a pull request.
 
 MIT License — see [LICENSE](LICENSE) for details.
 
+## Features added
+- **Field to add hyperlink to subject property
+- **Fields for seller information
+- **AI Generator: Button, when selected, generates a prompt to copy/paste into any AI, to evaluate the deal as inputed.
+- **PDF Summary: Button, when selected, generates a PDF which summarizes the deal.
+- **LOI Generator: Button, when selected, generates a PDF Letter of Intent (LOI) for use.
+- **MS Excel link: Button, when selected, takes user to shared MS Excel file, previously used as the calculator.
+
 ---
 
 Built to solve real problems in real estate investing, by markarian.ai
