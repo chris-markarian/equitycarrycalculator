@@ -646,6 +646,51 @@
             gap: 1rem;
             justify-content: center;
             margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .save-btn {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+        }
+
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(139, 92, 246, 0.5);
+        }
+
+        .load-btn {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+        }
+
+        .load-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(99, 102, 241, 0.5);
         }
 
         /* PDF Summary Styles */
@@ -1093,7 +1138,7 @@
     <div class="container">
         <header>
             <h1>Real Estate Underwriting Calculator</h1>
-            <p class="subtitle">Comprehensive deal analysis with seller financing & equity carry • Brought to you by markarian.ai</p>
+            <p class="subtitle">Comprehensive deal analysis with seller financing & equity carry</p>
         </header>
 
         <!-- Property & Preparer Info -->
@@ -1103,7 +1148,7 @@
                     <div class="info-section-title">📍 Property Address</div>
                     <div class="info-row">
                         <input type="text" id="propertyAddress" placeholder="Enter property address..." class="info-input" style="flex: 2;">
-                        <input type="url" id="propertyLink" placeholder="Property listing URL (Zillow, Redfin, etc.)" class="info-input" style="flex: 0.62;">
+                        <input type="url" id="propertyLink" placeholder="Property listing URL (Zillow, Redfin, etc.)" class="info-input" style="flex: 1;">
                     </div>
                 </div>
             </div>
@@ -1140,8 +1185,8 @@
                 <div class="form-group">
                     <label>Category / Property Type</label>
                     <select id="category" class="input-highlight" onchange="calculate()">
-                        <option value="DSCR Residential">DSCR Residential</option>
                         <option value="Mixed Use">Mixed Use</option>
+                        <option value="DSCR Residential">DSCR Residential</option>
                         <option value="12+Residential">12+ Residential</option>
                         <option value="Commercial">Commercial</option>
                         <option value="RV Park">RV Park</option>
@@ -1599,6 +1644,13 @@
 
         <!-- Export Buttons -->
         <div class="export-buttons">
+            <button class="save-btn" onclick="saveToFile()">
+                <span>💾</span> Save Deal
+            </button>
+            <button class="load-btn" onclick="document.getElementById('loadFileInput').click()">
+                <span>📂</span> Load Deal
+            </button>
+            <input type="file" id="loadFileInput" accept=".json" style="display: none;" onchange="loadFromFile(event)">
             <button class="print-btn" onclick="generatePDF()">
                 <span>📄</span> Export PDF Summary
             </button>
@@ -1611,8 +1663,7 @@
         </div>
 
         <footer>
-            Real Estate Underwriting Calculator • All calculations are estimates only • Brought to you by markarian.ai 
-            © 2026 markarian.ai • This document and its contents are proprietary. Unauthorized reproduction or distribution is prohibited.
+            Real Estate Underwriting Calculator • All calculations are estimates only
         </footer>
     </div>
 
@@ -1984,6 +2035,168 @@ Please be direct and specific with your analysis.`;
                     btn.classList.remove('copied');
                 }, 2000);
             });
+        }
+
+        // Save deal to JSON file
+        function saveToFile() {
+            const data = {
+                version: '1.0',
+                savedAt: new Date().toISOString(),
+                propertyInfo: {
+                    address: document.getElementById('propertyAddress').value,
+                    link: document.getElementById('propertyLink').value,
+                },
+                preparer: {
+                    name: document.getElementById('preparerName').value,
+                    email: document.getElementById('preparerEmail').value,
+                    phone: document.getElementById('preparerPhone').value,
+                },
+                seller: {
+                    name: document.getElementById('sellerName').value,
+                    email: document.getElementById('sellerEmail').value,
+                    phone: document.getElementById('sellerPhone').value,
+                },
+                dealTerms: {
+                    category: document.getElementById('category').value,
+                    purchasePrice: document.getElementById('purchasePrice').value,
+                    askingPrice: document.getElementById('askingPrice').value,
+                    rentalRevenue: document.getElementById('rentalRevenue').value,
+                    appreciationRate: document.getElementById('appreciationRate').value,
+                },
+                financing: {
+                    firstLoanLTV: document.getElementById('firstLoanLTV').value,
+                    interestOnly: document.getElementById('interestOnly').value,
+                    sellerCarryPct: document.getElementById('sellerCarryPct').value,
+                    sellerCarryRate: document.getElementById('sellerCarryRate').value,
+                    sellerCarryAmort: document.getElementById('sellerCarryAmort').value,
+                    interestAtBalloon: document.getElementById('interestAtBalloon').value,
+                    yearsToBalloon: document.getElementById('yearsToBalloon').value,
+                },
+                stabilization: {
+                    monthsToStabilize: document.getElementById('monthsToStabilize').value,
+                    revenueDuringStab: document.getElementById('revenueDuringStab').value,
+                },
+                expenses: {
+                    propertyTax: document.getElementById('propertyTax').value,
+                    insurance: document.getElementById('insurance').value,
+                    hoa: document.getElementById('hoa').value,
+                    otherExpenses: document.getElementById('otherExpenses').value,
+                    capexPct: document.getElementById('capexPct').value,
+                    managementPct: document.getElementById('managementPct').value,
+                    vacancyPct: document.getElementById('vacancyPct').value,
+                },
+                cashToBuyer: {
+                    agentFee: document.getElementById('agentFee').value,
+                    rehabCost: document.getElementById('rehabCost').value,
+                    assignmentFeePct: document.getElementById('assignmentFeePct').value,
+                    appraisalCost: document.getElementById('appraisalCost').value,
+                    closingCostPct: document.getElementById('closingCostPct').value,
+                },
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            
+            // Create filename from address
+            const address = document.getElementById('propertyAddress').value || 'Untitled_Deal';
+            const safeAddress = address.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 40);
+            const date = new Date().toISOString().split('T')[0];
+            
+            a.href = url;
+            a.download = `${safeAddress}_${date}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Load deal from JSON file
+        function loadFromFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    
+                    // Property info
+                    if (data.propertyInfo) {
+                        document.getElementById('propertyAddress').value = data.propertyInfo.address || '';
+                        document.getElementById('propertyLink').value = data.propertyInfo.link || '';
+                    }
+                    
+                    // Preparer
+                    if (data.preparer) {
+                        document.getElementById('preparerName').value = data.preparer.name || '';
+                        document.getElementById('preparerEmail').value = data.preparer.email || '';
+                        document.getElementById('preparerPhone').value = data.preparer.phone || '';
+                    }
+                    
+                    // Seller
+                    if (data.seller) {
+                        document.getElementById('sellerName').value = data.seller.name || '';
+                        document.getElementById('sellerEmail').value = data.seller.email || '';
+                        document.getElementById('sellerPhone').value = data.seller.phone || '';
+                    }
+                    
+                    // Deal terms
+                    if (data.dealTerms) {
+                        document.getElementById('category').value = data.dealTerms.category || 'DSCR Residential (1-4)';
+                        document.getElementById('purchasePrice').value = data.dealTerms.purchasePrice || '';
+                        document.getElementById('askingPrice').value = data.dealTerms.askingPrice || '';
+                        document.getElementById('rentalRevenue').value = data.dealTerms.rentalRevenue || '';
+                        document.getElementById('appreciationRate').value = data.dealTerms.appreciationRate || '';
+                    }
+                    
+                    // Financing
+                    if (data.financing) {
+                        document.getElementById('firstLoanLTV').value = data.financing.firstLoanLTV || '';
+                        document.getElementById('interestOnly').value = data.financing.interestOnly || 'No';
+                        document.getElementById('sellerCarryPct').value = data.financing.sellerCarryPct || '';
+                        document.getElementById('sellerCarryRate').value = data.financing.sellerCarryRate || '';
+                        document.getElementById('sellerCarryAmort').value = data.financing.sellerCarryAmort || '';
+                        document.getElementById('interestAtBalloon').value = data.financing.interestAtBalloon || 'No';
+                        document.getElementById('yearsToBalloon').value = data.financing.yearsToBalloon || '';
+                    }
+                    
+                    // Stabilization
+                    if (data.stabilization) {
+                        document.getElementById('monthsToStabilize').value = data.stabilization.monthsToStabilize || '';
+                        document.getElementById('revenueDuringStab').value = data.stabilization.revenueDuringStab || '';
+                    }
+                    
+                    // Expenses
+                    if (data.expenses) {
+                        document.getElementById('propertyTax').value = data.expenses.propertyTax || '';
+                        document.getElementById('insurance').value = data.expenses.insurance || '';
+                        document.getElementById('hoa').value = data.expenses.hoa || '';
+                        document.getElementById('otherExpenses').value = data.expenses.otherExpenses || '';
+                        document.getElementById('capexPct').value = data.expenses.capexPct || '';
+                        document.getElementById('managementPct').value = data.expenses.managementPct || '';
+                        document.getElementById('vacancyPct').value = data.expenses.vacancyPct || '';
+                    }
+                    
+                    // Cash to buyer
+                    if (data.cashToBuyer) {
+                        document.getElementById('agentFee').value = data.cashToBuyer.agentFee || '';
+                        document.getElementById('rehabCost').value = data.cashToBuyer.rehabCost || '';
+                        document.getElementById('assignmentFeePct').value = data.cashToBuyer.assignmentFeePct || '';
+                        document.getElementById('appraisalCost').value = data.cashToBuyer.appraisalCost || '';
+                        document.getElementById('closingCostPct').value = data.cashToBuyer.closingCostPct || '';
+                    }
+                    
+                    // Recalculate
+                    calculate();
+                    
+                    alert('Deal loaded successfully!');
+                } catch (err) {
+                    alert('Error loading file: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+            
+            // Reset file input so same file can be loaded again
+            event.target.value = '';
         }
 
         // PDF Print functionality
