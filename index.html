@@ -67,9 +67,9 @@
         }
 
         .info-bar {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 16px;
@@ -77,9 +77,17 @@
             margin-bottom: 2rem;
         }
 
+        .info-row-full {
+            width: 100%;
+        }
+
+        .info-row-full .info-section {
+            width: 100%;
+        }
+
         @media (max-width: 900px) {
             .info-bar {
-                grid-template-columns: 1fr;
+                gap: 1rem;
             }
         }
 
@@ -611,6 +619,28 @@
             box-shadow: 0 6px 25px rgba(34, 197, 94, 0.5);
         }
 
+        .loi-btn {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+        }
+
+        .loi-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(245, 158, 11, 0.5);
+        }
+
         .export-buttons {
             display: flex;
             gap: 1rem;
@@ -630,11 +660,11 @@
                 padding: 0;
             }
             
-            body > *:not(#pdf-summary) {
+            body > * {
                 display: none !important;
             }
             
-            #pdf-summary {
+            #pdf-summary.printing {
                 display: block !important;
                 position: relative;
                 width: 100%;
@@ -645,11 +675,19 @@
                 margin: 0;
             }
 
-            .print-btn {
+            #loi-document.printing {
+                display: block !important;
+                position: relative;
+                width: 100%;
+                background: white;
+                margin: 0;
+            }
+
+            .print-btn, .excel-btn, .loi-btn {
                 display: none !important;
             }
 
-            .container, .main-grid, .card, header, footer, .info-bar, .market-analysis-section {
+            .container, .main-grid, .card, header, footer, .info-bar, .market-analysis-section, .export-buttons {
                 display: none !important;
             }
 
@@ -665,6 +703,10 @@
             }
 
             .pdf-highlight-box {
+                page-break-inside: avoid;
+            }
+
+            .loi-signature-section {
                 page-break-inside: avoid;
             }
         }
@@ -707,6 +749,16 @@
             color: #333;
             font-weight: 600;
             margin-top: 8px;
+        }
+
+        .pdf-header .pdf-property-link {
+            font-size: 11px;
+            margin-top: 5px;
+        }
+
+        .pdf-header .pdf-property-link a {
+            color: #14b8a6;
+            text-decoration: none;
         }
 
         .pdf-preparer-box {
@@ -837,6 +889,204 @@
             color: #888;
             font-size: 11px;
         }
+
+        /* LOI Document Styles */
+        #loi-document {
+            display: none;
+            background: white;
+            color: #1a1a1a;
+            padding: 40px 50px;
+            font-family: Arial, sans-serif;
+            font-size: 11pt;
+            line-height: 1.5;
+            max-width: 8.5in;
+            margin: 0 auto;
+        }
+
+        .loi-date-header {
+            margin-bottom: 20px;
+            font-size: 11pt;
+        }
+
+        .loi-address-line {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .loi-property-link {
+            font-size: 10pt;
+            margin-bottom: 15px;
+        }
+
+        .loi-property-link a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        .loi-tracking {
+            font-weight: normal;
+        }
+
+        .loi-re {
+            margin-bottom: 20px;
+        }
+
+        .loi-greeting {
+            margin-bottom: 20px;
+        }
+
+        .loi-body {
+            text-align: justify;
+        }
+
+        .loi-body h3 {
+            font-size: 11pt;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .loi-body p {
+            margin-bottom: 12px;
+        }
+
+        .loi-body ul {
+            margin-left: 20px;
+            margin-bottom: 12px;
+        }
+
+        .loi-body li {
+            margin-bottom: 6px;
+        }
+
+        .loi-steps-box {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .loi-steps-box h3 {
+            margin-top: 15px;
+            margin-bottom: 8px;
+            font-size: 11pt;
+        }
+
+        .loi-steps-box h3:first-child {
+            margin-top: 0;
+        }
+
+        .loi-steps-box ul {
+            margin-left: 20px;
+            margin-bottom: 0;
+        }
+
+        .loi-benefits li {
+            list-style: none;
+            margin-left: -20px;
+        }
+
+        .loi-docs-list li {
+            margin-bottom: 10px;
+        }
+
+        .loi-signature-section {
+            margin-top: 30px;
+        }
+
+        .loi-sig-left p {
+            margin: 3px 0;
+        }
+
+        .loi-acceptance {
+            margin-top: 40px;
+        }
+
+        .loi-signature-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 40px;
+            margin-bottom: 20px;
+        }
+
+        .loi-sig-date {
+            min-width: 120px;
+        }
+
+        .loi-sig-content {
+            flex: 1;
+        }
+
+        .loi-sig-by {
+            margin: 0 0 5px 0;
+        }
+
+        .loi-sig-label {
+            margin: 0 0 3px 0;
+            padding-left: 30px;
+        }
+
+        .loi-sig-detail {
+            margin: 0 0 3px 0;
+            padding-left: 30px;
+            color: #333;
+        }
+
+        .loi-blank-line {
+            display: inline-block;
+            min-width: 120px;
+        }
+
+        .loi-accept-title {
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        .loi-footer-doc {
+            margin-top: 40px;
+            font-size: 9pt;
+            color: #666;
+        }
+
+        .steven-signature {
+            font-family: 'Brush Script MT', 'Segoe Script', 'Bradley Hand', cursive;
+            font-size: 24pt;
+            color: #1a1a1a;
+            border-bottom: 1px solid #000;
+            padding-bottom: 2px;
+        }
+
+        @media print {
+            #loi-document.printing {
+                display: block !important;
+                padding: 0.5in 0.6in;
+                font-size: 10pt;
+                line-height: 1.4;
+            }
+
+            .loi-body p {
+                margin-bottom: 10px;
+            }
+
+            .loi-body h3 {
+                margin-top: 15px;
+                margin-bottom: 8px;
+            }
+
+            .loi-steps-box {
+                padding: 15px;
+                margin: 15px 0;
+            }
+
+            .loi-signature-section {
+                page-break-inside: avoid;
+            }
+
+            .loi-acceptance {
+                page-break-inside: avoid;
+            }
+        }
     </style>
 </head>
 <body>
@@ -848,16 +1098,33 @@
 
         <!-- Property & Preparer Info -->
         <div class="info-bar">
-            <div class="info-section">
-                <div class="info-section-title">📍 Property Address</div>
-                <input type="text" id="propertyAddress" placeholder="Enter property address..." class="info-input">
+            <div class="info-row-full">
+                <div class="info-section">
+                    <div class="info-section-title">📍 Property Address</div>
+                    <div class="info-row">
+                        <input type="text" id="propertyAddress" placeholder="Enter property address..." class="info-input" style="flex: 2;">
+                        <input type="url" id="propertyLink" placeholder="Property listing URL (Zillow, Redfin, etc.)" class="info-input" style="flex: 1;">
+                    </div>
+                </div>
             </div>
-            <div class="info-section">
-                <div class="info-section-title">👤 Prepared By</div>
-                <div class="info-row">
-                    <input type="text" id="preparerName" placeholder="Your name" class="info-input">
-                    <input type="email" id="preparerEmail" placeholder="Email address" class="info-input">
-                    <input type="tel" id="preparerPhone" placeholder="Phone number" class="info-input">
+            <div class="info-row-full">
+                <div class="info-section">
+                    <div class="info-section-title">👤 Prepared By</div>
+                    <div class="info-row">
+                        <input type="text" id="preparerName" placeholder="Your name" class="info-input">
+                        <input type="email" id="preparerEmail" placeholder="Email address" class="info-input">
+                        <input type="tel" id="preparerPhone" placeholder="Phone number" class="info-input">
+                    </div>
+                </div>
+            </div>
+            <div class="info-row-full">
+                <div class="info-section">
+                    <div class="info-section-title">🏠 Seller Info</div>
+                    <div class="info-row">
+                        <input type="text" id="sellerName" placeholder="Seller's name" class="info-input">
+                        <input type="email" id="sellerEmail" placeholder="Seller's email" class="info-input">
+                        <input type="tel" id="sellerPhone" placeholder="Seller's phone" class="info-input">
+                    </div>
                 </div>
             </div>
         </div>
@@ -1332,12 +1599,15 @@
 
         <!-- Export Buttons -->
         <div class="export-buttons">
-            <a href="https://docs.google.com/spreadsheets/d/1vC4g5GC8DfM-E15MRpkWZz1-L9SxtOjtXp31Yd6eYE0/edit?usp=sharing" class="excel-btn" target="_blank">
+            <button class="print-btn" onclick="generatePDF()">
+                <span>📄</span> Export PDF Summary
+            </button>
+            <button class="loi-btn" onclick="generateLOI()">
+                <span>📝</span> Generate LOI
+            </button>
+            <a href="https://docs.google.com/spreadsheets/d/YOUR_SPREADSHEET_ID/copy" class="excel-btn" target="_blank">
                 <span>📊</span> Download Excel Template
             </a>
-            <button class="print-btn" onclick="generatePDF()">
-                <span>📄</span> Export PDF
-            </button>
         </div>
 
         <footer>
@@ -1719,12 +1989,22 @@ Please be direct and specific with your analysis.`;
         function generatePDF() {
             // Get property address and preparer info
             const propertyAddress = document.getElementById('propertyAddress').value || 'Address not specified';
+            const propertyLink = document.getElementById('propertyLink').value || '';
             const preparerName = document.getElementById('preparerName').value || '';
             const preparerEmail = document.getElementById('preparerEmail').value || '';
             const preparerPhone = document.getElementById('preparerPhone').value || '';
             
             // Update PDF header with address
             document.getElementById('pdf-address').textContent = propertyAddress;
+            
+            // Update property link
+            const pdfPropertyLink = document.getElementById('pdf-property-link');
+            if (propertyLink) {
+                pdfPropertyLink.innerHTML = `<a href="${propertyLink}" target="_blank">🔗 ${propertyLink}</a>`;
+                pdfPropertyLink.style.display = 'block';
+            } else {
+                pdfPropertyLink.style.display = 'none';
+            }
             
             // Update preparer info
             document.getElementById('pdf-preparer-name').textContent = preparerName || 'Not specified';
@@ -1801,12 +2081,149 @@ Please be direct and specific with your analysis.`;
             });
             
             // Show PDF summary and print
-            document.getElementById('pdf-summary').style.display = 'block';
+            const pdfSummary = document.getElementById('pdf-summary');
+            pdfSummary.style.display = 'block';
+            pdfSummary.classList.add('printing');
+            
             window.print();
             
             // Hide after print dialog closes
             setTimeout(() => {
-                document.getElementById('pdf-summary').style.display = 'none';
+                pdfSummary.style.display = 'none';
+                pdfSummary.classList.remove('printing');
+            }, 1000);
+        }
+
+        // LOI Generation
+        function generateLOI() {
+            // Get values
+            const propertyAddress = document.getElementById('propertyAddress').value || '[PROPERTY ADDRESS]';
+            const propertyLink = document.getElementById('propertyLink').value || '';
+            const preparerName = document.getElementById('preparerName').value || '[Name]';
+            const preparerEmail = document.getElementById('preparerEmail').value || '';
+            const preparerPhone = document.getElementById('preparerPhone').value || '';
+            
+            // Seller info
+            const sellerName = document.getElementById('sellerName').value || '[Seller Name]';
+            const sellerEmail = document.getElementById('sellerEmail').value || '';
+            const sellerPhone = document.getElementById('sellerPhone').value || '';
+            
+            const purchasePrice = parseFloat(document.getElementById('purchasePrice').value) || 0;
+            const sellerCarryAmort = parseInt(document.getElementById('sellerCarryAmort').value) || 30;
+            const yearsToBalloon = parseInt(document.getElementById('yearsToBalloon').value) || 8;
+
+            // Get calculated values
+            const cashAtClosing = document.getElementById('firstPositionLoan').textContent;
+            const sellerEquity = document.getElementById('sellerCarryAmount').textContent;
+            const monthlyPayment = document.getElementById('sellerCarryPayment').textContent;
+
+            // Format dates
+            const today = new Date();
+            const dateStr = today.toLocaleDateString('en-US', { year: 'numeric', month: 'numeric', day: 'numeric' });
+            
+            // Expiry date (30 days from now)
+            const expiryDate = new Date(today);
+            expiryDate.setDate(expiryDate.getDate() + 30);
+            const expiryStr = expiryDate.toISOString().split('T')[0];
+
+            // Generate tracking number (format: StreetNum-AllWordsBeforeStreetType-YYYYMMDDSEQ)
+            // Example: 3053 S Edgewater Lane → 3053-S-EDGEWATER-2026010701
+            
+            // Street type words to stop at
+            const streetTypes = ['STREET', 'ST', 'AVENUE', 'AVE', 'LANE', 'LN', 'DRIVE', 'DR', 'ROAD', 'RD', 
+                                'BOULEVARD', 'BLVD', 'COURT', 'CT', 'CIRCLE', 'CIR', 'WAY', 'PLACE', 'PL', 
+                                'TERRACE', 'TER', 'TRAIL', 'TRL', 'PARKWAY', 'PKWY', 'HIGHWAY', 'HWY'];
+            
+            // Extract street number
+            const streetNumMatch = propertyAddress.match(/^(\d+)/);
+            let streetNum = streetNumMatch ? streetNumMatch[1] : 'XXXXX';
+            
+            // Get words after street number, before street type
+            const addressWithoutNum = propertyAddress.replace(/^\d+\s*/, '');
+            const words = addressWithoutNum.split(/[\s,]+/);
+            let streetParts = [];
+            
+            for (let word of words) {
+                const cleanWord = word.toUpperCase().replace(/[^A-Z]/g, '');
+                if (!cleanWord) continue;
+                if (streetTypes.includes(cleanWord)) break;
+                streetParts.push(cleanWord);
+            }
+            
+            const streetPortion = streetParts.length > 0 ? streetParts.join('-') : 'UNKNOWN';
+            
+            // Date portion YYYYMMDD
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const datePart = `${year}${month}${day}`;
+            
+            // Sequence number (default 01)
+            const seq = '01';
+            
+            const trackingNum = `${streetNum}-${streetPortion}-${datePart}${seq}`;
+
+            // Format currency for display
+            const priceFormatted = formatCurrency(purchasePrice);
+
+            // Populate all LOI fields
+            document.getElementById('loi-date').textContent = dateStr;
+            document.getElementById('loi-property-address').textContent = propertyAddress;
+            document.getElementById('loi-tracking').textContent = trackingNum;
+            
+            // Property link
+            const loiPropertyLink = document.getElementById('loi-property-link-container');
+            if (propertyLink) {
+                loiPropertyLink.innerHTML = `🔗 <a href="${propertyLink}" target="_blank">${propertyLink}</a>`;
+                loiPropertyLink.style.display = 'block';
+            } else {
+                loiPropertyLink.style.display = 'none';
+            }
+            
+            document.getElementById('loi-seller-name').textContent = sellerName;
+            document.getElementById('loi-address-inline').textContent = propertyAddress;
+            document.getElementById('loi-price-inline').textContent = priceFormatted;
+            document.getElementById('loi-property-full').textContent = propertyAddress;
+            document.getElementById('loi-purchase-price').textContent = priceFormatted;
+            document.getElementById('loi-cash-at-closing').textContent = cashAtClosing;
+            document.getElementById('loi-seller-equity').textContent = sellerEquity;
+            document.getElementById('loi-amort-years').textContent = sellerCarryAmort;
+            document.getElementById('loi-monthly-payment').textContent = monthlyPayment;
+            document.getElementById('loi-balloon-years').textContent = yearsToBalloon;
+
+            // Steps section
+            document.getElementById('loi-step1-price').textContent = priceFormatted;
+            document.getElementById('loi-step2-cash').textContent = priceFormatted;
+            document.getElementById('loi-step2-payout').textContent = cashAtClosing;
+            document.getElementById('loi-step3-remaining').textContent = sellerEquity;
+            document.getElementById('loi-step4-payment').textContent = monthlyPayment;
+            document.getElementById('loi-step4-balloon').textContent = yearsToBalloon;
+            document.getElementById('loi-step5-cash').textContent = cashAtClosing;
+            document.getElementById('loi-step5-payment').textContent = monthlyPayment;
+
+            // Expiry and signature
+            document.getElementById('loi-expiry-date').textContent = expiryStr;
+            document.getElementById('loi-sig-name').textContent = preparerName;
+            document.getElementById('loi-sig-email').textContent = preparerEmail;
+            document.getElementById('loi-sig-phone').textContent = preparerPhone;
+            document.getElementById('loi-accept-date').textContent = dateStr;
+            
+            // Seller signature section
+            document.getElementById('loi-seller-sig-name').textContent = sellerName;
+            document.getElementById('loi-seller-sig-email').textContent = sellerEmail;
+            document.getElementById('loi-seller-sig-phone').textContent = sellerPhone;
+
+            // Hide other elements and show LOI
+            const loiDoc = document.getElementById('loi-document');
+            loiDoc.style.display = 'block';
+            loiDoc.classList.add('printing');
+            
+            window.print();
+
+            // Hide after print
+            setTimeout(() => {
+                loiDoc.style.display = 'none';
+                loiDoc.classList.remove('printing');
             }, 1000);
         }
     </script>
@@ -1816,6 +2233,7 @@ Please be direct and specific with your analysis.`;
         <div class="pdf-header">
             <h1>Real Estate Underwriting Summary</h1>
             <div class="pdf-address" id="pdf-address"></div>
+            <div class="pdf-property-link" id="pdf-property-link"></div>
             <div class="pdf-date" id="pdf-date"></div>
         </div>
 
@@ -2005,5 +2423,182 @@ Please be direct and specific with your analysis.`;
             <br>Generated by Real Estate Underwriting Calculator
         </div>
     </div>
-</body>
-</html>
+
+    <!-- LOI Template -->
+    <div id="loi-document">
+        <div class="loi-date-header">
+            <span id="loi-date"></span>
+        </div>
+
+        <div class="loi-address-line">
+            <span id="loi-property-address"></span>
+            <span class="loi-tracking">LOI TRACKING NUMBER: <span id="loi-tracking"></span></span>
+        </div>
+        
+        <div class="loi-property-link" id="loi-property-link-container"></div>
+
+        <div class="loi-re">
+            <strong>Re: Letter of Intent to Purchase Property</strong>
+        </div>
+
+        <div class="loi-greeting">
+            Dear <span id="loi-seller-name">[Seller Name]</span>,
+        </div>
+
+        <div class="loi-body">
+            <p>On behalf of <strong>Instant Hotels, Inc.</strong>, we are pleased to present this Letter of Intent expressing our intention to purchase the property located at <strong id="loi-address-inline"></strong> for the proposed purchase price of <strong id="loi-price-inline"></strong>. This Letter of Intent outlines the key terms and conditions of our offer, subject to further negotiations and the execution of a formal purchase contract.</p>
+
+            <h3>Purchase Details:</h3>
+            <p><u>Property:</u> <span id="loi-property-full"></span></p>
+            <p><u>Proposed Terms Purchase Price:</u> <span id="loi-purchase-price"></span></p>
+            <p><strong>Property Condition:</strong> Property to be acquired strictly in its present "As-Is, Where-Is" condition, with no representations or warranties from the Seller.</p>
+            
+            <p>• <u>Cash at Closing:</u> <strong id="loi-cash-at-closing"></strong> (Buyer has established lender financing relationships and can deliver without delay).</p>
+            
+            <p>• <u>Seller-Equity Agreement:</u> (Finance Agreement): <strong id="loi-seller-equity"></strong>. Amortization: <strong id="loi-amort-years"></strong> years, Monthly Payments: <strong id="loi-monthly-payment"></strong> consisting of principal only with a <strong id="loi-balloon-years"></strong>-year balloon.</p>
+
+            <p><strong>Seller-Equity Agreement:</strong> Simultaneously, the Buyer's LLC operating agreement is executed to reflect the Seller's minority equity interest. Escrow returns this portion to the Buyer post-closing, while the Seller retains a secured interest in the LLC for that amount, with rights to assume full ownership of the LLC in the event of default.</p>
+
+            <p>The closing will be facilitated by a licensed title company, escrow agent, or closing attorney (hereby "the Closing Agent"), and all funds will be disbursed at the close of escrow in accordance with mutually agreed-upon instructions contained in a definitive state-approved Purchase and Sale Agreement ("PSA"). The transaction will occur in two distinct stages:</p>
+
+            <h3><u>First Stage (All Cash Closing)</u></h3>
+            <p>At the initial all-cash closing, the Buyer will bring the full purchase price in cash. The Buyer intends to obtain a Commercial loan at 70-80% loan-to-value (LTV) to reimburse a portion of the funds following this close. The Purchase and Sale Agreement and its incorporated escrow instructions shall direct the Closing Agent to hold funds in escrow until the second leg of the transaction is completed. The close will be contingent on the Property appraising at or above the agreed-upon purchase price. The Buyer will close escrow, and the title insurer will issue a title policy insuring the Buyer's interest in the Property after this first leg, with all associated title insurance premiums and related closing costs borne by the Buyer.</p>
+
+            <h3><u>Second Stage (Seller-Financing/Installment Sale)</u></h3>
+            <p>Following the close of escrow and completion of the first leg, the immediate second leg of the transaction is opened pursuant to detailed escrow instructions in the Purchase and Sale Agreement. The Closing Agent shall disburse the Seller's agreed-upon down payment, and instead of recording a Deed of Trust/Mortgage and Promissory Note, the Seller's remaining equity will be secured through the Buyer's LLC operating agreement, naming the Seller as a minority equity partner. In the event of a default, this structure entitles the Seller to obtain 100% ownership of the LLC, thereby regaining full control of the Property without the need for foreclosure. The Seller-financed portion shall still be structured as an installment sale, providing ongoing, tax-advantaged income while simultaneously reducing the Seller's immediate tax burden. To further protect the Seller's financial interest in the Property, we offer a Seller Protection Clause (please see the bottom of this Section for more details). The title insurer will issue a title policy insuring the Buyer's interest in the Property after this second leg, with all associated title insurance premiums and related closing costs borne by the Buyer.</p>
+
+            <p>This creative structure enables the Buyer to acquire the Property at a comparatively low capitalization rate at retail pricing, while remitting a substantial portion of the Purchase Price to the Seller as an immediate down payment. Concurrently, by structuring the balance as an installment sale with seller financing, the Seller can defer and potentially minimize immediate tax liabilities. The Seller, thus, secures an aggressive purchase price, a significant down payment, and the potential for a reduced overall tax burden.</p>
+
+            <div class="loi-steps-box">
+                <h3>Step 1 – Seller Agrees to Sell Property</h3>
+                <ul>
+                    <li>Property Price: <strong id="loi-step1-price"></strong></li>
+                    <li>Seller hands over the property in <strong>as-is</strong> condition.</li>
+                </ul>
+
+                <h3>Step 2 – Stage 1: Cash Closing</h3>
+                <ul>
+                    <li>Buyer brings <strong id="loi-step2-cash"></strong> cash to closing.</li>
+                    <li>Escrow holds funds temporarily.</li>
+                    <li>Title transfers → Buyer's LLC now owns the property.</li>
+                    <li>Seller gets their immediate cash payout: <strong id="loi-step2-payout"></strong>.</li>
+                </ul>
+
+                <h3>Step 3 – Stage 2: Equity Carry Agreement</h3>
+                <ul>
+                    <li>The remaining <strong id="loi-step3-remaining"></strong> is not paid out in cash.</li>
+                    <li>Instead, it becomes the Seller's <strong>Equity Carry (preferred equity)</strong> inside Buyer's LLC.</li>
+                </ul>
+
+                <h3>Step 4 – Seller's Equity Terms</h3>
+                <ul>
+                    <li>Treated like a <strong>secured loan inside the new LLC</strong>.</li>
+                    <li>Monthly payment: <strong id="loi-step4-payment"></strong> (principal only).</li>
+                    <li>Balloon: <strong id="loi-step4-balloon"></strong> years.</li>
+                    <li>If Buyer defaults → Seller can <strong>take back 100% of the LLC</strong> (full ownership of property) without foreclosure.</li>
+                </ul>
+
+                <h3>Step 5 – Seller's Benefits</h3>
+                <ul class="loi-benefits">
+                    <li>✅ Immediate cash at close (<strong id="loi-step5-cash"></strong>)</li>
+                    <li>✅ Ongoing monthly payments (<strong id="loi-step5-payment"></strong>)</li>
+                    <li>✅ Secured "back door" ownership protection</li>
+                    <li>✅ Tax-advantaged structure (installment sale)</li>
+                </ul>
+            </div>
+
+            <p>In accordance with guidance set forth by the Internal Revenue Service (IRS) for installment sales (see, e.g., IRS Publication 537), "income received over time through an installment sale may, under certain circumstances, be treated as ordinary income." This approach allows for the recognition of gains and the associated tax obligations to be spread over multiple tax years, rather than realized in a single lump sum, potentially resulting in a more favorable tax outcome.</p>
+
+            <p>Additionally, the buyer will cover all title insurance premiums, all customary closing costs, fees, and related expenses. This allocation ensures the Seller realizes the full benefit of the agreed-upon financial terms without incurring out-of-pocket transactional costs.</p>
+
+            <p>This LOI is provided solely as an outline and for the purpose of facilitating further discussion. Except as may be otherwise agreed in writing (such as confidentiality or exclusivity provisions), this LOI is non-binding. Neither Party shall be legally obligated to proceed unless and until both Parties execute a definitive State-approved PSA and related ancillary documents that fully memorialize the terms and conditions of the transaction.</p>
+
+            <h3><u>Seller Protection Clause</u></h3>
+            <p style="text-align: center;"><strong>Operating Agreement with Default Control Provisions</strong></p>
+            <ul>
+                <li><strong>Instead of holding a second-position lien, the Seller and Buyer will enter into an LLC operating agreement (or land trust with an assignment of beneficial interest) where the Seller maintains certain minority equity interest.</strong></li>
+                <li><strong>The LLC or trust holds title to the property, and the Buyer operates as the primary manager/member.</strong></li>
+                <li><strong>The agreement includes a clause that allows the Seller to regain full control of the LLC or trust (and thus the property) if the Buyer defaults on their financial obligations (missed payments, failure to insure, etc.).</strong></li>
+            </ul>
+
+            <p><u>Commissions:</u> 2.5% to Buyer's Agent, Steven Glaude, LPT Realty, Lic #01257750.</p>
+
+            <p><u>Deposit:</u> EMD is 1% of purchase price, deposited after inspection period.</p>
+
+            <p><u>Inspection Period:</u> Buyer shall have a maximum of thirty (30) business days following execution of the PSA to complete all due diligence, including inspections, title review, and feasibility studies. The inspection period only begins after the buyer receives all financials relevant to the business operation. The buyer is prepared to accelerate this if feasible. The Earnest Money Deposit goes hard at 1% after the inspection contingency period.</p>
+
+            <p><strong>Provision of Financial and Operational Documentation:</strong> The Seller agrees to furnish the Buyer, within a specified due diligence period, with complete and accurate financial and operational records relating to the Property. Such records shall include, but are not limited to:</p>
+            <ul class="loi-docs-list">
+                <li><strong>Trailing Twelve (T12) Months Operating Statements:</strong> Detailed income and expense reports for the previous twelve (12) months.</li>
+                <li><strong>Rent Roll and Leases:</strong> Current rent roll listing all tenants, rental amounts, security deposits, lease start and end dates, and any tenant concessions. Copies of all existing tenant leases, amendments, and related agreements (including any side letters or guaranties) shall be provided.</li>
+                <li><strong>Service and Vendor Contracts:</strong> Copies of all service agreements, property management contracts, warranties, guaranties, or other third-party obligations that the Buyer would assume or be subject to post-closing.</li>
+                <li><strong>Utility and Maintenance Records:</strong> Historical utility bills, maintenance logs, capital expenditure records, and warranty information for major systems (HVAC, roof, mechanicals, elevators, if applicable).</li>
+                <li><strong>Insurance and Claims History:</strong> Certificates of insurance, loss runs, and any claims history that may impact future insurance premiums or coverage availability.</li>
+                <li><strong>Tax and Assessment Information:</strong> Most recent property tax statements, assessments, and notices of any special assessments or pending reassessments.</li>
+                <li><strong>Permits and Licenses:</strong> Copies of all governmental permits, licenses, or approvals necessary for the current operation of the Property, including any evidence of compliance with zoning, building codes, fire and life safety regulations, and other applicable laws.</li>
+            </ul>
+
+            <p><u>Closing Date:</u> Closing to occur within <strong>forty-five (45) to sixty (60) days</strong> or sooner following full execution of the Agreement. The buyer is positioned to close earlier if conditions permit. A one-time extension of 15 days may be granted upon mutual agreement.</p>
+
+            <p><u>Closing Costs:</u> Buyer will assume all standard closing costs, including escrow fees, title insurance premiums, recording fees, transfer taxes, and other customary expenses, thereby ensuring a streamlined closing process for Seller. Commitment to Transaction: Buyer is a capable and well-capitalized purchaser, seeking a straightforward and expeditious transaction. The terms outlined above are designed to provide Seller with a clean, competitive, and dependable closing, minimizing risk and delay.</p>
+
+            <h3>Contingencies to Closing:</h3>
+            <p>a. Property Inspections: Buyer shall inspect all buildings, grounds, utilities and clean environmental.</p>
+            <p>b. Lending, Appraisal, and Financing.</p>
+            <p>c. Review documentation and verify title, check for delinquent utilities, and review current payment statements.</p>
+
+            <h3>Conditions:</h3>
+            <p>The execution of an Agreement of Sale shall be conditioned on the satisfaction of the above terms and contingencies. Both Purchaser and Seller acknowledge that this Letter of Intent is not a purchase contract but serves as the foundation for drafting a formal purchase contract between the parties. No legal obligations or liabilities shall arise from this Letter of Intent.</p>
+
+            <p><strong>Instant Hotels, Inc.</strong>, makes no warranty or representation to Seller or Purchaser that the acceptance of this Letter of Intent guarantees the execution of a purchase contract.</p>
+
+            <p>This Letter of Intent is valid until <strong>5:00 PM</strong> on <strong id="loi-expiry-date"></strong>. If an executed copy of this letter is not received by that date, this Letter of Intent will be considered withdrawn.</p>
+
+            <p>We look forward to further discussions and negotiations to reach a mutually beneficial agreement. Please do not hesitate to contact us to initiate the next steps in this process.</p>
+
+            <p>Sincerely,</p>
+
+            <div class="loi-signature-section">
+                <div class="loi-sig-left">
+                    <p><strong id="loi-sig-name"></strong></p>
+                    <p>Acquisitions Manager,</p>
+                    <p>Instant Hotels, Inc</p>
+                    <p id="loi-sig-email"></p>
+                    <p id="loi-sig-phone"></p>
+                    <br>
+                    <p><strong>Steven P. Glaude</strong></p>
+                    <p><em>President</em></p>
+                    <p>Realtor ~ Investor</p>
+                    <p>CalBRE #01257750</p>
+                    <p>Tel. No. (916) 316-4472</p>
+                    <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d8abacbdaebdb698bdb9aba1b9a8b9aaacb5bdb6acabbaada1bdaaf6bbb7b5">[email&#160;protected]</a></p>
+                    <p>www.stevenglaude.com</p>
+                    <p>https://equitycarrygroup.com/</p>
+                </div>
+            </div>
+
+            <div class="loi-acceptance">
+                <div class="loi-signature-row">
+                    <div class="loi-sig-date">
+                        <span id="loi-accept-date"></span>
+                    </div>
+                    <div class="loi-sig-content">
+                        <p class="loi-sig-by">By: <span class="steven-signature">Steven Glaude</span></p>
+                        <p class="loi-sig-label">Buyer: Instant Hotels, Inc.</p>
+                    </div>
+                </div>
+
+                <h3 class="loi-accept-title">ACCEPTANCE THIS DATE:</h3>
+                
+                <div class="loi-signature-row">
+                    <div class="loi-sig-date">
+                        <span class="loi-blank-line">_____________________</span>
+                    </div>
+                    <div class="loi-sig-content">
+                        <p class="loi-sig-by">By: _________________________________</p>
+                        <p class="loi-sig-label"><strong>Seller:</strong> <span id="loi-seller-sig-name"></span></p>
+                        <p class="loi-sig-detail" id="loi-seller-sig-email"></p>
+                        <p class="loi-sig-detail" id="loi-seller-sig-phone"></p>
+                    </div>
+                </div>
+            </div>
