@@ -85,6 +85,75 @@
             width: 100%;
         }
 
+        /* Sticky Dashboard Bar */
+        .sticky-dashboard {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .dashboard-metric {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 100px;
+        }
+
+        .dashboard-label {
+            font-size: 0.7rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.25rem;
+        }
+
+        .dashboard-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #14b8a6;
+        }
+
+        .dashboard-value.negative {
+            color: #f87171;
+        }
+
+        .dashboard-value.positive {
+            color: #4ade80;
+        }
+
+        @media (max-width: 900px) {
+            .sticky-dashboard {
+                justify-content: center;
+                padding: 0.75rem 1rem;
+            }
+            
+            .dashboard-metric {
+                min-width: 80px;
+            }
+            
+            .dashboard-value {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .sticky-dashboard {
+                position: relative;
+                top: auto;
+            }
+        }
+
         @media (max-width: 900px) {
             .info-bar {
                 gap: 1rem;
@@ -344,6 +413,16 @@
         input.input-highlight {
             border-color: var(--accent-teal);
             background: rgba(20, 184, 166, 0.05);
+        }
+
+        input.input-target {
+            border-color: #f59e0b !important;
+            background: rgba(245, 158, 11, 0.1) !important;
+        }
+
+        input.input-target::placeholder {
+            color: #9ca3af;
+            font-style: italic;
         }
 
         select {
@@ -732,7 +811,7 @@
                 display: none !important;
             }
 
-            .container, .main-grid, .card, header, footer, .info-bar, .market-analysis-section, .export-buttons {
+            .container, .main-grid, .card, header, footer, .info-bar, .market-analysis-section, .export-buttons, .sticky-dashboard {
                 display: none !important;
             }
 
@@ -1174,6 +1253,34 @@
             </div>
         </div>
 
+        <!-- Sticky Dashboard Bar -->
+        <div class="sticky-dashboard">
+            <div class="dashboard-metric">
+                <span class="dashboard-label">Cap Rate</span>
+                <span class="dashboard-value" id="dashCapRate">0%</span>
+            </div>
+            <div class="dashboard-metric">
+                <span class="dashboard-label">Blended Rate</span>
+                <span class="dashboard-value" id="dashBlendedRate">0%</span>
+            </div>
+            <div class="dashboard-metric">
+                <span class="dashboard-label">Spread</span>
+                <span class="dashboard-value" id="dashSpread">0%</span>
+            </div>
+            <div class="dashboard-metric">
+                <span class="dashboard-label">NOI</span>
+                <span class="dashboard-value" id="dashNOI">$0</span>
+            </div>
+            <div class="dashboard-metric">
+                <span class="dashboard-label">Monthly CF</span>
+                <span class="dashboard-value" id="dashMonthlyCF">$0</span>
+            </div>
+            <div class="dashboard-metric">
+                <span class="dashboard-label">Cash to Seller</span>
+                <span class="dashboard-value" id="dashCashToSeller">$0</span>
+            </div>
+        </div>
+
         <div class="main-grid">
             <!-- LOAN CONFIGURATION -->
             <div class="card">
@@ -1185,8 +1292,8 @@
                 <div class="form-group">
                     <label>Category / Property Type</label>
                     <select id="category" class="input-highlight" onchange="calculate()">
-                        <option value="Mixed Use">Mixed Use</option>
                         <option value="DSCR Residential">DSCR Residential</option>
+                        <option value="Mixed Use">Mixed Use</option>
                         <option value="12+Residential">12+ Residential</option>
                         <option value="Commercial">Commercial</option>
                         <option value="RV Park">RV Park</option>
@@ -1196,13 +1303,18 @@
                 <div class="input-row">
                     <div class="form-group">
                         <label>First Loan % / LTV</label>
-                        <input type="number" id="firstLoanLTV" value="70" step="1" min="0" max="100" class="input-highlight" onchange="calculate()">
+                        <input type="number" id="firstLoanLTV" value="26" step="1" min="0" max="100" class="input-highlight" onchange="calculate()">
                         <span class="helper-text">% of purchase price</span>
                     </div>
                     <div class="form-group">
                         <label>Seller Carry %</label>
-                        <input type="number" id="sellerCarryPct" value="40" step="1" min="0" max="100" class="input-highlight" onchange="calculate()">
+                        <input type="number" id="sellerCarryPct" value="80" step="1" min="0" max="100" class="input-highlight" onchange="calculate()">
                         <span class="helper-text">% of purchase price</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Target Cash to Seller</label>
+                        <input type="number" id="targetCashToSeller" value="" step="1000" min="0" class="input-highlight input-target" placeholder="Optional" onchange="calculateFromTarget()">
+                        <span class="helper-text">NET after closing costs</span>
                     </div>
                 </div>
 
@@ -1249,12 +1361,12 @@
 
                 <div class="form-group">
                     <label>Purchase Price ($)</label>
-                    <input type="number" id="purchasePrice" value="25000000" step="1000" class="input-highlight" onchange="calculate()">
+                    <input type="number" id="purchasePrice" value="675000" step="1000" class="input-highlight" onchange="calculate()">
                 </div>
 
                 <div class="form-group">
                     <label>Asking Price ($)</label>
-                    <input type="number" id="askingPrice" value="25000000" step="1000" class="input-highlight" onchange="calculate()">
+                    <input type="number" id="askingPrice" value="675000" step="1000" class="input-highlight" onchange="calculate()">
                 </div>
 
                 <div class="result-grid">
@@ -1268,13 +1380,13 @@
 
                 <div class="form-group">
                     <label>Annual Rental Revenue ($)</label>
-                    <input type="number" id="rentalRevenue" value="2435916" step="100" class="input-highlight" onchange="calculate()">
+                    <input type="number" id="rentalRevenue" value="48000" step="100" class="input-highlight" onchange="calculate()">
                     <span class="helper-text">Monthly: <span id="monthlyRevenue">$202,993</span></span>
                 </div>
 
                 <div class="form-group">
                     <label>Appreciation per Year (%)</label>
-                    <input type="number" id="appreciationRate" value="3.5" step="0.1" min="0" class="input-highlight" onchange="calculate()">
+                    <input type="number" id="appreciationRate" value="2" step="0.1" min="0" class="input-highlight" onchange="calculate()">
                 </div>
             </div>
 
@@ -1288,7 +1400,7 @@
                 <div class="input-row">
                     <div class="form-group">
                         <label>Agent Fee ($)</label>
-                        <input type="number" id="agentFee" value="0" step="100" class="input-highlight" onchange="calculate()">
+                        <input type="number" id="agentFee" value="16500" step="100" class="input-highlight" onchange="calculate()">
                     </div>
                     <div class="form-group">
                         <label>Rehab Cost ($)</label>
@@ -1420,11 +1532,11 @@
                 <div class="percentage-inputs">
                     <div class="form-group">
                         <label>Property Tax ($/yr)</label>
-                        <input type="number" id="propertyTax" value="0" step="100" onchange="calculate()">
+                        <input type="number" id="propertyTax" value="3000" step="100" onchange="calculate()">
                     </div>
                     <div class="form-group">
                         <label>Insurance ($/yr)</label>
-                        <input type="number" id="insurance" value="0" step="100" onchange="calculate()">
+                        <input type="number" id="insurance" value="3000" step="100" onchange="calculate()">
                     </div>
                     <div class="form-group">
                         <label>HOA ($/yr)</label>
@@ -1441,15 +1553,15 @@
                 <div class="percentage-inputs">
                     <div class="form-group">
                         <label>CapEx & Maint (% Revenue)</label>
-                        <input type="number" id="capexPct" value="0" step="1" min="0" max="50" onchange="calculate()">
+                        <input type="number" id="capexPct" value="2" step="1" min="0" max="50" onchange="calculate()">
                     </div>
                     <div class="form-group">
                         <label>Management (% Revenue)</label>
-                        <input type="number" id="managementPct" value="0" step="1" min="0" max="50" onchange="calculate()">
+                        <input type="number" id="managementPct" value="8" step="1" min="0" max="50" onchange="calculate()">
                     </div>
                     <div class="form-group">
                         <label>Vacancy (% Revenue)</label>
-                        <input type="number" id="vacancyPct" value="0" step="1" min="0" max="50" onchange="calculate()">
+                        <input type="number" id="vacancyPct" value="5" step="1" min="0" max="50" onchange="calculate()">
                     </div>
                 </div>
 
@@ -1594,8 +1706,8 @@
                         <td id="loiPurchasePrice">$0</td>
                     </tr>
                     <tr>
-                        <td>Down Payment to Seller</td>
-                        <td id="loiDownPayment">$0</td>
+                        <td>Cash to Seller at Closing</td>
+                        <td id="loiCashToSeller">$0</td>
                     </tr>
                     <tr>
                         <td>Seller Equity Agreement</td>
@@ -1663,8 +1775,7 @@
         </div>
 
         <footer>
-            Real Estate Underwriting Calculator • All calculations are estimates only © 2026 markarian.ai. This document and its contents are proprietary. 
-   Unauthorized reproduction or distribution is prohibited.
+            Real Estate Underwriting Calculator • All calculations are estimates only
         </footer>
     </div>
 
@@ -1727,7 +1838,56 @@
             }
         }
 
+        // Calculate First Loan % from Target Cash to Seller (NET after closing costs)
+        function calculateFromTarget() {
+            const purchasePrice = parseFloat(document.getElementById('purchasePrice').value) || 0;
+            const targetNetCash = parseFloat(document.getElementById('targetCashToSeller').value) || 0;
+            const closingCostPct = parseFloat(document.getElementById('closingCostPct').value) / 100 || 0;
+            const agentFee = parseFloat(document.getElementById('agentFee').value) || 0;
+            
+            if (purchasePrice > 0 && targetNetCash > 0) {
+                // Calculate closing costs based on purchase price
+                const closingCosts = purchasePrice * closingCostPct;
+                
+                // First Position Loan needs to cover: target net + closing costs + agent fee
+                const requiredFirstLoan = targetNetCash + closingCosts + agentFee;
+                
+                // Calculate what First Loan % should be
+                const firstLoanPct = (requiredFirstLoan / purchasePrice) * 100;
+                
+                // Update the First Loan % field (round to 1 decimal)
+                document.getElementById('firstLoanLTV').value = Math.round(firstLoanPct * 10) / 10;
+            }
+            
+            // Recalculate everything (but don't loop back)
+            calculateWithoutTargetAdjust();
+        }
+
+        // Main calculation without target adjustment (to prevent loops)
+        function calculateWithoutTargetAdjust() {
+            runCalculations();
+        }
+
         function calculate() {
+            // If target cash is set, recalculate First Loan % first
+            const targetNetCash = parseFloat(document.getElementById('targetCashToSeller').value) || 0;
+            if (targetNetCash > 0) {
+                const purchasePrice = parseFloat(document.getElementById('purchasePrice').value) || 0;
+                const closingCostPct = parseFloat(document.getElementById('closingCostPct').value) / 100 || 0;
+                const agentFee = parseFloat(document.getElementById('agentFee').value) || 0;
+                
+                if (purchasePrice > 0) {
+                    const closingCosts = purchasePrice * closingCostPct;
+                    const requiredFirstLoan = targetNetCash + closingCosts + agentFee;
+                    const firstLoanPct = (requiredFirstLoan / purchasePrice) * 100;
+                    document.getElementById('firstLoanLTV').value = Math.round(firstLoanPct * 10) / 10;
+                }
+            }
+            
+            runCalculations();
+        }
+
+        function runCalculations() {
             // Get all inputs
             const category = document.getElementById('category').value;
             const firstLoanLTV = parseFloat(document.getElementById('firstLoanLTV').value) / 100 || 0;
@@ -1930,14 +2090,25 @@
             document.getElementById('sellerCarryBalance').textContent = formatCurrency(sellerCarryBalance);
 
             // LOI Summary
+            const cashToSellerAtClosing = firstPositionLoan - closingCost - agentFee;
             document.getElementById('loiPurchasePrice').textContent = formatCurrency(purchasePrice);
-            document.getElementById('loiDownPayment').textContent = formatCurrency(downPayment);
+            document.getElementById('loiCashToSeller').textContent = formatCurrency(cashToSellerAtClosing);
             document.getElementById('loiSellerEquity').textContent = formatCurrency(sellerCarryAmount);
             document.getElementById('loiAmortization').textContent = sellerCarryAmort;
             document.getElementById('loiYearsBalloon').textContent = yearsToBalloon;
             document.getElementById('loiMonthsStabilize').textContent = monthsToStabilize;
             document.getElementById('loiMonthlyPayment').textContent = formatCurrency(sellerCarryPaymentMonthly);
             document.getElementById('loiInterestRate').textContent = formatPercent(sellerCarryRate, 1);
+
+            // Sticky Dashboard
+            document.getElementById('dashCapRate').textContent = formatPercent(capRate);
+            document.getElementById('dashBlendedRate').textContent = formatPercent(blendedRate);
+            document.getElementById('dashSpread').textContent = formatPercent(capBlendedSpread);
+            document.getElementById('dashSpread').className = 'dashboard-value ' + (capBlendedSpread >= 0 ? 'positive' : 'negative');
+            document.getElementById('dashNOI').textContent = formatCurrency(noi);
+            document.getElementById('dashMonthlyCF').textContent = formatCurrency(monthlyCashFlow);
+            document.getElementById('dashMonthlyCF').className = 'dashboard-value ' + (monthlyCashFlow >= 0 ? 'positive' : 'negative');
+            document.getElementById('dashCashToSeller').textContent = formatCurrency(cashToSellerAtClosing);
         }
 
         // Initialize on load
@@ -2072,6 +2243,7 @@ Please be direct and specific with your analysis.`;
                     sellerCarryAmort: document.getElementById('sellerCarryAmort').value,
                     interestAtBalloon: document.getElementById('interestAtBalloon').value,
                     yearsToBalloon: document.getElementById('yearsToBalloon').value,
+                    targetCashToSeller: document.getElementById('targetCashToSeller').value,
                 },
                 stabilization: {
                     monthsToStabilize: document.getElementById('monthsToStabilize').value,
@@ -2158,6 +2330,7 @@ Please be direct and specific with your analysis.`;
                         document.getElementById('sellerCarryAmort').value = data.financing.sellerCarryAmort || '';
                         document.getElementById('interestAtBalloon').value = data.financing.interestAtBalloon || 'No';
                         document.getElementById('yearsToBalloon').value = data.financing.yearsToBalloon || '';
+                        document.getElementById('targetCashToSeller').value = data.financing.targetCashToSeller || '';
                     }
                     
                     // Stabilization
