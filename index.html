@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Real Estate Underwriting Calculator</title>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --bg-primary: #0a0f1a;
@@ -749,22 +750,6 @@
             gap: 0.5rem;
         }
 
-        .library-save-btn {
-            background: linear-gradient(135deg, #14b8a6, #0d9488);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .library-save-btn:hover {
-            transform: translateY(-1px);
-        }
-
         .library-close-btn {
             background: transparent;
             color: var(--text-secondary);
@@ -781,7 +766,8 @@
         }
 
         .library-list {
-            max-height: 400px;
+            max-height: 500px;
+            min-height: 200px;
             overflow-y: auto;
         }
 
@@ -990,6 +976,260 @@
         .load-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 25px rgba(99, 102, 241, 0.5);
+        }
+
+        /* Auth Modal Styles */
+        .auth-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .auth-modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+            margin: 1rem;
+        }
+
+        .auth-modal h2 {
+            text-align: center;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .auth-modal .subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .auth-form .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .auth-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .auth-form input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--bg-input);
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .auth-form input:focus {
+            outline: none;
+            border-color: var(--accent-teal);
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 0.875rem;
+            background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(20, 184, 166, 0.4);
+        }
+
+        .auth-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .auth-toggle {
+            text-align: center;
+            margin-top: 1rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .auth-toggle a {
+            color: var(--accent-teal);
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .auth-toggle a:hover {
+            text-decoration: underline;
+        }
+
+        .auth-error {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid var(--accent-red);
+            color: var(--accent-red);
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .auth-error.show {
+            display: block;
+        }
+
+        /* User Profile Indicator */
+        .user-indicator {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            padding: 0.5rem 1rem;
+            z-index: 100;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: white;
+        }
+
+        .user-email {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .logout-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: var(--accent-red);
+            color: var(--accent-red);
+        }
+
+        /* Address Collision Warning */
+        .collision-warning {
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid var(--accent-amber);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .collision-warning.show {
+            display: block;
+        }
+
+        .collision-warning-title {
+            color: var(--accent-amber);
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .collision-warning-detail {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        /* Sync Status Indicator */
+        .sync-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-left: auto;
+        }
+
+        .sync-status.syncing {
+            color: var(--accent-amber);
+        }
+
+        .sync-status.synced {
+            color: var(--accent-green);
+        }
+
+        .sync-status.error {
+            color: var(--accent-red);
+        }
+
+        .sync-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .sync-status.syncing .sync-dot {
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        @media (max-width: 600px) {
+            .user-indicator {
+                top: auto;
+                bottom: 1rem;
+                right: 1rem;
+                left: 1rem;
+                justify-content: center;
+            }
+            
+            .user-email {
+                display: none;
+            }
         }
 
         /* PDF Summary Styles */
@@ -1434,6 +1674,61 @@
     </style>
 </head>
 <body>
+    <!-- Auth Modal -->
+    <div class="auth-modal-overlay" id="authModal">
+        <div class="auth-modal">
+            <h2 id="authTitle">Welcome Back</h2>
+            <p class="subtitle" id="authSubtitle">Sign in to sync your deals across devices</p>
+            
+            <div class="auth-error" id="authError"></div>
+            
+            <form class="auth-form" id="authForm" onsubmit="handleAuth(event)">
+                <div class="form-group" id="nameGroup" style="display: none;">
+                    <label for="authName">Full Name</label>
+                    <input type="text" id="authName" placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label for="authEmail">Email</label>
+                    <input type="email" id="authEmail" placeholder="you@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="authPassword">Password</label>
+                    <input type="password" id="authPassword" placeholder="••••••••" required minlength="6">
+                </div>
+                <button type="submit" class="auth-btn" id="authSubmitBtn">Sign In</button>
+            </form>
+            
+            <div class="auth-toggle">
+                <span id="authToggleText">Don't have an account?</span>
+                <a onclick="toggleAuthMode()" id="authToggleLink">Sign Up</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Indicator -->
+    <div class="user-indicator" id="userIndicator" style="display: none;">
+        <div class="user-avatar" id="userAvatar">?</div>
+        <span class="user-email" id="userEmail"></span>
+        <div class="sync-status synced" id="syncStatus">
+            <span class="sync-dot"></span>
+            <span class="sync-text">Synced</span>
+        </div>
+        <button class="logout-btn" onclick="handleLogout()">Logout</button>
+    </div>
+
+    <!-- Address Collision Warning (inserted near address fields via JS) -->
+    <template id="collisionWarningTemplate">
+        <div class="collision-warning" id="collisionWarning">
+            <div class="collision-warning-title">
+                <span>⚠️</span>
+                <span>Address Already Being Worked</span>
+            </div>
+            <div class="collision-warning-detail" id="collisionDetail">
+                This property is being worked by another team member.
+            </div>
+        </div>
+    </template>
+
     <div class="container">
         <header>
             <h1>Real Estate Underwriting Calculator</h1>
@@ -1446,10 +1741,19 @@
                 <div class="info-section">
                     <div class="info-section-title">📍 Property Address</div>
                     <div class="info-row">
-                        <input type="text" id="streetAddress" placeholder="Street address (e.g., 1234 Any Street)" class="info-input" style="flex: 2;">
-                        <input type="text" id="city" placeholder="City" class="info-input" style="flex: 1;">
-                        <input type="text" id="state" placeholder="State" class="info-input" style="flex: 0.3;" maxlength="2">
+                        <input type="text" id="streetAddress" placeholder="Street address (e.g., 1234 Any Street)" class="info-input" style="flex: 2;" onblur="checkAddressCollision()">
+                        <input type="text" id="city" placeholder="City" class="info-input" style="flex: 1;" onblur="checkAddressCollision()">
+                        <input type="text" id="state" placeholder="ST" class="info-input" style="flex: 0.3; text-transform: uppercase;" maxlength="2" onblur="checkAddressCollision()">
                         <input type="text" id="zip" placeholder="Zip" class="info-input" style="flex: 0.5;" maxlength="10">
+                    </div>
+                    <div class="collision-warning" id="collisionWarning">
+                        <div class="collision-warning-title">
+                            <span>⚠️</span>
+                            <span>Address Already Being Worked</span>
+                        </div>
+                        <div class="collision-warning-detail" id="collisionDetail">
+                            This property is being worked by another team member.
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1984,8 +2288,8 @@
 
         <!-- Export Buttons -->
         <div class="export-buttons">
-            <button class="library-btn" onclick="toggleLibrary()">
-                <span>📚</span> Show Deal Library
+            <button class="library-btn" onclick="saveToLibrary()">
+                <span>💾</span> Save Deal to Library
             </button>
             <button class="save-btn" onclick="saveToFile()">
                 <span>💾</span> Save Deal To Folder
@@ -2003,15 +2307,13 @@
         </div>
 
         <!-- Deal Library Panel -->
-        <div class="deal-library" id="dealLibrary" style="display: none;">
+        <div class="deal-library" id="dealLibrary">
             <div class="library-header">
                 <h3>📚 Deal Library</h3>
                 <div class="library-actions">
-                    <button class="library-save-btn" onclick="saveToLibrary()">+ Save Current Deal</button>
                     <button class="library-export-btn" onclick="exportAllDeals()">⬇️ Export All</button>
                     <button class="library-import-btn" onclick="document.getElementById('importLibraryInput').click()">⬆️ Import</button>
                     <input type="file" id="importLibraryInput" accept=".json" style="display: none;" onchange="importAllDeals(event)">
-                    <button class="library-close-btn" onclick="toggleLibrary()">✕</button>
                 </div>
             </div>
             
@@ -2047,6 +2349,460 @@
     </div>
 
     <script>
+        // =============================================
+        // SUPABASE CONFIGURATION
+        // =============================================
+        const SUPABASE_URL = 'https://rvlvmlcojwthlwykwmgq.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ2bHZtbGNvand0aGx3eWt3bWdxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgwNTU5NDYsImV4cCI6MjA4MzYzMTk0Nn0.LrzvTu43xl07yhyZqibXgfATxEhvoMuhdZ7GK_QYJcg';
+        
+        // Initialize Supabase client (with error handling)
+        let supabase = null;
+        try {
+            if (window.supabase) {
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            } else {
+                console.warn('Supabase library not loaded. Cloud sync will be disabled.');
+            }
+        } catch (e) {
+            console.error('Failed to initialize Supabase:', e);
+        }
+        
+        // Current user state
+        let currentUser = null;
+        let isSignUpMode = false;
+
+        // =============================================
+        // AUTHENTICATION FUNCTIONS
+        // =============================================
+        
+        async function initAuth() {
+            // If Supabase isn't available, skip auth and show app directly
+            if (!supabase) {
+                console.warn('Running in offline mode - no cloud sync');
+                hideAuthModal();
+                return;
+            }
+            
+            try {
+                // Check for existing session
+                const { data: { session } } = await supabase.auth.getSession();
+                
+                if (session) {
+                    currentUser = session.user;
+                    showApp();
+                    await loadDealsFromCloud();
+                } else {
+                    showAuthModal();
+                }
+
+                // Listen for auth changes
+                supabase.auth.onAuthStateChange(async (event, session) => {
+                    if (event === 'SIGNED_IN' && session) {
+                        currentUser = session.user;
+                        showApp();
+                        await loadDealsFromCloud();
+                    } else if (event === 'SIGNED_OUT') {
+                        currentUser = null;
+                        showAuthModal();
+                    }
+                });
+            } catch (e) {
+                console.error('Auth initialization error:', e);
+                hideAuthModal(); // Show app anyway if auth fails
+            }
+        }
+
+        function showAuthModal() {
+            document.getElementById('authModal').style.display = 'flex';
+            document.getElementById('userIndicator').style.display = 'none';
+        }
+
+        function hideAuthModal() {
+            document.getElementById('authModal').style.display = 'none';
+        }
+
+        function showApp() {
+            hideAuthModal();
+            
+            // Show user indicator
+            const indicator = document.getElementById('userIndicator');
+            indicator.style.display = 'flex';
+            
+            // Set user info
+            const email = currentUser.email;
+            document.getElementById('userEmail').textContent = email;
+            document.getElementById('userAvatar').textContent = email.charAt(0).toUpperCase();
+        }
+
+        function toggleAuthMode() {
+            isSignUpMode = !isSignUpMode;
+            
+            document.getElementById('authTitle').textContent = isSignUpMode ? 'Create Account' : 'Welcome Back';
+            document.getElementById('authSubtitle').textContent = isSignUpMode 
+                ? 'Sign up to save and sync your deals' 
+                : 'Sign in to sync your deals across devices';
+            document.getElementById('authSubmitBtn').textContent = isSignUpMode ? 'Sign Up' : 'Sign In';
+            document.getElementById('authToggleText').textContent = isSignUpMode 
+                ? 'Already have an account?' 
+                : "Don't have an account?";
+            document.getElementById('authToggleLink').textContent = isSignUpMode ? 'Sign In' : 'Sign Up';
+            document.getElementById('nameGroup').style.display = isSignUpMode ? 'block' : 'none';
+            
+            // Clear any errors
+            hideAuthError();
+        }
+
+        function showAuthError(message) {
+            const errorEl = document.getElementById('authError');
+            errorEl.textContent = message;
+            errorEl.classList.add('show');
+        }
+
+        function hideAuthError() {
+            document.getElementById('authError').classList.remove('show');
+        }
+
+        async function handleAuth(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('authEmail').value;
+            const password = document.getElementById('authPassword').value;
+            const submitBtn = document.getElementById('authSubmitBtn');
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = isSignUpMode ? 'Creating account...' : 'Signing in...';
+            hideAuthError();
+
+            try {
+                if (isSignUpMode) {
+                    const name = document.getElementById('authName').value;
+                    const { data, error } = await supabase.auth.signUp({
+                        email,
+                        password,
+                        options: {
+                            data: { full_name: name }
+                        }
+                    });
+                    
+                    if (error) throw error;
+                    
+                    if (data.user && !data.session) {
+                        // Email confirmation required
+                        showAuthError('Check your email for a confirmation link!');
+                        submitBtn.textContent = 'Check your email';
+                        return;
+                    }
+                } else {
+                    const { data, error } = await supabase.auth.signInWithPassword({
+                        email,
+                        password
+                    });
+                    
+                    if (error) throw error;
+                }
+            } catch (error) {
+                showAuthError(error.message);
+                submitBtn.disabled = false;
+                submitBtn.textContent = isSignUpMode ? 'Sign Up' : 'Sign In';
+            }
+        }
+
+        async function handleLogout() {
+            await supabase.auth.signOut();
+            // Clear local library
+            localStorage.removeItem('dealLibrary');
+            renderLibrary();
+        }
+
+        // =============================================
+        // CLOUD SYNC FUNCTIONS
+        // =============================================
+
+        function setSyncStatus(status, text) {
+            const syncEl = document.getElementById('syncStatus');
+            syncEl.className = 'sync-status ' + status;
+            syncEl.querySelector('.sync-text').textContent = text;
+        }
+
+        async function loadDealsFromCloud() {
+            if (!currentUser) return;
+            
+            setSyncStatus('syncing', 'Syncing...');
+            
+            try {
+                const { data, error } = await supabase
+                    .from('deals')
+                    .select('*')
+                    .eq('user_id', currentUser.id)
+                    .order('created_at', { ascending: false });
+                
+                if (error) throw error;
+                
+                // Convert cloud deals to local format and save to localStorage
+                const localDeals = data.map(cloudDealToLocal);
+                localStorage.setItem('dealLibrary', JSON.stringify(localDeals));
+                
+                renderLibrary();
+                setSyncStatus('synced', 'Synced');
+            } catch (error) {
+                console.error('Error loading deals:', error);
+                setSyncStatus('error', 'Sync failed');
+            }
+        }
+
+        async function saveToCloud(deal) {
+            if (!currentUser) return null;
+            
+            setSyncStatus('syncing', 'Saving...');
+            
+            try {
+                const cloudDeal = localDealToCloud(deal);
+                cloudDeal.user_id = currentUser.id;
+                
+                const { data, error } = await supabase
+                    .from('deals')
+                    .insert([cloudDeal])
+                    .select()
+                    .single();
+                
+                if (error) throw error;
+                
+                setSyncStatus('synced', 'Saved');
+                return data;
+            } catch (error) {
+                console.error('Error saving deal:', error);
+                setSyncStatus('error', 'Save failed');
+                return null;
+            }
+        }
+
+        async function updateInCloud(deal) {
+            if (!currentUser || !deal.cloud_id) return;
+            
+            setSyncStatus('syncing', 'Saving...');
+            
+            try {
+                const cloudDeal = localDealToCloud(deal);
+                
+                const { error } = await supabase
+                    .from('deals')
+                    .update(cloudDeal)
+                    .eq('id', deal.cloud_id);
+                
+                if (error) throw error;
+                
+                setSyncStatus('synced', 'Saved');
+            } catch (error) {
+                console.error('Error updating deal:', error);
+                setSyncStatus('error', 'Save failed');
+            }
+        }
+
+        async function deleteFromCloud(cloudId) {
+            if (!currentUser || !cloudId) return;
+            
+            try {
+                const { error } = await supabase
+                    .from('deals')
+                    .delete()
+                    .eq('id', cloudId);
+                
+                if (error) throw error;
+            } catch (error) {
+                console.error('Error deleting deal:', error);
+            }
+        }
+
+        // Convert local deal format to cloud format
+        function localDealToCloud(deal) {
+            return {
+                street_address: deal.propertyInfo?.streetAddress || '',
+                city: deal.propertyInfo?.city || '',
+                state: deal.propertyInfo?.state || '',
+                zip: deal.propertyInfo?.zip || '',
+                property_link: deal.propertyInfo?.link || '',
+                preparer_name: deal.preparer?.name || '',
+                preparer_email: deal.preparer?.email || '',
+                preparer_phone: deal.preparer?.phone || '',
+                seller_name: deal.seller?.name || '',
+                seller_email: deal.seller?.email || '',
+                seller_phone: deal.seller?.phone || '',
+                category: deal.loanConfig?.category || 'DSCR Residential',
+                first_loan_ltv: parseFloat(deal.loanConfig?.firstLoanLTV) || 26,
+                seller_carry_pct: parseFloat(deal.loanConfig?.sellerCarryPct) || 80,
+                target_cash_to_seller: parseFloat(deal.loanConfig?.targetCashToSeller) || null,
+                interest_only: deal.loanConfig?.interestOnly || 'No',
+                interest_at_balloon: deal.loanConfig?.interestAtBalloon || 'No',
+                months_to_stabilize: parseInt(deal.loanConfig?.monthsToStabilize) || 0,
+                revenue_during_stab: parseFloat(deal.loanConfig?.revenueDuringStab) || 100,
+                years_to_balloon: parseInt(deal.loanConfig?.yearsToBalloon) || 8,
+                purchase_price: parseFloat(deal.dealTerms?.purchasePrice) || 0,
+                asking_price: parseFloat(deal.dealTerms?.askingPrice) || 0,
+                rental_revenue: parseFloat(deal.dealTerms?.rentalRevenue) || 0,
+                appreciation_rate: parseFloat(deal.dealTerms?.appreciationRate) || 2,
+                agent_fee: parseFloat(deal.cashToBuyer?.agentFee) || 0,
+                rehab_cost: parseFloat(deal.cashToBuyer?.rehabCost) || 0,
+                assignment_fee_pct: parseFloat(deal.cashToBuyer?.assignmentFeePct) || 5,
+                appraisal_cost: parseFloat(deal.cashToBuyer?.appraisalCost) || 0,
+                closing_cost_pct: parseFloat(deal.cashToBuyer?.closingCostPct) || 5,
+                seller_carry_rate: parseFloat(deal.sellerFinancing?.rate) || 0,
+                seller_carry_amort: parseInt(deal.sellerFinancing?.amortization) || 30,
+                property_tax: parseFloat(deal.expenses?.propertyTax) || 0,
+                insurance: parseFloat(deal.expenses?.insurance) || 0,
+                hoa: parseFloat(deal.expenses?.hoa) || 0,
+                other_expenses: parseFloat(deal.expenses?.other) || 0,
+                capex_pct: parseFloat(deal.expenses?.capexPct) || 5,
+                management_pct: parseFloat(deal.expenses?.managementPct) || 8,
+                vacancy_pct: parseFloat(deal.expenses?.vacancyPct) || 5,
+                full_data: deal,
+                updated_at: new Date().toISOString()
+            };
+        }
+
+        // Convert cloud deal format to local format
+        function cloudDealToLocal(cloudDeal) {
+            // If we have full_data stored, use that as the base
+            const base = cloudDeal.full_data || {};
+            
+            return {
+                id: cloudDeal.id.substring(0, 13) + Date.now(), // Create local ID
+                cloud_id: cloudDeal.id,
+                version: '1.0',
+                savedAt: cloudDeal.created_at,
+                propertyInfo: {
+                    streetAddress: cloudDeal.street_address || base.propertyInfo?.streetAddress || '',
+                    city: cloudDeal.city || base.propertyInfo?.city || '',
+                    state: cloudDeal.state || base.propertyInfo?.state || '',
+                    zip: cloudDeal.zip || base.propertyInfo?.zip || '',
+                    address: `${cloudDeal.street_address}, ${cloudDeal.city}, ${cloudDeal.state} ${cloudDeal.zip}`.trim(),
+                    link: cloudDeal.property_link || base.propertyInfo?.link || '',
+                },
+                preparer: {
+                    name: cloudDeal.preparer_name || base.preparer?.name || '',
+                    email: cloudDeal.preparer_email || base.preparer?.email || '',
+                    phone: cloudDeal.preparer_phone || base.preparer?.phone || '',
+                },
+                seller: {
+                    name: cloudDeal.seller_name || base.seller?.name || '',
+                    email: cloudDeal.seller_email || base.seller?.email || '',
+                    phone: cloudDeal.seller_phone || base.seller?.phone || '',
+                },
+                loanConfig: {
+                    category: cloudDeal.category || base.loanConfig?.category || 'DSCR Residential',
+                    firstLoanLTV: cloudDeal.first_loan_ltv || base.loanConfig?.firstLoanLTV || 26,
+                    sellerCarryPct: cloudDeal.seller_carry_pct || base.loanConfig?.sellerCarryPct || 80,
+                    targetCashToSeller: cloudDeal.target_cash_to_seller || base.loanConfig?.targetCashToSeller || '',
+                    interestOnly: cloudDeal.interest_only || base.loanConfig?.interestOnly || 'No',
+                    interestAtBalloon: cloudDeal.interest_at_balloon || base.loanConfig?.interestAtBalloon || 'No',
+                    monthsToStabilize: cloudDeal.months_to_stabilize || base.loanConfig?.monthsToStabilize || 0,
+                    revenueDuringStab: cloudDeal.revenue_during_stab || base.loanConfig?.revenueDuringStab || 100,
+                    yearsToBalloon: cloudDeal.years_to_balloon || base.loanConfig?.yearsToBalloon || 8,
+                },
+                dealTerms: {
+                    purchasePrice: cloudDeal.purchase_price || base.dealTerms?.purchasePrice || 0,
+                    askingPrice: cloudDeal.asking_price || base.dealTerms?.askingPrice || 0,
+                    rentalRevenue: cloudDeal.rental_revenue || base.dealTerms?.rentalRevenue || 0,
+                    appreciationRate: cloudDeal.appreciation_rate || base.dealTerms?.appreciationRate || 2,
+                },
+                cashToBuyer: {
+                    agentFee: cloudDeal.agent_fee || base.cashToBuyer?.agentFee || 0,
+                    rehabCost: cloudDeal.rehab_cost || base.cashToBuyer?.rehabCost || 0,
+                    assignmentFeePct: cloudDeal.assignment_fee_pct || base.cashToBuyer?.assignmentFeePct || 5,
+                    appraisalCost: cloudDeal.appraisal_cost || base.cashToBuyer?.appraisalCost || 0,
+                    closingCostPct: cloudDeal.closing_cost_pct || base.cashToBuyer?.closingCostPct || 5,
+                },
+                sellerFinancing: {
+                    rate: cloudDeal.seller_carry_rate || base.sellerFinancing?.rate || 0,
+                    amortization: cloudDeal.seller_carry_amort || base.sellerFinancing?.amortization || 30,
+                },
+                expenses: {
+                    propertyTax: cloudDeal.property_tax || base.expenses?.propertyTax || 0,
+                    insurance: cloudDeal.insurance || base.expenses?.insurance || 0,
+                    hoa: cloudDeal.hoa || base.expenses?.hoa || 0,
+                    other: cloudDeal.other_expenses || base.expenses?.other || 0,
+                    capexPct: cloudDeal.capex_pct || base.expenses?.capexPct || 5,
+                    managementPct: cloudDeal.management_pct || base.expenses?.managementPct || 8,
+                    vacancyPct: cloudDeal.vacancy_pct || base.expenses?.vacancyPct || 5,
+                }
+            };
+        }
+
+        // =============================================
+        // ADDRESS COLLISION DETECTION
+        // =============================================
+
+        let collisionCheckTimeout = null;
+
+        async function checkAddressCollision() {
+            // Debounce the check
+            if (collisionCheckTimeout) {
+                clearTimeout(collisionCheckTimeout);
+            }
+            
+            collisionCheckTimeout = setTimeout(async () => {
+                await performCollisionCheck();
+            }, 500);
+        }
+
+        async function performCollisionCheck() {
+            if (!currentUser) return;
+            
+            const streetAddress = document.getElementById('streetAddress').value.trim();
+            const city = document.getElementById('city').value.trim();
+            const state = document.getElementById('state').value.trim();
+            
+            // Need at least street and city to check
+            if (!streetAddress || !city) {
+                hideCollisionWarning();
+                return;
+            }
+            
+            try {
+                const { data, error } = await supabase.rpc('check_address_collision', {
+                    p_street_address: streetAddress,
+                    p_city: city,
+                    p_state: state || '',
+                    p_exclude_user_id: currentUser.id
+                });
+                
+                if (error) {
+                    console.error('Collision check error:', error);
+                    return;
+                }
+                
+                if (data && data.length > 0) {
+                    showCollisionWarning(data);
+                } else {
+                    hideCollisionWarning();
+                }
+            } catch (error) {
+                console.error('Error checking collision:', error);
+            }
+        }
+
+        function showCollisionWarning(matches) {
+            const warningEl = document.getElementById('collisionWarning');
+            const detailEl = document.getElementById('collisionDetail');
+            
+            if (matches.length === 1) {
+                const match = matches[0];
+                const date = new Date(match.created_at).toLocaleDateString();
+                detailEl.textContent = `Being worked by ${match.user_email} (saved ${date})`;
+            } else {
+                detailEl.textContent = `Being worked by ${matches.length} team members`;
+            }
+            
+            warningEl.classList.add('show');
+        }
+
+        function hideCollisionWarning() {
+            document.getElementById('collisionWarning').classList.remove('show');
+        }
+
+        // =============================================
+        // UTILITY FUNCTIONS
+        // =============================================
+        
         // Utility functions
         function formatCurrency(num) {
             if (isNaN(num) || !isFinite(num)) return '$0';
@@ -2381,6 +3137,8 @@
         // Initialize on load
         document.addEventListener('DOMContentLoaded', function() {
             calculate();
+            renderLibrary();
+            initAuth(); // Initialize authentication
         });
 
         // Generate AI Prompt
@@ -2538,16 +3296,6 @@ Please be direct and specific with your analysis.`;
         }
 
         // Deal Library Functions (Local Storage)
-        function toggleLibrary() {
-            const library = document.getElementById('dealLibrary');
-            if (library.style.display === 'none') {
-                library.style.display = 'block';
-                renderLibrary();
-            } else {
-                library.style.display = 'none';
-            }
-        }
-
         function getLibrary() {
             const stored = localStorage.getItem('dealLibrary');
             return stored ? JSON.parse(stored) : [];
@@ -2557,16 +3305,33 @@ Please be direct and specific with your analysis.`;
             localStorage.setItem('dealLibrary', JSON.stringify(deals));
         }
 
-        function saveToLibrary() {
+        async function saveToLibrary() {
             const deal = buildDealObject();
             deal.id = Date.now(); // Unique ID
             
+            // Save to cloud first
+            if (currentUser) {
+                const cloudResult = await saveToCloud(deal);
+                if (cloudResult) {
+                    deal.cloud_id = cloudResult.id;
+                }
+            }
+            
+            // Also save to localStorage
             const deals = getLibrary();
             deals.unshift(deal); // Add to beginning
             saveLibrary(deals);
             renderLibrary();
             
-            alert('Deal saved to library!');
+            // Show success message (less intrusive than alert)
+            const btn = document.querySelector('.library-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span>✓</span> Saved!';
+            btn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.style.background = '';
+            }, 2000);
         }
 
         function loadFromLibrary(id) {
@@ -2574,14 +3339,22 @@ Please be direct and specific with your analysis.`;
             const deal = deals.find(d => d.id === id);
             if (deal) {
                 populateFormFromDeal(deal);
-                alert('Deal loaded!');
+                // Scroll to top to see the form
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
 
-        function deleteFromLibrary(id) {
+        async function deleteFromLibrary(id) {
             if (!confirm('Delete this deal from your library?')) return;
             
             let deals = getLibrary();
+            const dealToDelete = deals.find(d => d.id === id);
+            
+            // Delete from cloud if it has a cloud_id
+            if (dealToDelete?.cloud_id) {
+                await deleteFromCloud(dealToDelete.cloud_id);
+            }
+            
             deals = deals.filter(d => d.id !== id);
             saveLibrary(deals);
             renderLibrary();
