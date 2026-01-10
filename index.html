@@ -3321,9 +3321,9 @@ Please be direct and specific with your analysis.`;
             }, 2000);
         }
 
-        function loadFromLibrary(id) {
+        function loadFromLibrary(dealId) {
             const deals = getLibrary();
-            const deal = deals.find(d => d.id === id);
+            const deal = deals.find(d => String(d.id) === String(dealId));
             if (deal) {
                 populateFormFromDeal(deal);
                 // Scroll to top to see the form
@@ -3331,27 +3331,30 @@ Please be direct and specific with your analysis.`;
             }
         }
 
-        async function deleteFromLibrary(id) {
+        async function deleteFromLibrary(dealId) {
             if (!confirm('Delete this deal from your library?')) return;
             
             let deals = getLibrary();
-            const dealToDelete = deals.find(d => d.id === id);
+            const dealToDelete = deals.find(d => String(d.id) === String(dealId));
             
             // Delete from cloud if it has a cloud_id
             if (dealToDelete?.cloud_id) {
                 await deleteFromCloud(dealToDelete.cloud_id);
             }
             
-            deals = deals.filter(d => d.id !== id);
+            deals = deals.filter(d => String(d.id) !== String(dealId));
             saveLibrary(deals);
             renderLibrary();
         }
 
-        function emailOffer(id) {
+        function emailOffer(dealId) {
             const deals = getLibrary();
-            const deal = deals.find(d => d.id === id);
+            const deal = deals.find(d => String(d.id) === String(dealId));
             
-            if (!deal) return;
+            if (!deal) {
+                console.error('Deal not found:', dealId);
+                return;
+            }
             
             // Get deal details
             const sellerName = deal.seller?.name || 'Seller';
@@ -3425,8 +3428,12 @@ Note: Please find the attached LOI and PDF Summary documents for complete deal t
             // Encode for mailto
             const mailtoLink = `mailto:${encodeURIComponent(sellerEmail)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
             
-            // Open email client
-            window.location.href = mailtoLink;
+            // Open email client using window.open as fallback
+            const emailWindow = window.open(mailtoLink, '_blank');
+            if (!emailWindow) {
+                // If popup blocked, try location.href
+                window.location.href = mailtoLink;
+            }
         }
 
         function renderLibrary() {
@@ -3484,17 +3491,17 @@ Note: Please find the attached LOI and PDF Summary documents for complete deal t
                 
                 return `
                     <div class="library-item">
-                        <div class="library-item-info" onclick="loadFromLibrary(${deal.id})">
+                        <div class="library-item-info" onclick="loadFromLibrary('${deal.id}')">
                             <div class="library-item-address">${address}</div>
                             <div class="library-item-meta">Saved ${date} ${locationBadge}</div>
                             ${seller ? `<div class="library-item-details">Seller: <span class="library-item-seller">${seller}</span></div>` : ''}
                         </div>
                         <div class="library-item-price">${price}</div>
                         <div class="library-item-actions">
-                            <button class="library-item-email" onclick="emailOffer(${deal.id})" ${hasSellerEmail ? '' : 'disabled'} title="${hasSellerEmail ? 'Email offer to seller' : 'No seller email saved'}">
+                            <button class="library-item-email" onclick="emailOffer('${deal.id}')" ${hasSellerEmail ? '' : 'disabled'} title="${hasSellerEmail ? 'Email offer to seller' : 'No seller email saved'}">
                                 <span>📧</span> Email Seller
                             </button>
-                            <button class="library-item-delete" onclick="deleteFromLibrary(${deal.id})" title="Delete">🗑️</button>
+                            <button class="library-item-delete" onclick="deleteFromLibrary('${deal.id}')" title="Delete">🗑️</button>
                         </div>
                     </div>
                 `;
