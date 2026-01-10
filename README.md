@@ -1,115 +1,231 @@
-# equitycarrycalculator
-A calculator to evaluate opportunities for the equity carry method
-# Real Estate Underwriting Calculator for the Equity Carry Method
+# Real Estate Underwriting Calculator, created by Chris Markarian at markarian.ai
 
-A comprehensive web-based tool for analyzing real estate investment deals with seller financing, equity carry, and balloon payment structures.
+A comprehensive real estate deal analysis tool with seller financing, equity carry structures, and cloud sync capabilities.
 
-![Calculator Preview](preview.png)
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Platform](https://img.shields.io/badge/platform-web-brightgreen.svg)
 
-## 🔗 Live Demo
+## 🏠 Overview
 
-**[Try the Calculator →](https://equitycarrycalculator.netlify.app/)**
+This calculator helps real estate investors analyze deals using creative financing strategies, specifically **equity carry** and **capital stacking** techniques. It provides instant calculations for cash flow, cap rates, blended interest rates, and more.
 
-## Overview
+### Key Features
 
-This calculator was built to replace complex Excel-based underwriting spreadsheets with a modern, interactive web application. It's designed for real estate investors, wholesalers, and agents who need to quickly analyze deals involving creative financing structures.
+- **Deal Analysis** - Complete underwriting with NOI, cap rate, cash-on-cash return, and spread calculations
+- **Seller Financing** - Model seller carry terms including interest rates, amortization, and balloon payments
+- **Capital Stacking** - Combine first position loans with seller financing to maximize leverage
+- **Cloud Sync** - Save deals to the cloud and access them from any device
+- **Team Collaboration** - Collision detection alerts when multiple team members work the same property
+- **PDF Export** - Generate professional deal summaries
+- **LOI Generator** - Create Letters of Intent with deal terms pre-filled
+- **AI Prompt Generator** - Generate prompts for AI-assisted market analysis
 
-## Features
+## 🚀 Live Demo
 
-### 📊 Deal Analysis
-- Purchase price vs. asking price comparison
-- Automatic interest rate and amortization based on property type
-- Support for DSCR Residential, 12+ Unit Residential, Commercial, Mixed Use, and RV Parks
+Access the calculator at: [https://chris-markarian.github.io/equitycarrycalculator/](https://chris-markarian.github.io/equitycarrycalculator/)
 
-### 💰 Financing Structures
-- First position loan calculations with interest-only option
-- Seller carry/seller financing with customizable terms
-- Adjustable LTV percentages and down payment calculations
-- Balloon payment tracking and projections
+## 📊 Calculations Included
 
-### 📈 Cash Flow Analysis
-- Net Operating Income (NOI) calculation
-- Cap rate analysis
-- Cash-on-Cash return
-- Monthly and annual cash flow projections
-- Operating expense tracking (taxes, insurance, CapEx, vacancy, management)
+| Category | Metrics |
+|----------|---------|
+| **Returns** | Cap Rate, Cash-on-Cash Return, Blended Interest Rate, Spread |
+| **Cash Flow** | NOI, Annual/Monthly Cash Flow, CF to Purchase Price |
+| **Financing** | First Position Loan, Seller Carry Amount, Total Financing %, Down Payment |
+| **Expenses** | Property Tax, Insurance, HOA, CapEx, Management, Vacancy |
+| **Projections** | Value at Balloon, Equity at Balloon, Remaining Balances |
+| **Deal Structure** | Cash to Seller at Closing, Cash to Buyer, Agent Fees, Closing Costs |
 
-### 🎈 Equity & Balloon Projections
-- Property value appreciation modeling
-- Remaining loan balance calculations
-- Equity position at balloon date
-- Equity percentage projections
+## 🔧 Setup
 
-### 📄 PDF Export
-- Professional one-page summary report
-- Property address and preparer information
-- Key metrics highlighted
-- Print-ready formatting
+### Basic Usage (No Cloud Sync)
 
-## Tech Stack
+Simply open `index.html` in a web browser. All features work except cloud sync.
 
-- **HTML5** — Semantic markup
-- **CSS3** — Custom properties, Grid, Flexbox, Print styles
-- **Vanilla JavaScript** — No dependencies, runs anywhere
-- **Google Fonts** — DM Sans & Space Mono
+### Full Setup with Cloud Sync
 
-## Getting Started
+1. **Create a Supabase Account**
+   - Go to [supabase.com](https://supabase.com) and create a free account
+   - Create a new project
 
-### Option 1: Open Directly
-Simply download `index.html` and open it in any modern browser. No server required.
+2. **Run Database Setup**
+   - In Supabase, go to **SQL Editor** → **New Query**
+   - Paste and run the following SQL:
 
-### Option 2: Deploy to Netlify
-1. Drag and drop the HTML file to [Netlify Drop](https://app.netlify.com/drop)
-2. Get an instant shareable URL
+```sql
+-- Create the deals table
+CREATE TABLE IF NOT EXISTS deals (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    street_address TEXT,
+    city TEXT,
+    state TEXT,
+    zip TEXT,
+    property_link TEXT,
+    preparer_name TEXT,
+    preparer_email TEXT,
+    preparer_phone TEXT,
+    seller_name TEXT,
+    seller_email TEXT,
+    seller_phone TEXT,
+    category TEXT DEFAULT 'DSCR Residential',
+    first_loan_ltv NUMERIC DEFAULT 26,
+    seller_carry_pct NUMERIC DEFAULT 80,
+    target_cash_to_seller NUMERIC,
+    interest_only TEXT DEFAULT 'No',
+    interest_at_balloon TEXT DEFAULT 'No',
+    months_to_stabilize INTEGER DEFAULT 0,
+    revenue_during_stab NUMERIC DEFAULT 100,
+    years_to_balloon INTEGER DEFAULT 8,
+    purchase_price NUMERIC DEFAULT 0,
+    asking_price NUMERIC DEFAULT 0,
+    rental_revenue NUMERIC DEFAULT 0,
+    appreciation_rate NUMERIC DEFAULT 2,
+    agent_fee NUMERIC DEFAULT 0,
+    rehab_cost NUMERIC DEFAULT 0,
+    assignment_fee_pct NUMERIC DEFAULT 5,
+    appraisal_cost NUMERIC DEFAULT 0,
+    closing_cost_pct NUMERIC DEFAULT 5,
+    seller_carry_rate NUMERIC DEFAULT 0,
+    seller_carry_amort INTEGER DEFAULT 30,
+    property_tax NUMERIC DEFAULT 0,
+    insurance NUMERIC DEFAULT 0,
+    hoa NUMERIC DEFAULT 0,
+    other_expenses NUMERIC DEFAULT 0,
+    capex_pct NUMERIC DEFAULT 5,
+    management_pct NUMERIC DEFAULT 8,
+    vacancy_pct NUMERIC DEFAULT 5,
+    full_data JSONB
+);
 
-### Option 3: GitHub Pages
-1. Fork this repository
-2. Go to Settings → Pages
-3. Enable GitHub Pages from main branch
-4. Access at `https://yourusername.github.io/repo-name`
+-- Create indexes
+CREATE INDEX IF NOT EXISTS idx_deals_address ON deals (LOWER(street_address), LOWER(city), LOWER(state));
+CREATE INDEX IF NOT EXISTS idx_deals_user_id ON deals (user_id);
 
-## Usage
+-- Enable Row Level Security
+ALTER TABLE deals ENABLE ROW LEVEL SECURITY;
 
-1. **Enter property details** — Address, purchase price, asking price, rental revenue
-2. **Configure financing** — Set LTV percentages, seller carry terms, interest rates
-3. **Add operating expenses** — Property tax, insurance, management fees, vacancy
-4. **Review analysis** — Cash flow, NOI, cap rate, and returns update in real-time
-5. **Export PDF** — Click the export button to generate a professional summary
+-- Create policies
+DROP POLICY IF EXISTS "Users can view own deals" ON deals;
+DROP POLICY IF EXISTS "Users can insert own deals" ON deals;
+DROP POLICY IF EXISTS "Users can update own deals" ON deals;
+DROP POLICY IF EXISTS "Users can delete own deals" ON deals;
 
-## Calculations
+CREATE POLICY "Users can view own deals" ON deals FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can insert own deals" ON deals FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users can update own deals" ON deals FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY "Users can delete own deals" ON deals FOR DELETE USING (auth.uid() = user_id);
 
-The calculator replicates standard real estate financial formulas:
+-- Create collision detection function
+CREATE OR REPLACE FUNCTION check_address_collision(
+    p_street_address TEXT,
+    p_city TEXT,
+    p_state TEXT,
+    p_exclude_user_id UUID DEFAULT NULL
+)
+RETURNS TABLE (user_email TEXT, created_at TIMESTAMP WITH TIME ZONE)
+SECURITY DEFINER AS $$
+BEGIN
+    RETURN QUERY
+    SELECT u.email::TEXT, d.created_at
+    FROM deals d
+    JOIN auth.users u ON d.user_id = u.id
+    WHERE LOWER(TRIM(d.street_address)) = LOWER(TRIM(p_street_address))
+      AND LOWER(TRIM(d.city)) = LOWER(TRIM(p_city))
+      AND LOWER(TRIM(d.state)) = LOWER(TRIM(p_state))
+      AND (p_exclude_user_id IS NULL OR d.user_id != p_exclude_user_id)
+    LIMIT 5;
+END;
+$$ LANGUAGE plpgsql;
 
-- **PMT (Payment)**: Standard amortization formula for loan payments
-- **Cap Rate**: NOI ÷ Purchase Price
-- **Cash-on-Cash**: Annual Cash Flow ÷ Total Cash Invested
-- **Remaining Balance**: Amortization schedule calculation at balloon date
-- **Future Value**: Purchase price × (1 + appreciation rate)^years
+GRANT EXECUTE ON FUNCTION check_address_collision TO authenticated;
+```
 
-## Roadmap
+3. **Configure Authentication**
+   - Go to **Authentication** → **Providers** → **Email**
+   - (Optional) Toggle off "Confirm email" for easier onboarding
 
-- [ ] Save/load deal scenarios
-- [ ] Multiple property comparison
-- [ ] Sensitivity analysis tables
-- [ ] Integration with property data APIs
-- [ ] Mobile app version
+4. **Update the App**
+   - In `index.html`, update the Supabase credentials (around line 2355):
+   ```javascript
+   const SUPABASE_URL = 'https://your-project.supabase.co';
+   const SUPABASE_ANON_KEY = 'your-anon-key';
+   ```
 
-## Contributing
+5. **Deploy**
+   - Host on GitHub Pages, Netlify, Vercel, or any static hosting
 
-Contributions are welcome! Feel free to open an issue or submit a pull request.
+## 📱 Usage
 
-## License
+### Analyzing a Deal
 
-MIT License — see [LICENSE](LICENSE) for details.
+1. Enter the property address and details
+2. Configure loan terms (LTV, seller carry %)
+3. Input purchase price and expected rental revenue
+4. Add operating expenses
+5. Review calculated metrics in the dashboard
 
-## Features added
-- **Field to add hyperlink to subject property
-- **Fields for seller information
-- **AI Generator: Button, when selected, generates a prompt to copy/paste into any AI, to evaluate the deal as inputed.
-- **PDF Summary: Button, when selected, generates a PDF which summarizes the deal.
-- **LOI Generator: Button, when selected, generates a PDF Letter of Intent (LOI) for use.
-- **MS Excel link: Button, when selected, takes user to shared MS Excel file, previously used as the calculator.
+### Saving Deals
+
+1. Sign up / log in with your email
+2. Fill in deal details
+3. Click **"Save Deal to Library"**
+4. Access your deals from any device by logging in
+
+### Generating Documents
+
+- **PDF Summary** - Click "PDF Summary" for a printable deal overview
+- **LOI** - Click "Generate LOI" to create a Letter of Intent
+
+## 🏗️ Architecture
+
+```
+┌─────────────────┐     ┌─────────────────┐
+│   Browser       │────▶│  GitHub Pages   │
+│   (Any Device)  │     │  (Static Host)  │
+└─────────────────┘     └─────────────────┘
+                               │
+                               ▼
+                        ┌─────────────────┐
+                        │    Supabase     │
+                        │  ┌───────────┐  │
+                        │  │   Auth    │  │
+                        │  ├───────────┤  │
+                        │  │ Database  │  │
+                        │  │ (Postgres)│  │
+                        │  └───────────┘  │
+                        └─────────────────┘
+```
+
+## 🔒 Security
+
+- **Row Level Security (RLS)** - Users can only access their own deals
+- **Secure Authentication** - Handled by Supabase Auth
+- **No Server Required** - Runs entirely client-side with Supabase backend
+
+## 💰 Cost
+
+- **Supabase Free Tier** includes:
+  - 500 MB database storage (~166,000 deals)
+  - 50,000 monthly active users
+  - Unlimited API requests
+
+For typical usage (20-100 users), you'll stay well within the free tier.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Built with [Supabase](https://supabase.com) for backend services
+- Inspired by creative real estate financing strategies
 
 ---
 
-Built to solve real problems in real estate investing, by markarian.ai
+**Questions?** Open an issue or reach out to Chris M at chris@markarian.ai
