@@ -2356,10 +2356,10 @@
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ2bHZtbGNvand0aGx3eWt3bWdxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgwNTU5NDYsImV4cCI6MjA4MzYzMTk0Nn0.LrzvTu43xl07yhyZqibXgfATxEhvoMuhdZ7GK_QYJcg';
         
         // Initialize Supabase client (with error handling)
-        let supabase = null;
+        let supabaseClient = null;
         try {
             if (window.supabase) {
-                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             } else {
                 console.warn('Supabase library not loaded. Cloud sync will be disabled.');
             }
@@ -2377,7 +2377,7 @@
         
         async function initAuth() {
             // If Supabase isn't available, skip auth and show app directly
-            if (!supabase) {
+            if (!supabaseClient) {
                 console.warn('Running in offline mode - no cloud sync');
                 hideAuthModal();
                 return;
@@ -2385,7 +2385,7 @@
             
             try {
                 // Check for existing session
-                const { data: { session } } = await supabase.auth.getSession();
+                const { data: { session } } = await supabaseClient.auth.getSession();
                 
                 if (session) {
                     currentUser = session.user;
@@ -2396,7 +2396,7 @@
                 }
 
                 // Listen for auth changes
-                supabase.auth.onAuthStateChange(async (event, session) => {
+                supabaseClient.auth.onAuthStateChange(async (event, session) => {
                     if (event === 'SIGNED_IN' && session) {
                         currentUser = session.user;
                         showApp();
@@ -2476,7 +2476,7 @@
             try {
                 if (isSignUpMode) {
                     const name = document.getElementById('authName').value;
-                    const { data, error } = await supabase.auth.signUp({
+                    const { data, error } = await supabaseClient.auth.signUp({
                         email,
                         password,
                         options: {
@@ -2493,7 +2493,7 @@
                         return;
                     }
                 } else {
-                    const { data, error } = await supabase.auth.signInWithPassword({
+                    const { data, error } = await supabaseClient.auth.signInWithPassword({
                         email,
                         password
                     });
@@ -2508,7 +2508,7 @@
         }
 
         async function handleLogout() {
-            await supabase.auth.signOut();
+            await supabaseClient.auth.signOut();
             // Clear local library
             localStorage.removeItem('dealLibrary');
             renderLibrary();
@@ -2530,7 +2530,7 @@
             setSyncStatus('syncing', 'Syncing...');
             
             try {
-                const { data, error } = await supabase
+                const { data, error } = await supabaseClient
                     .from('deals')
                     .select('*')
                     .eq('user_id', currentUser.id)
@@ -2559,7 +2559,7 @@
                 const cloudDeal = localDealToCloud(deal);
                 cloudDeal.user_id = currentUser.id;
                 
-                const { data, error } = await supabase
+                const { data, error } = await supabaseClient
                     .from('deals')
                     .insert([cloudDeal])
                     .select()
@@ -2584,7 +2584,7 @@
             try {
                 const cloudDeal = localDealToCloud(deal);
                 
-                const { error } = await supabase
+                const { error } = await supabaseClient
                     .from('deals')
                     .update(cloudDeal)
                     .eq('id', deal.cloud_id);
@@ -2602,7 +2602,7 @@
             if (!currentUser || !cloudId) return;
             
             try {
-                const { error } = await supabase
+                const { error } = await supabaseClient
                     .from('deals')
                     .delete()
                     .eq('id', cloudId);
@@ -2758,7 +2758,7 @@
             }
             
             try {
-                const { data, error } = await supabase.rpc('check_address_collision', {
+                const { data, error } = await supabaseClient.rpc('check_address_collision', {
                     p_street_address: streetAddress,
                     p_city: city,
                     p_state: state || '',
