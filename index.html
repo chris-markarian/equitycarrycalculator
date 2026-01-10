@@ -778,47 +778,88 @@
             font-style: italic;
         }
 
+        /* Library Table Styles */
+        .library-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .library-table-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 150px;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+            background: var(--bg-secondary);
+            border-radius: 8px 8px 0 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .library-table-header span {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
         .library-item {
-            display: flex;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 150px;
+            gap: 1rem;
             align-items: center;
-            padding: 1rem;
+            padding: 0.875rem 1rem;
             background: var(--bg-tertiary);
-            border-radius: 8px;
-            margin-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
             transition: background 0.2s;
+        }
+
+        .library-item:last-child {
+            border-radius: 0 0 8px 8px;
+            border-bottom: none;
         }
 
         .library-item:hover {
             background: rgba(20, 184, 166, 0.1);
         }
 
-        .library-item-info {
-            flex: 1;
-            cursor: pointer;
-        }
-
         .library-item-address {
             font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
-        .library-item-meta {
-            font-size: 0.75rem;
+        .library-item-address:hover {
+            color: var(--accent-teal);
+        }
+
+        .library-item-date {
+            font-size: 0.85rem;
             color: var(--text-secondary);
         }
 
+        .library-item-seller {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
         .library-item-price {
-            color: #14b8a6;
+            color: var(--accent-teal);
             font-weight: 600;
-            margin-right: 1rem;
+            font-size: 0.9rem;
         }
 
         .library-item-actions {
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            justify-content: flex-end;
         }
 
         .library-item-email {
@@ -828,12 +869,13 @@
             padding: 0.4rem 0.75rem;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 500;
             display: flex;
             align-items: center;
             gap: 0.35rem;
             transition: all 0.2s;
+            white-space: nowrap;
         }
 
         .library-item-email:hover {
@@ -866,6 +908,46 @@
 
         .library-item-delete:hover {
             opacity: 1;
+        }
+
+        /* Responsive: Stack on mobile */
+        @media (max-width: 768px) {
+            .library-table-header {
+                display: none;
+            }
+            
+            .library-item {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+                padding: 1rem;
+            }
+            
+            .library-item-address {
+                white-space: normal;
+            }
+            
+            .library-item-date::before {
+                content: 'Created: ';
+                color: var(--text-muted);
+            }
+            
+            .library-item-seller::before {
+                content: 'Seller: ';
+                color: var(--text-muted);
+            }
+            
+            .library-item-price::before {
+                content: 'Price: ';
+                color: var(--text-muted);
+                font-weight: normal;
+            }
+            
+            .library-item-actions {
+                justify-content: flex-start;
+                padding-top: 0.5rem;
+                border-top: 1px solid var(--border-color);
+                margin-top: 0.5rem;
+            }
         }
 
         .library-controls {
@@ -943,25 +1025,6 @@
         .library-export-btn:hover, .library-import-btn:hover {
             background: var(--bg-tertiary);
             color: var(--text-primary);
-        }
-
-        .library-item-details {
-            font-size: 0.7rem;
-            color: var(--text-secondary);
-            margin-top: 0.25rem;
-        }
-
-        .library-item-seller {
-            color: #f59e0b;
-        }
-
-        .library-item-location {
-            background: rgba(20, 184, 166, 0.2);
-            color: #14b8a6;
-            padding: 0.1rem 0.4rem;
-            border-radius: 4px;
-            font-size: 0.65rem;
-            margin-left: 0.5rem;
         }
 
         .export-buttons {
@@ -3472,30 +3535,35 @@ Note: Please find the attached LOI and PDF Summary documents for complete deal t
             if (deals.length === 0) {
                 listEl.innerHTML = searchTerm 
                     ? '<p class="library-empty">No deals match your search.</p>'
-                    : '<p class="library-empty">No deals saved yet. Click "Save Current Deal" to add one.</p>';
+                    : '<p class="library-empty">No deals saved yet. Click "Save Deal to Library" to add one.</p>';
                 return;
             }
             
-            listEl.innerHTML = deals.map(deal => {
+            // Build table header + rows
+            const tableHeader = `
+                <div class="library-table-header">
+                    <span>Address</span>
+                    <span>Date Created</span>
+                    <span>Seller</span>
+                    <span>Price</span>
+                    <span>Actions</span>
+                </div>
+            `;
+            
+            const tableRows = deals.map(deal => {
                 const address = deal.propertyInfo?.address || getAddressFromParts(deal.propertyInfo) || 'Untitled Deal';
-                const city = deal.propertyInfo?.city || '';
-                const state = deal.propertyInfo?.state || '';
                 const price = deal.dealTerms?.purchasePrice ? formatCurrency(parseFloat(deal.dealTerms.purchasePrice)) : '$0';
-                const date = deal.savedAt ? new Date(deal.savedAt).toLocaleDateString() : '';
-                const seller = deal.seller?.name || '';
-                
-                const locationBadge = (city || state) ? `<span class="library-item-location">${city}${city && state ? ', ' : ''}${state}</span>` : '';
+                const date = deal.savedAt ? new Date(deal.savedAt).toLocaleDateString() : '—';
+                const seller = deal.seller?.name || '—';
                 
                 const sellerEmail = deal.seller?.email || '';
                 const hasSellerEmail = sellerEmail.length > 0;
                 
                 return `
                     <div class="library-item">
-                        <div class="library-item-info" onclick="loadFromLibrary('${deal.id}')">
-                            <div class="library-item-address">${address}</div>
-                            <div class="library-item-meta">Saved ${date} ${locationBadge}</div>
-                            ${seller ? `<div class="library-item-details">Seller: <span class="library-item-seller">${seller}</span></div>` : ''}
-                        </div>
+                        <div class="library-item-address" onclick="loadFromLibrary('${deal.id}')" title="Click to load deal">${address}</div>
+                        <div class="library-item-date">${date}</div>
+                        <div class="library-item-seller" title="${seller}">${seller}</div>
                         <div class="library-item-price">${price}</div>
                         <div class="library-item-actions">
                             <button class="library-item-email" onclick="emailOffer('${deal.id}')" ${hasSellerEmail ? '' : 'disabled'} title="${hasSellerEmail ? 'Email offer to seller' : 'No seller email saved'}">
@@ -3506,6 +3574,8 @@ Note: Please find the attached LOI and PDF Summary documents for complete deal t
                     </div>
                 `;
             }).join('');
+            
+            listEl.innerHTML = tableHeader + tableRows;
         }
 
         function getAddressFromParts(propertyInfo) {
