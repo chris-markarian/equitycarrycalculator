@@ -815,6 +815,44 @@
             margin-right: 1rem;
         }
 
+        .library-item-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .library-item-email {
+            background: transparent;
+            color: var(--accent-blue);
+            border: 1px solid var(--accent-blue);
+            padding: 0.4rem 0.75rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            transition: all 0.2s;
+        }
+
+        .library-item-email:hover {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        .library-item-email:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            border-color: var(--text-muted);
+            color: var(--text-muted);
+        }
+
+        .library-item-email:disabled:hover {
+            background: transparent;
+            color: var(--text-muted);
+        }
+
         .library-item-delete {
             background: transparent;
             color: #f87171;
@@ -932,50 +970,6 @@
             justify-content: center;
             margin: 2rem 0;
             flex-wrap: wrap;
-        }
-
-        .save-btn {
-            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-            color: white;
-            border: none;
-            padding: 1rem 1.5rem;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
-            transition: transform 0.2s, box-shadow 0.2s;
-            text-decoration: none;
-        }
-
-        .save-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(139, 92, 246, 0.5);
-        }
-
-        .load-btn {
-            background: linear-gradient(135deg, #6366f1, #4f46e5);
-            color: white;
-            border: none;
-            padding: 1rem 1.5rem;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
-            transition: transform 0.2s, box-shadow 0.2s;
-            text-decoration: none;
-        }
-
-        .load-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(99, 102, 241, 0.5);
         }
 
         /* Auth Modal Styles */
@@ -2291,13 +2285,6 @@
             <button class="library-btn" onclick="saveToLibrary()">
                 <span>💾</span> Save Deal to Library
             </button>
-            <button class="save-btn" onclick="saveToFile()">
-                <span>💾</span> Save Deal To Folder
-            </button>
-            <button class="load-btn" onclick="document.getElementById('loadFileInput').click()">
-                <span>📂</span> Load Deal From Folder
-            </button>
-            <input type="file" id="loadFileInput" accept=".json" style="display: none;" onchange="loadFromFile(event)">
             <button class="print-btn" onclick="generatePDF()">
                 <span>📄</span> PDF Summary
             </button>
@@ -3360,6 +3347,88 @@ Please be direct and specific with your analysis.`;
             renderLibrary();
         }
 
+        function emailOffer(id) {
+            const deals = getLibrary();
+            const deal = deals.find(d => d.id === id);
+            
+            if (!deal) return;
+            
+            // Get deal details
+            const sellerName = deal.seller?.name || 'Seller';
+            const sellerEmail = deal.seller?.email || '';
+            const preparerName = deal.preparer?.name || '';
+            const preparerEmail = deal.preparer?.email || '';
+            const preparerPhone = deal.preparer?.phone || '';
+            
+            // Property info
+            const streetAddress = deal.propertyInfo?.streetAddress || '';
+            const city = deal.propertyInfo?.city || '';
+            const state = deal.propertyInfo?.state || '';
+            const zip = deal.propertyInfo?.zip || '';
+            const fullAddress = [streetAddress, city, state, zip].filter(Boolean).join(', ');
+            
+            // Financial details
+            const purchasePrice = parseFloat(deal.dealTerms?.purchasePrice) || 0;
+            const sellerCarryPct = parseFloat(deal.loanConfig?.sellerCarryPct) / 100 || 0;
+            const sellerCarryAmount = purchasePrice * sellerCarryPct;
+            const cashToSeller = purchasePrice * (1 - sellerCarryPct);
+            const sellerCarryRate = parseFloat(deal.sellerFinancing?.rate) || 0;
+            const sellerCarryAmort = parseInt(deal.sellerFinancing?.amortization) || 30;
+            const yearsToBalloon = parseInt(deal.loanConfig?.yearsToBalloon) || 8;
+            
+            // Calculate monthly payment to seller
+            let monthlyPayment = 0;
+            if (sellerCarryAmount > 0) {
+                if (sellerCarryRate === 0) {
+                    monthlyPayment = sellerCarryAmount / (sellerCarryAmort * 12);
+                } else {
+                    const monthlyRate = sellerCarryRate / 100 / 12;
+                    const numPayments = sellerCarryAmort * 12;
+                    monthlyPayment = sellerCarryAmount * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1);
+                }
+            }
+            
+            // Format currency helper
+            const fmt = (num) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(num);
+            
+            // Build email subject
+            const subject = `Letter of Intent - ${fullAddress}`;
+            
+            // Build email body
+            const body = `Dear ${sellerName},
+
+I hope this message finds you well. I am writing to express our interest in acquiring your property located at:
+
+${fullAddress}
+
+PROPOSED TERMS:
+• Purchase Price: ${fmt(purchasePrice)}
+• Cash to Seller at Closing: ${fmt(cashToSeller)}
+• Seller Carry Amount: ${fmt(sellerCarryAmount)} (${(sellerCarryPct * 100).toFixed(0)}%)
+• Monthly Payment to Seller: ${fmt(monthlyPayment)}
+• Interest Rate: ${sellerCarryRate}%
+• Amortization: ${sellerCarryAmort} years
+• Balloon: ${yearsToBalloon} years
+
+We believe this structure offers you immediate liquidity while providing ongoing monthly income and potential tax advantages through an installment sale.
+
+I have attached a formal Letter of Intent and Deal Summary with complete details for your review. Please feel free to reach out with any questions.
+
+Best regards,
+${preparerName}
+${preparerEmail}
+${preparerPhone}
+
+---
+Note: Please find the attached LOI and PDF Summary documents for complete deal terms.`;
+
+            // Encode for mailto
+            const mailtoLink = `mailto:${encodeURIComponent(sellerEmail)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            
+            // Open email client
+            window.location.href = mailtoLink;
+        }
+
         function renderLibrary() {
             let deals = getLibrary();
             const listEl = document.getElementById('libraryList');
@@ -3410,6 +3479,9 @@ Please be direct and specific with your analysis.`;
                 
                 const locationBadge = (city || state) ? `<span class="library-item-location">${city}${city && state ? ', ' : ''}${state}</span>` : '';
                 
+                const sellerEmail = deal.seller?.email || '';
+                const hasSellerEmail = sellerEmail.length > 0;
+                
                 return `
                     <div class="library-item">
                         <div class="library-item-info" onclick="loadFromLibrary(${deal.id})">
@@ -3418,7 +3490,12 @@ Please be direct and specific with your analysis.`;
                             ${seller ? `<div class="library-item-details">Seller: <span class="library-item-seller">${seller}</span></div>` : ''}
                         </div>
                         <div class="library-item-price">${price}</div>
-                        <button class="library-item-delete" onclick="deleteFromLibrary(${deal.id})" title="Delete">🗑️</button>
+                        <div class="library-item-actions">
+                            <button class="library-item-email" onclick="emailOffer(${deal.id})" ${hasSellerEmail ? '' : 'disabled'} title="${hasSellerEmail ? 'Email offer to seller' : 'No seller email saved'}">
+                                <span>📧</span> Email Seller
+                            </button>
+                            <button class="library-item-delete" onclick="deleteFromLibrary(${deal.id})" title="Delete">🗑️</button>
+                        </div>
                     </div>
                 `;
             }).join('');
@@ -3703,46 +3780,6 @@ Please be direct and specific with your analysis.`;
             
             // Recalculate
             calculate();
-        }
-
-        // Save deal to JSON file
-        function saveToFile() {
-            const data = buildDealObject();
-
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            
-            // Create filename from address
-            const address = getFullAddress();
-            const safeAddress = address.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 40);
-            const date = new Date().toISOString().split('T')[0];
-            
-            a.href = url;
-            a.download = `${safeAddress}_${date}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-
-        // Load deal from JSON file
-        function loadFromFile(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = JSON.parse(e.target.result);
-                    populateFormFromDeal(data);
-                    alert('Deal loaded successfully!');
-                } catch (err) {
-                    alert('Error loading file: ' + err.message);
-                }
-            };
-            reader.readAsText(file);
-            
-            // Reset file input so same file can be loaded again
-            event.target.value = '';
         }
 
         // PDF Print functionality
