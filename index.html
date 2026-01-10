@@ -3113,7 +3113,7 @@
             document.getElementById('sellerCarryBalance').textContent = formatCurrency(sellerCarryBalance);
 
             // LOI Summary
-            const cashToSellerAtClosing = firstPositionLoan - closingCost - agentFee;
+            const cashToSellerAtClosing = (1 - sellerCarryPct) * purchasePrice;
             document.getElementById('loiPurchasePrice').textContent = formatCurrency(purchasePrice);
             document.getElementById('loiCashToSeller').textContent = formatCurrency(cashToSellerAtClosing);
             document.getElementById('loiSellerEquity').textContent = formatCurrency(sellerCarryAmount);
