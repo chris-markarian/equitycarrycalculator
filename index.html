@@ -676,28 +676,6 @@
             box-shadow: 0 6px 25px rgba(20, 184, 166, 0.5);
         }
 
-        .excel-btn {
-            background: linear-gradient(135deg, #22c55e, #16a34a);
-            color: white;
-            border: none;
-            padding: 1rem 1.5rem;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            box-shadow: 0 4px 20px rgba(34, 197, 94, 0.4);
-            transition: transform 0.2s, box-shadow 0.2s;
-            text-decoration: none;
-        }
-
-        .excel-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(34, 197, 94, 0.5);
-        }
-
         .loi-btn {
             background: linear-gradient(135deg, #f59e0b, #d97706);
             color: white;
@@ -718,6 +696,248 @@
         .loi-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 25px rgba(245, 158, 11, 0.5);
+        }
+
+        .library-btn {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 20px rgba(34, 197, 94, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+        }
+
+        .library-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(34, 197, 94, 0.5);
+        }
+
+        /* Deal Library Panel */
+        .deal-library {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .library-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .library-header h3 {
+            margin: 0;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+        }
+
+        .library-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .library-save-btn {
+            background: linear-gradient(135deg, #14b8a6, #0d9488);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .library-save-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .library-close-btn {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .library-close-btn:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .library-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .library-empty {
+            color: var(--text-secondary);
+            text-align: center;
+            padding: 2rem;
+            font-style: italic;
+        }
+
+        .library-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: background 0.2s;
+        }
+
+        .library-item:hover {
+            background: rgba(20, 184, 166, 0.1);
+        }
+
+        .library-item-info {
+            flex: 1;
+            cursor: pointer;
+        }
+
+        .library-item-address {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .library-item-meta {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .library-item-price {
+            color: #14b8a6;
+            font-weight: 600;
+            margin-right: 1rem;
+        }
+
+        .library-item-delete {
+            background: transparent;
+            color: #f87171;
+            border: none;
+            padding: 0.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        .library-item-delete:hover {
+            opacity: 1;
+        }
+
+        .library-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .library-search {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .library-search input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+        }
+
+        .library-search input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .library-sort {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .library-sort label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            white-space: nowrap;
+        }
+
+        .library-sort select {
+            padding: 0.75rem 2rem 0.75rem 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            cursor: pointer;
+        }
+
+        .library-sort select option {
+            background: #1e293b;
+            color: #f1f5f9;
+        }
+
+        .library-stats {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .library-export-btn, .library-import-btn {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .library-export-btn:hover, .library-import-btn:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .library-item-details {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .library-item-seller {
+            color: #f59e0b;
+        }
+
+        .library-item-location {
+            background: rgba(20, 184, 166, 0.2);
+            color: #14b8a6;
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            margin-left: 0.5rem;
         }
 
         .export-buttons {
@@ -807,7 +1027,7 @@
                 margin: 0;
             }
 
-            .print-btn, .excel-btn, .loi-btn {
+            .print-btn, .loi-btn {
                 display: none !important;
             }
 
@@ -1226,9 +1446,17 @@
                 <div class="info-section">
                     <div class="info-section-title">📍 Property Address</div>
                     <div class="info-row">
-                        <input type="text" id="propertyAddress" placeholder="Enter property address..." class="info-input" style="flex: 2;">
-                        <input type="url" id="propertyLink" placeholder="Property listing URL (Zillow, Redfin, etc.)" class="info-input" style="flex: 1;">
+                        <input type="text" id="streetAddress" placeholder="Street address (e.g., 1234 Any Street)" class="info-input" style="flex: 2;">
+                        <input type="text" id="city" placeholder="City" class="info-input" style="flex: 1;">
+                        <input type="text" id="state" placeholder="ST" class="info-input" style="flex: 0.3; text-transform: uppercase;" maxlength="2">
+                        <input type="text" id="zip" placeholder="Zip" class="info-input" style="flex: 0.5;" maxlength="10">
                     </div>
+                </div>
+            </div>
+            <div class="info-row-full">
+                <div class="info-section">
+                    <div class="info-section-title">🔗 Property Link</div>
+                    <input type="url" id="propertyLink" placeholder="Property listing URL (Zillow, Redfin, etc.)" class="info-input">
                 </div>
             </div>
             <div class="info-row-full">
@@ -1756,22 +1984,61 @@
 
         <!-- Export Buttons -->
         <div class="export-buttons">
+            <button class="library-btn" onclick="toggleLibrary()">
+                <span>📚</span> Show Deal Library
+            </button>
             <button class="save-btn" onclick="saveToFile()">
-                <span>💾</span> Save Deal
+                <span>💾</span> Save Deal To Folder
             </button>
             <button class="load-btn" onclick="document.getElementById('loadFileInput').click()">
-                <span>📂</span> Load Deal
+                <span>📂</span> Load Deal From Folder
             </button>
             <input type="file" id="loadFileInput" accept=".json" style="display: none;" onchange="loadFromFile(event)">
             <button class="print-btn" onclick="generatePDF()">
-                <span>📄</span> Export PDF Summary
+                <span>📄</span> PDF Summary
             </button>
             <button class="loi-btn" onclick="generateLOI()">
                 <span>📝</span> Generate LOI
             </button>
-            <a href="https://docs.google.com/spreadsheets/d/YOUR_SPREADSHEET_ID/copy" class="excel-btn" target="_blank">
-                <span>📊</span> Download Excel Template
-            </a>
+        </div>
+
+        <!-- Deal Library Panel -->
+        <div class="deal-library" id="dealLibrary" style="display: none;">
+            <div class="library-header">
+                <h3>📚 Deal Library</h3>
+                <div class="library-actions">
+                    <button class="library-save-btn" onclick="saveToLibrary()">+ Save Current Deal</button>
+                    <button class="library-export-btn" onclick="exportAllDeals()">⬇️ Export All</button>
+                    <button class="library-import-btn" onclick="document.getElementById('importLibraryInput').click()">⬆️ Import</button>
+                    <input type="file" id="importLibraryInput" accept=".json" style="display: none;" onchange="importAllDeals(event)">
+                    <button class="library-close-btn" onclick="toggleLibrary()">✕</button>
+                </div>
+            </div>
+            
+            <div class="library-controls">
+                <div class="library-search">
+                    <input type="text" id="librarySearch" placeholder="Search by address, city, state, or seller..." onkeyup="renderLibrary()">
+                </div>
+                <div class="library-sort">
+                    <label>Sort by:</label>
+                    <select id="librarySort" onchange="renderLibrary()">
+                        <option value="date-desc">Date (Newest)</option>
+                        <option value="date-asc">Date (Oldest)</option>
+                        <option value="address">Address (A-Z)</option>
+                        <option value="city">City (A-Z)</option>
+                        <option value="state">State (A-Z)</option>
+                        <option value="seller">Seller (A-Z)</option>
+                        <option value="price-desc">Price (High-Low)</option>
+                        <option value="price-asc">Price (Low-High)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="library-stats" id="libraryStats"></div>
+            
+            <div class="library-list" id="libraryList">
+                <p class="library-empty">No deals saved yet. Click "Save Current Deal" to add one.</p>
+            </div>
         </div>
 
         <footer>
@@ -2118,7 +2385,7 @@
 
         // Generate AI Prompt
         function generatePrompt() {
-            const address = document.getElementById('propertyAddress').value.trim() || '[ADDRESS NOT ENTERED]';
+            const address = getFullAddress();
             const category = document.getElementById('category').value;
             const purchasePrice = parseFloat(document.getElementById('purchasePrice').value) || 0;
             const askingPrice = parseFloat(document.getElementById('askingPrice').value) || 0;
@@ -2209,13 +2476,325 @@ Please be direct and specific with your analysis.`;
             });
         }
 
-        // Save deal to JSON file
-        function saveToFile() {
+        // Get full formatted address from individual fields
+        function getFullAddress() {
+            const street = document.getElementById('streetAddress').value.trim();
+            const city = document.getElementById('city').value.trim();
+            const state = document.getElementById('state').value.trim().toUpperCase();
+            const zip = document.getElementById('zip').value.trim();
+            
+            let parts = [];
+            if (street) parts.push(street);
+            if (city) parts.push(city);
+            if (state && zip) {
+                parts.push(`${state} ${zip}`);
+            } else if (state) {
+                parts.push(state);
+            } else if (zip) {
+                parts.push(zip);
+            }
+            
+            return parts.join(', ') || '[PROPERTY ADDRESS]';
+        }
+
+        // Parse old single-field address into components
+        function parseOldAddress(address) {
+            const result = { street: '', city: '', state: '', zip: '' };
+            if (!address) return result;
+            
+            // Try to parse format: "123 Main St, City, ST 12345" or "123 Main St, City, ST"
+            const parts = address.split(',').map(p => p.trim());
+            
+            if (parts.length >= 1) {
+                result.street = parts[0];
+            }
+            if (parts.length >= 2) {
+                result.city = parts[1];
+            }
+            if (parts.length >= 3) {
+                // Last part might be "ST 12345" or "State 12345" or just "ST"
+                const lastPart = parts[parts.length - 1];
+                const match = lastPart.match(/^([A-Z]{2})\s*(\d{5}(-\d{4})?)?$/i);
+                if (match) {
+                    result.state = match[1].toUpperCase();
+                    result.zip = match[2] || '';
+                } else {
+                    // Maybe just state or something else
+                    const stateMatch = lastPart.match(/^([A-Z]{2})$/i);
+                    if (stateMatch) {
+                        result.state = stateMatch[1].toUpperCase();
+                    }
+                }
+                // If city was actually in position 2 and state+zip in position 3
+                if (parts.length === 3 && result.city) {
+                    // Already handled
+                } else if (parts.length > 3) {
+                    // Might have extra commas, combine middle parts as city
+                    result.city = parts.slice(1, -1).join(', ');
+                }
+            }
+            
+            return result;
+        }
+
+        // Deal Library Functions (Local Storage)
+        function toggleLibrary() {
+            const library = document.getElementById('dealLibrary');
+            if (library.style.display === 'none') {
+                library.style.display = 'block';
+                renderLibrary();
+            } else {
+                library.style.display = 'none';
+            }
+        }
+
+        function getLibrary() {
+            const stored = localStorage.getItem('dealLibrary');
+            return stored ? JSON.parse(stored) : [];
+        }
+
+        function saveLibrary(deals) {
+            localStorage.setItem('dealLibrary', JSON.stringify(deals));
+        }
+
+        function saveToLibrary() {
+            const deal = buildDealObject();
+            deal.id = Date.now(); // Unique ID
+            
+            const deals = getLibrary();
+            deals.unshift(deal); // Add to beginning
+            saveLibrary(deals);
+            renderLibrary();
+            
+            alert('Deal saved to library!');
+        }
+
+        function loadFromLibrary(id) {
+            const deals = getLibrary();
+            const deal = deals.find(d => d.id === id);
+            if (deal) {
+                populateFormFromDeal(deal);
+                alert('Deal loaded!');
+            }
+        }
+
+        function deleteFromLibrary(id) {
+            if (!confirm('Delete this deal from your library?')) return;
+            
+            let deals = getLibrary();
+            deals = deals.filter(d => d.id !== id);
+            saveLibrary(deals);
+            renderLibrary();
+        }
+
+        function renderLibrary() {
+            let deals = getLibrary();
+            const listEl = document.getElementById('libraryList');
+            const statsEl = document.getElementById('libraryStats');
+            const searchTerm = document.getElementById('librarySearch')?.value?.toLowerCase() || '';
+            const sortBy = document.getElementById('librarySort')?.value || 'date-desc';
+            
+            // Filter by search term
+            if (searchTerm) {
+                deals = deals.filter(deal => {
+                    const address = (deal.propertyInfo?.address || '').toLowerCase();
+                    const street = (deal.propertyInfo?.streetAddress || '').toLowerCase();
+                    const city = (deal.propertyInfo?.city || '').toLowerCase();
+                    const state = (deal.propertyInfo?.state || '').toLowerCase();
+                    const seller = (deal.seller?.name || '').toLowerCase();
+                    return address.includes(searchTerm) || 
+                           street.includes(searchTerm) || 
+                           city.includes(searchTerm) || 
+                           state.includes(searchTerm) || 
+                           seller.includes(searchTerm);
+                });
+            }
+            
+            // Sort deals
+            deals = sortDeals(deals, sortBy);
+            
+            // Update stats
+            const totalDeals = getLibrary().length;
+            const shownDeals = deals.length;
+            statsEl.textContent = searchTerm 
+                ? `Showing ${shownDeals} of ${totalDeals} deals`
+                : `${totalDeals} deal${totalDeals !== 1 ? 's' : ''} in library`;
+            
+            if (deals.length === 0) {
+                listEl.innerHTML = searchTerm 
+                    ? '<p class="library-empty">No deals match your search.</p>'
+                    : '<p class="library-empty">No deals saved yet. Click "Save Current Deal" to add one.</p>';
+                return;
+            }
+            
+            listEl.innerHTML = deals.map(deal => {
+                const address = deal.propertyInfo?.address || getAddressFromParts(deal.propertyInfo) || 'Untitled Deal';
+                const city = deal.propertyInfo?.city || '';
+                const state = deal.propertyInfo?.state || '';
+                const price = deal.dealTerms?.purchasePrice ? formatCurrency(parseFloat(deal.dealTerms.purchasePrice)) : '$0';
+                const date = deal.savedAt ? new Date(deal.savedAt).toLocaleDateString() : '';
+                const seller = deal.seller?.name || '';
+                
+                const locationBadge = (city || state) ? `<span class="library-item-location">${city}${city && state ? ', ' : ''}${state}</span>` : '';
+                
+                return `
+                    <div class="library-item">
+                        <div class="library-item-info" onclick="loadFromLibrary(${deal.id})">
+                            <div class="library-item-address">${address}</div>
+                            <div class="library-item-meta">Saved ${date} ${locationBadge}</div>
+                            ${seller ? `<div class="library-item-details">Seller: <span class="library-item-seller">${seller}</span></div>` : ''}
+                        </div>
+                        <div class="library-item-price">${price}</div>
+                        <button class="library-item-delete" onclick="deleteFromLibrary(${deal.id})" title="Delete">🗑️</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function getAddressFromParts(propertyInfo) {
+            if (!propertyInfo) return '';
+            const parts = [];
+            if (propertyInfo.streetAddress) parts.push(propertyInfo.streetAddress);
+            if (propertyInfo.city) parts.push(propertyInfo.city);
+            if (propertyInfo.state && propertyInfo.zip) {
+                parts.push(`${propertyInfo.state} ${propertyInfo.zip}`);
+            } else if (propertyInfo.state) {
+                parts.push(propertyInfo.state);
+            }
+            return parts.join(', ');
+        }
+
+        function parseAddress(address) {
+            // Try to extract city and state from address
+            // Typical format: "123 Main St, City, ST 12345" or "123 Main St, City, State"
+            const parts = address.split(',').map(p => p.trim());
+            let city = '';
+            let state = '';
+            
+            if (parts.length >= 2) {
+                city = parts[parts.length - 2] || '';
+                // State might be "ST 12345" or just "ST"
+                const lastPart = parts[parts.length - 1] || '';
+                const stateMatch = lastPart.match(/^([A-Z]{2})\b/i);
+                if (stateMatch) {
+                    state = stateMatch[1].toUpperCase();
+                }
+            }
+            
+            return { city, state };
+        }
+
+        function sortDeals(deals, sortBy) {
+            return [...deals].sort((a, b) => {
+                switch (sortBy) {
+                    case 'date-desc':
+                        return new Date(b.savedAt || 0) - new Date(a.savedAt || 0);
+                    case 'date-asc':
+                        return new Date(a.savedAt || 0) - new Date(b.savedAt || 0);
+                    case 'address':
+                        const addrA = a.propertyInfo?.streetAddress || a.propertyInfo?.address || '';
+                        const addrB = b.propertyInfo?.streetAddress || b.propertyInfo?.address || '';
+                        return addrA.localeCompare(addrB);
+                    case 'city':
+                        const cityA = a.propertyInfo?.city || parseAddress(a.propertyInfo?.address || '').city || '';
+                        const cityB = b.propertyInfo?.city || parseAddress(b.propertyInfo?.address || '').city || '';
+                        return cityA.localeCompare(cityB);
+                    case 'state':
+                        const stateA = a.propertyInfo?.state || parseAddress(a.propertyInfo?.address || '').state || '';
+                        const stateB = b.propertyInfo?.state || parseAddress(b.propertyInfo?.address || '').state || '';
+                        return stateA.localeCompare(stateB);
+                    case 'seller':
+                        return (a.seller?.name || '').localeCompare(b.seller?.name || '');
+                    case 'price-desc':
+                        return (parseFloat(b.dealTerms?.purchasePrice) || 0) - (parseFloat(a.dealTerms?.purchasePrice) || 0);
+                    case 'price-asc':
+                        return (parseFloat(a.dealTerms?.purchasePrice) || 0) - (parseFloat(b.dealTerms?.purchasePrice) || 0);
+                    default:
+                        return 0;
+                }
+            });
+        }
+
+        function exportAllDeals() {
+            const deals = getLibrary();
+            if (deals.length === 0) {
+                alert('No deals to export.');
+                return;
+            }
+            
             const data = {
+                exportedAt: new Date().toISOString(),
+                version: '1.0',
+                dealCount: deals.length,
+                deals: deals
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            const date = new Date().toISOString().split('T')[0];
+            
+            a.href = url;
+            a.download = `deal_library_backup_${date}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            alert(`Exported ${deals.length} deals.`);
+        }
+
+        function importAllDeals(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    let importedDeals = [];
+                    
+                    // Handle both full library export and single deal files
+                    if (data.deals && Array.isArray(data.deals)) {
+                        importedDeals = data.deals;
+                    } else if (data.propertyInfo) {
+                        // Single deal file
+                        importedDeals = [data];
+                    } else {
+                        throw new Error('Invalid file format');
+                    }
+                    
+                    const existingDeals = getLibrary();
+                    
+                    // Add imported deals with new IDs
+                    let addedCount = 0;
+                    importedDeals.forEach(deal => {
+                        deal.id = Date.now() + addedCount;
+                        existingDeals.unshift(deal);
+                        addedCount++;
+                    });
+                    
+                    saveLibrary(existingDeals);
+                    renderLibrary();
+                    
+                    alert(`Imported ${addedCount} deal${addedCount !== 1 ? 's' : ''}.`);
+                } catch (err) {
+                    alert('Error importing file: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+            
+            event.target.value = '';
+        }
+
+        function buildDealObject() {
+            return {
                 version: '1.0',
                 savedAt: new Date().toISOString(),
                 propertyInfo: {
-                    address: document.getElementById('propertyAddress').value,
+                    streetAddress: document.getElementById('streetAddress').value,
+                    city: document.getElementById('city').value,
+                    state: document.getElementById('state').value.toUpperCase(),
+                    zip: document.getElementById('zip').value,
+                    address: getFullAddress(), // Combined for backward compatibility
                     link: document.getElementById('propertyLink').value,
                 },
                 preparer: {
@@ -2266,13 +2845,103 @@ Please be direct and specific with your analysis.`;
                     closingCostPct: document.getElementById('closingCostPct').value,
                 },
             };
+        }
+
+        function populateFormFromDeal(data) {
+            // Property info - handle both new and old format
+            if (data.propertyInfo) {
+                if (data.propertyInfo.streetAddress !== undefined) {
+                    // New format with separate fields
+                    document.getElementById('streetAddress').value = data.propertyInfo.streetAddress || '';
+                    document.getElementById('city').value = data.propertyInfo.city || '';
+                    document.getElementById('state').value = data.propertyInfo.state || '';
+                    document.getElementById('zip').value = data.propertyInfo.zip || '';
+                } else if (data.propertyInfo.address) {
+                    // Old format - try to parse it
+                    const parsed = parseOldAddress(data.propertyInfo.address);
+                    document.getElementById('streetAddress').value = parsed.street;
+                    document.getElementById('city').value = parsed.city;
+                    document.getElementById('state').value = parsed.state;
+                    document.getElementById('zip').value = parsed.zip;
+                }
+                document.getElementById('propertyLink').value = data.propertyInfo.link || '';
+            }
+            
+            // Preparer
+            if (data.preparer) {
+                document.getElementById('preparerName').value = data.preparer.name || '';
+                document.getElementById('preparerEmail').value = data.preparer.email || '';
+                document.getElementById('preparerPhone').value = data.preparer.phone || '';
+            }
+            
+            // Seller
+            if (data.seller) {
+                document.getElementById('sellerName').value = data.seller.name || '';
+                document.getElementById('sellerEmail').value = data.seller.email || '';
+                document.getElementById('sellerPhone').value = data.seller.phone || '';
+            }
+            
+            // Deal terms
+            if (data.dealTerms) {
+                document.getElementById('category').value = data.dealTerms.category || 'DSCR Residential';
+                document.getElementById('purchasePrice').value = data.dealTerms.purchasePrice || '';
+                document.getElementById('askingPrice').value = data.dealTerms.askingPrice || '';
+                document.getElementById('rentalRevenue').value = data.dealTerms.rentalRevenue || '';
+                document.getElementById('appreciationRate').value = data.dealTerms.appreciationRate || '';
+            }
+            
+            // Financing
+            if (data.financing) {
+                document.getElementById('firstLoanLTV').value = data.financing.firstLoanLTV || '';
+                document.getElementById('interestOnly').value = data.financing.interestOnly || 'No';
+                document.getElementById('sellerCarryPct').value = data.financing.sellerCarryPct || '';
+                document.getElementById('sellerCarryRate').value = data.financing.sellerCarryRate || '';
+                document.getElementById('sellerCarryAmort').value = data.financing.sellerCarryAmort || '';
+                document.getElementById('interestAtBalloon').value = data.financing.interestAtBalloon || 'No';
+                document.getElementById('yearsToBalloon').value = data.financing.yearsToBalloon || '';
+                document.getElementById('targetCashToSeller').value = data.financing.targetCashToSeller || '';
+            }
+            
+            // Stabilization
+            if (data.stabilization) {
+                document.getElementById('monthsToStabilize').value = data.stabilization.monthsToStabilize || '';
+                document.getElementById('revenueDuringStab').value = data.stabilization.revenueDuringStab || '';
+            }
+            
+            // Expenses
+            if (data.expenses) {
+                document.getElementById('propertyTax').value = data.expenses.propertyTax || '';
+                document.getElementById('insurance').value = data.expenses.insurance || '';
+                document.getElementById('hoa').value = data.expenses.hoa || '';
+                document.getElementById('otherExpenses').value = data.expenses.otherExpenses || '';
+                document.getElementById('capexPct').value = data.expenses.capexPct || '';
+                document.getElementById('managementPct').value = data.expenses.managementPct || '';
+                document.getElementById('vacancyPct').value = data.expenses.vacancyPct || '';
+            }
+            
+            // Cash to buyer
+            if (data.cashToBuyer) {
+                document.getElementById('agentFee').value = data.cashToBuyer.agentFee || '';
+                document.getElementById('rehabCost').value = data.cashToBuyer.rehabCost || '';
+                document.getElementById('assignmentFeePct').value = data.cashToBuyer.assignmentFeePct || '';
+                document.getElementById('appraisalCost').value = data.cashToBuyer.appraisalCost || '';
+                document.getElementById('closingCostPct').value = data.cashToBuyer.closingCostPct || '';
+            }
+            
+            // Recalculate
+            calculate();
+        }
+
+        // Save deal to JSON file
+        function saveToFile() {
+            const data = buildDealObject();
 
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             
             // Create filename from address
-            const address = document.getElementById('propertyAddress').value || 'Untitled_Deal';
+            const address = getFullAddress();
             const safeAddress = address.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 40);
             const date = new Date().toISOString().split('T')[0];
             
@@ -2291,77 +2960,7 @@ Please be direct and specific with your analysis.`;
             reader.onload = function(e) {
                 try {
                     const data = JSON.parse(e.target.result);
-                    
-                    // Property info
-                    if (data.propertyInfo) {
-                        document.getElementById('propertyAddress').value = data.propertyInfo.address || '';
-                        document.getElementById('propertyLink').value = data.propertyInfo.link || '';
-                    }
-                    
-                    // Preparer
-                    if (data.preparer) {
-                        document.getElementById('preparerName').value = data.preparer.name || '';
-                        document.getElementById('preparerEmail').value = data.preparer.email || '';
-                        document.getElementById('preparerPhone').value = data.preparer.phone || '';
-                    }
-                    
-                    // Seller
-                    if (data.seller) {
-                        document.getElementById('sellerName').value = data.seller.name || '';
-                        document.getElementById('sellerEmail').value = data.seller.email || '';
-                        document.getElementById('sellerPhone').value = data.seller.phone || '';
-                    }
-                    
-                    // Deal terms
-                    if (data.dealTerms) {
-                        document.getElementById('category').value = data.dealTerms.category || 'DSCR Residential (1-4)';
-                        document.getElementById('purchasePrice').value = data.dealTerms.purchasePrice || '';
-                        document.getElementById('askingPrice').value = data.dealTerms.askingPrice || '';
-                        document.getElementById('rentalRevenue').value = data.dealTerms.rentalRevenue || '';
-                        document.getElementById('appreciationRate').value = data.dealTerms.appreciationRate || '';
-                    }
-                    
-                    // Financing
-                    if (data.financing) {
-                        document.getElementById('firstLoanLTV').value = data.financing.firstLoanLTV || '';
-                        document.getElementById('interestOnly').value = data.financing.interestOnly || 'No';
-                        document.getElementById('sellerCarryPct').value = data.financing.sellerCarryPct || '';
-                        document.getElementById('sellerCarryRate').value = data.financing.sellerCarryRate || '';
-                        document.getElementById('sellerCarryAmort').value = data.financing.sellerCarryAmort || '';
-                        document.getElementById('interestAtBalloon').value = data.financing.interestAtBalloon || 'No';
-                        document.getElementById('yearsToBalloon').value = data.financing.yearsToBalloon || '';
-                        document.getElementById('targetCashToSeller').value = data.financing.targetCashToSeller || '';
-                    }
-                    
-                    // Stabilization
-                    if (data.stabilization) {
-                        document.getElementById('monthsToStabilize').value = data.stabilization.monthsToStabilize || '';
-                        document.getElementById('revenueDuringStab').value = data.stabilization.revenueDuringStab || '';
-                    }
-                    
-                    // Expenses
-                    if (data.expenses) {
-                        document.getElementById('propertyTax').value = data.expenses.propertyTax || '';
-                        document.getElementById('insurance').value = data.expenses.insurance || '';
-                        document.getElementById('hoa').value = data.expenses.hoa || '';
-                        document.getElementById('otherExpenses').value = data.expenses.otherExpenses || '';
-                        document.getElementById('capexPct').value = data.expenses.capexPct || '';
-                        document.getElementById('managementPct').value = data.expenses.managementPct || '';
-                        document.getElementById('vacancyPct').value = data.expenses.vacancyPct || '';
-                    }
-                    
-                    // Cash to buyer
-                    if (data.cashToBuyer) {
-                        document.getElementById('agentFee').value = data.cashToBuyer.agentFee || '';
-                        document.getElementById('rehabCost').value = data.cashToBuyer.rehabCost || '';
-                        document.getElementById('assignmentFeePct').value = data.cashToBuyer.assignmentFeePct || '';
-                        document.getElementById('appraisalCost').value = data.cashToBuyer.appraisalCost || '';
-                        document.getElementById('closingCostPct').value = data.cashToBuyer.closingCostPct || '';
-                    }
-                    
-                    // Recalculate
-                    calculate();
-                    
+                    populateFormFromDeal(data);
                     alert('Deal loaded successfully!');
                 } catch (err) {
                     alert('Error loading file: ' + err.message);
@@ -2376,7 +2975,7 @@ Please be direct and specific with your analysis.`;
         // PDF Print functionality
         function generatePDF() {
             // Get property address and preparer info
-            const propertyAddress = document.getElementById('propertyAddress').value || 'Address not specified';
+            const propertyAddress = getFullAddress();
             const propertyLink = document.getElementById('propertyLink').value || '';
             const preparerName = document.getElementById('preparerName').value || '';
             const preparerEmail = document.getElementById('preparerEmail').value || '';
@@ -2485,7 +3084,7 @@ Please be direct and specific with your analysis.`;
         // LOI Generation
         function generateLOI() {
             // Get values
-            const propertyAddress = document.getElementById('propertyAddress').value || '[PROPERTY ADDRESS]';
+            const propertyAddress = getFullAddress();
             const propertyLink = document.getElementById('propertyLink').value || '';
             const preparerName = document.getElementById('preparerName').value || '[Name]';
             const preparerEmail = document.getElementById('preparerEmail').value || '';
