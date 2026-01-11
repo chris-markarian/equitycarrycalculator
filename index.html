@@ -699,28 +699,6 @@
             box-shadow: 0 6px 25px rgba(245, 158, 11, 0.5);
         }
 
-        .new-deal-btn {
-            background: linear-gradient(135deg, var(--accent-blue), #6366f1);
-            color: white;
-            border: none;
-            padding: 1rem 1.5rem;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
-            transition: transform 0.2s, box-shadow 0.2s;
-            text-decoration: none;
-        }
-
-        .new-deal-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(59, 130, 246, 0.5);
-        }
-
         .library-btn {
             background: linear-gradient(135deg, #22c55e, #16a34a);
             color: white;
@@ -1736,6 +1714,116 @@
             background: var(--bg-secondary);
         }
 
+        /* Save Choice Modal */
+        .save-choice-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1002;
+        }
+
+        .save-choice-modal-overlay.show {
+            display: flex;
+        }
+
+        .save-choice-modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            width: 100%;
+            max-width: 400px;
+            margin: 1rem;
+            text-align: center;
+        }
+
+        .save-choice-modal h3 {
+            margin: 0 0 0.5rem 0;
+            color: var(--text-primary);
+        }
+
+        .save-choice-modal .subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .save-choice-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .save-choice-btn {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1.25rem 1rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .save-choice-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .save-choice-btn.overwrite {
+            background: linear-gradient(135deg, var(--accent-teal), #0d9488);
+            box-shadow: 0 4px 15px rgba(20, 184, 166, 0.3);
+        }
+
+        .save-choice-btn.overwrite:hover {
+            box-shadow: 0 6px 20px rgba(20, 184, 166, 0.4);
+        }
+
+        .save-choice-btn.copy {
+            background: linear-gradient(135deg, var(--accent-blue), #4f46e5);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .save-choice-btn.copy:hover {
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .save-choice-btn span:first-child {
+            font-size: 1.5rem;
+        }
+
+        .save-choice-btn .btn-hint {
+            font-size: 0.75rem;
+            font-weight: 400;
+            opacity: 0.85;
+        }
+
+        .save-choice-cancel {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .save-choice-cancel:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
         /* Shared Deal Banner */
         .shared-deal-banner {
             background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(20, 184, 166, 0.15));
@@ -2273,6 +2361,29 @@
                 <button class="share-revoke-btn" id="shareRevokeBtn" onclick="revokeShare()">Revoke Access</button>
                 <button class="share-close-btn" onclick="closeShareModal()">Done</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Save Choice Modal -->
+    <div class="save-choice-modal-overlay" id="saveChoiceModal">
+        <div class="save-choice-modal">
+            <h3>💾 Save Deal</h3>
+            <p class="subtitle">This deal already exists in your library. How would you like to save?</p>
+            
+            <div class="save-choice-buttons">
+                <button class="save-choice-btn overwrite" onclick="resolveSaveChoice('update')">
+                    <span>📝</span>
+                    <span>Overwrite</span>
+                    <span class="btn-hint">Update the existing deal</span>
+                </button>
+                <button class="save-choice-btn copy" onclick="resolveSaveChoice('copy')">
+                    <span>📋</span>
+                    <span>Create Copy</span>
+                    <span class="btn-hint">Save as a new version</span>
+                </button>
+            </div>
+            
+            <button class="save-choice-cancel" onclick="resolveSaveChoice('cancel')">Cancel</button>
         </div>
     </div>
 
@@ -2954,9 +3065,6 @@
 
         <!-- Export Buttons -->
         <div class="export-buttons">
-            <button class="new-deal-btn" onclick="startNewDeal()">
-                <span>➕</span> New Deal
-            </button>
             <button class="library-btn" onclick="saveToLibrary()">
                 <span>💾</span> Save Deal to Library
             </button>
@@ -4516,18 +4624,29 @@ Please be direct and specific with your analysis.`;
                 }
                 
                 let deals = getLibrary();
-                let isUpdate = false;
                 let existingDeal = null;
+                let saveAsCopy = false;
                 
-                // Check if we're updating an existing deal
+                // Check if we're working with an existing deal
                 if (currentLoadedDealId) {
                     existingDeal = deals.find(d => String(d.id) === String(currentLoadedDealId));
                     if (existingDeal) {
-                        isUpdate = true;
+                        // Ask user: update or copy?
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
+                        
+                        const choice = await showSaveChoiceDialog();
+                        if (choice === 'cancel') {
+                            return;
+                        }
+                        saveAsCopy = (choice === 'copy');
+                        
+                        btn.innerHTML = '<span>⏳</span> Saving...';
+                        btn.disabled = true;
                     }
                 }
                 
-                if (isUpdate && existingDeal) {
+                if (existingDeal && !saveAsCopy) {
                     // Update existing deal
                     deal.id = existingDeal.id;
                     deal.savedAt = existingDeal.savedAt; // Preserve original created date
@@ -4550,12 +4669,26 @@ Please be direct and specific with your analysis.`;
                     if (index !== -1) {
                         deals[index] = deal;
                     }
+                    
+                    saveLibrary(deals);
+                    renderLibrary();
+                    
+                    btn.innerHTML = '<span>✓</span> Updated!';
                 } else {
-                    // Create new deal
+                    // Create new deal (or copy)
                     deal.id = Date.now();
+                    
+                    if (saveAsCopy) {
+                        // Add copy number to the full address display
+                        const fullAddress = getAddressFromParts(existingDeal.propertyInfo);
+                        const copyNumber = getNextCopyNumber(deals, fullAddress);
+                        deal.copyNumber = copyNumber; // Store copy number
+                        deal.originalAddress = fullAddress; // Store original for reference
+                    }
+                    
                     currentLoadedDealId = deal.id; // Track as current deal
                     
-                    // Save to cloud first
+                    // Save to cloud
                     if (currentUser) {
                         const cloudResult = await saveToCloud(deal);
                         if (cloudResult) {
@@ -4564,13 +4697,13 @@ Please be direct and specific with your analysis.`;
                     }
                     
                     deals.unshift(deal); // Add to beginning
+                    
+                    saveLibrary(deals);
+                    renderLibrary();
+                    
+                    btn.innerHTML = saveAsCopy ? '<span>✓</span> Copy Saved!' : '<span>✓</span> Saved!';
                 }
                 
-                saveLibrary(deals);
-                renderLibrary();
-                
-                // Show success message
-                btn.innerHTML = isUpdate ? '<span>✓</span> Updated!' : '<span>✓</span> Saved!';
                 btn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
                 btn.disabled = false;
                 setTimeout(() => {
@@ -4586,60 +4719,44 @@ Please be direct and specific with your analysis.`;
             }
         }
         
-        function clearCurrentDeal() {
-            currentLoadedDealId = null;
-            // Could also clear form fields here if needed
+        let saveChoiceResolver = null;
+        
+        function showSaveChoiceDialog() {
+            return new Promise((resolve) => {
+                saveChoiceResolver = resolve;
+                document.getElementById('saveChoiceModal').classList.add('show');
+            });
         }
         
-        function startNewDeal() {
-            if (!confirm('Start a new deal? Any unsaved changes will be lost.')) {
-                return;
+        function resolveSaveChoice(choice) {
+            document.getElementById('saveChoiceModal').classList.remove('show');
+            if (saveChoiceResolver) {
+                saveChoiceResolver(choice);
+                saveChoiceResolver = null;
             }
+        }
+        
+        function getNextCopyNumber(deals, baseFullAddress) {
+            // Find the highest copy number for deals with matching address
+            let maxCopyNum = 0;
             
+            deals.forEach(d => {
+                const dealAddress = d.propertyInfo?.address || getAddressFromParts(d.propertyInfo) || '';
+                const originalAddr = d.originalAddress || dealAddress;
+                
+                // Check if this deal matches the base address (either directly or via originalAddress)
+                if (dealAddress === baseFullAddress || originalAddr === baseFullAddress) {
+                    // This is either the original or a copy of it
+                    const copyNum = d.copyNumber || 0;
+                    maxCopyNum = Math.max(maxCopyNum, copyNum);
+                }
+            });
+            
+            return maxCopyNum + 1;
+        }
+        
+        function clearCurrentDeal() {
             currentLoadedDealId = null;
-            
-            // Clear all form fields
-            document.getElementById('streetAddress').value = '';
-            document.getElementById('city').value = '';
-            document.getElementById('state').value = '';
-            document.getElementById('zip').value = '';
-            document.getElementById('propertyLink').value = '';
-            document.getElementById('preparerName').value = '';
-            document.getElementById('preparerEmail').value = '';
-            document.getElementById('preparerPhone').value = '';
-            document.getElementById('sellerName').value = '';
-            document.getElementById('sellerEmail').value = '';
-            document.getElementById('sellerPhone').value = '';
-            document.getElementById('purchasePrice').value = '';
-            document.getElementById('askingPrice').value = '';
-            document.getElementById('rentalRevenue').value = '';
-            document.getElementById('appreciationRate').value = '2';
-            document.getElementById('category').value = 'DSCR Residential';
-            document.getElementById('firstLoanLTV').value = '26';
-            document.getElementById('sellerCarryPct').value = '80';
-            document.getElementById('interestOnly').value = 'No';
-            document.getElementById('interestAtBalloon').value = 'No';
-            document.getElementById('monthsToStabilize').value = '0';
-            document.getElementById('revenueDuringStab').value = '100';
-            document.getElementById('yearsToBalloon').value = '8';
-            document.getElementById('sellerCarryRate').value = '0';
-            document.getElementById('sellerCarryAmort').value = '30';
-            document.getElementById('propertyTax').value = '';
-            document.getElementById('insurance').value = '';
-            document.getElementById('hoa').value = '';
-            document.getElementById('otherExpenses').value = '';
-            document.getElementById('capexPct').value = '5';
-            document.getElementById('managementPct').value = '8';
-            document.getElementById('vacancyPct').value = '5';
-            document.getElementById('agentFee').value = '';
-            document.getElementById('rehabCost').value = '';
-            document.getElementById('assignmentFeePct').value = '5';
-            document.getElementById('appraisalCost').value = '';
-            document.getElementById('closingCostPct').value = '5';
-            
-            // Recalculate and scroll to top
-            calculate();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function loadFromLibrary(dealId) {
@@ -4814,7 +4931,13 @@ Note: Please find the attached LOI and PDF Summary documents for complete deal t
             `;
             
             const tableRows = deals.map(deal => {
-                const address = deal.propertyInfo?.address || getAddressFromParts(deal.propertyInfo) || 'Untitled Deal';
+                let address = deal.propertyInfo?.address || getAddressFromParts(deal.propertyInfo) || 'Untitled Deal';
+                
+                // Add copy number to end of address if this is a copy
+                if (deal.copyNumber) {
+                    address = `${address} (${deal.copyNumber})`;
+                }
+                
                 const price = deal.dealTerms?.purchasePrice ? formatCurrency(parseFloat(deal.dealTerms.purchasePrice)) : '$0';
                 
                 // Show modified or created date based on sort
