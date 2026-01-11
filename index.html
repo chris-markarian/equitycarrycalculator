@@ -3628,6 +3628,9 @@
 
         function hideAuthModal() {
             document.getElementById('authModal').style.display = 'none';
+            
+            // Apply any pending property params from extension (for offline/skip cases)
+            applyPendingParams();
         }
 
         function showApp() {
@@ -3641,6 +3644,9 @@
             const email = currentUser.email;
             document.getElementById('userEmail').textContent = email;
             document.getElementById('userAvatar').textContent = email.charAt(0).toUpperCase();
+            
+            // Apply any pending property params from extension
+            applyPendingParams();
         }
 
         function toggleAuthMode() {
@@ -4370,10 +4376,16 @@
         }
 
         // Initialize on load
+        // Store params globally so they survive auth flow
+        let pendingPropertyParams = null;
+        
         document.addEventListener('DOMContentLoaded', function() {
+            // Capture URL params immediately before anything else
+            capturePendingParams();
+            
             calculate();
             renderLibrary();
-            initAuth(); // Initialize authentication
+            initAuth(); // Initialize authentication - will call applyPendingParams after auth
             checkForSharedDeal(); // Check if opening a shared deal link
             
             // Toggle price range visibility based on checkbox
@@ -4386,6 +4398,133 @@
                 document.getElementById('goalAmortRange').style.display = this.checked ? 'flex' : 'none';
             });
         });
+
+        // =============================================
+        // URL PARAMETER HANDLING (for browser extension)
+        // =============================================
+        
+        function capturePendingParams() {
+            const params = new URLSearchParams(window.location.search);
+            
+            // Check if we have property data params (not share params)
+            if (params.has('street') || params.has('asking') || params.has('price')) {
+                pendingPropertyParams = {
+                    street: params.get('street'),
+                    city: params.get('city'),
+                    state: params.get('state'),
+                    zip: params.get('zip'),
+                    asking: params.get('asking'),
+                    price: params.get('price'),
+                    rent: params.get('rent'),
+                    debt: params.get('debt'),
+                    url: params.get('url')
+                };
+                
+                // Clean up URL immediately (remove params without refreshing)
+                const cleanUrl = window.location.origin + window.location.pathname;
+                window.history.replaceState({}, document.title, cleanUrl);
+            }
+        }
+        
+        function applyPendingParams() {
+            if (!pendingPropertyParams) return;
+            
+            const params = pendingPropertyParams;
+            pendingPropertyParams = null; // Clear so it doesn't apply again
+            
+            // Address fields
+            if (params.street) {
+                document.getElementById('streetAddress').value = params.street;
+            }
+            if (params.city) {
+                document.getElementById('city').value = params.city;
+            }
+            if (params.state) {
+                document.getElementById('state').value = params.state;
+            }
+            if (params.zip) {
+                document.getElementById('zip').value = params.zip;
+            }
+            
+            // Pricing
+            if (params.asking) {
+                const asking = params.asking.replace(/[^0-9.]/g, '');
+                document.getElementById('askingPrice').value = asking;
+                document.getElementById('purchasePrice').value = asking; // Default to asking
+            }
+            if (params.price) {
+                const price = params.price.replace(/[^0-9.]/g, '');
+                document.getElementById('purchasePrice').value = price;
+                if (!params.asking) {
+                    document.getElementById('askingPrice').value = price;
+                }
+            }
+            
+            // Rental income (annual)
+            if (params.rent) {
+                const rent = params.rent.replace(/[^0-9.]/g, '');
+                document.getElementById('rentalRevenue').value = rent;
+            }
+            
+            // Existing debt
+            if (params.debt) {
+                const debt = params.debt.replace(/[^0-9.]/g, '');
+                document.getElementById('existingDebt').value = debt;
+            }
+            
+            // Property link (the source URL)
+            if (params.url) {
+                document.getElementById('propertyLink').value = params.url;
+            }
+            
+            // Recalculate with new values
+            calculate();
+            
+            // Show a subtle notification
+            showExtensionNotification();
+        }
+        
+        function checkForPropertyParams() {
+            // This is now handled by capturePendingParams + applyPendingParams
+            // Keeping function for backwards compatibility
+            applyPendingParams();
+        }
+        
+        function showExtensionNotification() {
+            const notification = document.createElement('div');
+            notification.innerHTML = `
+                <div style="
+                    position: fixed;
+                    top: 1rem;
+                    right: 1rem;
+                    background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+                    color: white;
+                    padding: 1rem 1.5rem;
+                    border-radius: 12px;
+                    font-size: 0.9rem;
+                    font-weight: 500;
+                    z-index: 9999;
+                    animation: slideIn 0.3s ease-out;
+                    box-shadow: 0 4px 20px rgba(20, 184, 166, 0.3);
+                ">
+                    📥 Property data imported from extension
+                </div>
+            `;
+            document.body.appendChild(notification);
+            
+            // Add animation style
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { opacity: 0; transform: translateX(20px); }
+                    to { opacity: 1; transform: translateX(0); }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // Remove after 3 seconds
+            setTimeout(() => notification.remove(), 3000);
+        }
 
         // =============================================
         // SHARE DEAL FUNCTIONS
