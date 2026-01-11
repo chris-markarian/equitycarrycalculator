@@ -895,6 +895,36 @@
             color: var(--text-muted);
         }
 
+        .library-item-share {
+            background: transparent;
+            color: var(--accent-blue);
+            border: none;
+            padding: 0.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        .library-item-share:hover {
+            opacity: 1;
+        }
+
+        .library-item-download {
+            background: transparent;
+            color: var(--accent-teal);
+            border: none;
+            padding: 0.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        .library-item-download:hover {
+            opacity: 1;
+        }
+
         .library-item-delete {
             background: transparent;
             color: #f87171;
@@ -1011,28 +1041,309 @@
             border-bottom: 1px solid var(--border-color);
         }
 
-        .library-export-btn, .library-import-btn {
-            background: transparent;
-            color: var(--text-secondary);
-            border: 1px solid var(--border-color);
-            padding: 0.5rem 0.75rem;
-            border-radius: 8px;
-            font-size: 0.75rem;
-            cursor: pointer;
-            transition: background 0.2s, color 0.2s;
-        }
-
-        .library-export-btn:hover, .library-import-btn:hover {
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-        }
-
         .export-buttons {
             display: flex;
             gap: 1rem;
             justify-content: center;
             margin: 2rem 0;
             flex-wrap: wrap;
+        }
+
+        /* Goal Finder Styles */
+        .goal-finder {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .goal-finder-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .goal-finder-header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .goal-finder-header h2 {
+            margin: 0;
+            font-size: 1.25rem;
+        }
+
+        .goal-finder-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .goal-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .goal-input-group label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .goal-input-group input[type="number"] {
+            background: var(--bg-input);
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            padding: 0.625rem 0.875rem;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            width: 100%;
+        }
+
+        .goal-input-group input:focus {
+            outline: none;
+            border-color: var(--accent-teal);
+        }
+
+        .goal-variables {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .goal-variables-title {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.75rem;
+        }
+
+        .goal-variable-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .goal-variable-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .goal-variable-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent-teal);
+            cursor: pointer;
+        }
+
+        .goal-variable-item label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .goal-variable-item label:hover {
+            color: var(--text-primary);
+        }
+
+        .goal-price-range {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .goal-price-range label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .goal-price-range input {
+            width: 100px;
+            background: var(--bg-input);
+            border: 1px solid var(--input-border);
+            border-radius: 6px;
+            padding: 0.4rem 0.6rem;
+            color: var(--text-primary);
+            font-size: 0.8rem;
+        }
+
+        .goal-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .goal-find-btn {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            border: none;
+            padding: 0.875rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .goal-find-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+        }
+
+        .goal-find-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .goal-results {
+            margin-top: 1.5rem;
+            padding: 1.25rem;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .goal-results.show {
+            display: block;
+        }
+
+        .goal-results.success {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid var(--accent-green);
+        }
+
+        .goal-results.failure {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--accent-red);
+        }
+
+        .goal-results.partial {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid var(--accent-amber);
+        }
+
+        .goal-results-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .goal-results.success .goal-results-header {
+            color: var(--accent-green);
+        }
+
+        .goal-results.failure .goal-results-header {
+            color: var(--accent-red);
+        }
+
+        .goal-results.partial .goal-results-header {
+            color: var(--accent-amber);
+        }
+
+        .goal-results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .goal-result-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .goal-result-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .goal-result-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .goal-result-value.changed {
+            color: var(--accent-amber);
+        }
+
+        .goal-result-note {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 0.15rem;
+        }
+
+        .goal-metric-target {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-left: 0.25rem;
+        }
+
+        .goal-metrics-achieved {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .goal-metric-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.8rem;
+            padding: 0.35rem 0.65rem;
+            border-radius: 20px;
+            background: var(--bg-tertiary);
+        }
+
+        .goal-metric-badge.met {
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--accent-green);
+        }
+
+        .goal-metric-badge.unmet {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--accent-red);
+        }
+
+        .goal-apply-btn {
+            background: linear-gradient(135deg, var(--accent-green), #16a34a);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: transform 0.2s;
+        }
+
+        .goal-apply-btn:hover {
+            transform: translateY(-1px);
         }
 
         /* Auth Modal Styles */
@@ -1287,6 +1598,180 @@
             .user-email {
                 display: none;
             }
+        }
+
+        /* Share Modal Styles */
+        .share-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+        }
+
+        .share-modal-overlay.show {
+            display: flex;
+        }
+
+        .share-modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            width: 100%;
+            max-width: 500px;
+            margin: 1rem;
+        }
+
+        .share-modal h3 {
+            margin: 0 0 0.5rem 0;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .share-modal .subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .share-link-container {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .share-link-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            background: var(--bg-input);
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-family: monospace;
+        }
+
+        .share-copy-btn {
+            background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+            border: none;
+            border-radius: 8px;
+            color: white;
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+
+        .share-copy-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .share-copy-btn.copied {
+            background: linear-gradient(135deg, var(--accent-green), #16a34a);
+        }
+
+        .share-note {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid var(--accent-blue);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .share-note strong {
+            color: var(--accent-blue);
+        }
+
+        .share-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .share-revoke-btn {
+            background: transparent;
+            border: 1px solid var(--accent-red);
+            color: var(--accent-red);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .share-revoke-btn:hover {
+            background: rgba(239, 68, 68, 0.15);
+        }
+
+        .share-close-btn {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .share-close-btn:hover {
+            background: var(--bg-secondary);
+        }
+
+        /* Shared Deal Banner */
+        .shared-deal-banner {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(20, 184, 166, 0.15));
+            border: 1px solid var(--accent-blue);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+
+        .shared-deal-banner.show {
+            display: block;
+        }
+
+        .shared-deal-banner h4 {
+            margin: 0 0 0.5rem 0;
+            color: var(--accent-blue);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .shared-deal-banner p {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .shared-deal-banner .save-shared-btn {
+            background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+            border: none;
+            border-radius: 8px;
+            color: white;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-top: 0.75rem;
+            transition: transform 0.2s;
+        }
+
+        .shared-deal-banner .save-shared-btn:hover {
+            transform: translateY(-1px);
         }
 
         /* PDF Summary Styles */
@@ -1762,6 +2247,28 @@
         </div>
     </div>
 
+    <!-- Share Modal -->
+    <div class="share-modal-overlay" id="shareModal">
+        <div class="share-modal">
+            <h3>🔗 Share Deal</h3>
+            <p class="subtitle">Anyone with this link can view and edit this deal</p>
+            
+            <div class="share-link-container">
+                <input type="text" class="share-link-input" id="shareLinkInput" readonly>
+                <button class="share-copy-btn" id="shareCopyBtn" onclick="copyShareLink()">Copy</button>
+            </div>
+            
+            <div class="share-note">
+                <strong>Note:</strong> Changes made by collaborators will update your original deal in real-time.
+            </div>
+            
+            <div class="share-actions">
+                <button class="share-revoke-btn" id="shareRevokeBtn" onclick="revokeShare()">Revoke Access</button>
+                <button class="share-close-btn" onclick="closeShareModal()">Done</button>
+            </div>
+        </div>
+    </div>
+
     <!-- User Indicator -->
     <div class="user-indicator" id="userIndicator" style="display: none;">
         <div class="user-avatar" id="userAvatar">?</div>
@@ -1787,6 +2294,13 @@
     </template>
 
     <div class="container">
+        <!-- Shared Deal Banner -->
+        <div class="shared-deal-banner" id="sharedDealBanner">
+            <h4>🔗 Shared Deal</h4>
+            <p>You're viewing a shared deal. Any changes you make will be synced to the owner's library.</p>
+            <button class="save-shared-btn" onclick="saveSharedDealChanges()">💾 Save Changes</button>
+        </div>
+
         <header>
             <h1>Real Estate Underwriting Calculator</h1>
             <p class="subtitle">Comprehensive deal analysis with seller financing & equity carry</p>
@@ -1899,11 +2413,6 @@
                         <label>Seller Carry %</label>
                         <input type="number" id="sellerCarryPct" value="80" step="1" min="0" max="100" class="input-highlight" onchange="calculate()">
                         <span class="helper-text">% of purchase price</span>
-                    </div>
-                    <div class="form-group">
-                        <label>Target Cash to Seller</label>
-                        <input type="number" id="targetCashToSeller" value="" step="1000" min="0" class="input-highlight input-target" placeholder="Optional" onchange="calculateFromTarget()">
-                        <span class="helper-text">NET after closing costs</span>
                     </div>
                 </div>
 
@@ -2343,6 +2852,99 @@
             </div>
         </div>
 
+        <!-- Goal Finder -->
+        <div class="goal-finder">
+            <div class="goal-finder-header">
+                <div class="goal-finder-header-left">
+                    <div class="card-icon icon-amber">🎯</div>
+                    <h2>Goal Finder</h2>
+                </div>
+                <span style="color: var(--text-muted); font-size: 0.85rem;">Reverse-engineer deal terms from your desired outcomes</span>
+            </div>
+
+            <div class="goal-finder-grid">
+                <div class="goal-input-group">
+                    <label>Minimum Cap Rate (%)</label>
+                    <input type="number" id="goalCapRate" value="7" step="0.5" min="0" max="20">
+                </div>
+                <div class="goal-input-group">
+                    <label>Minimum Monthly Cash Flow ($)</label>
+                    <input type="number" id="goalCashFlow" value="300" step="50" min="0">
+                </div>
+                <div class="goal-input-group">
+                    <label>Target Cash to Seller ($)</label>
+                    <input type="number" id="goalCashToSeller" value="100000" step="5000" min="0">
+                </div>
+            </div>
+
+            <div class="goal-variables">
+                <div class="goal-variables-title">Variables to Adjust</div>
+                <div class="goal-variable-grid">
+                    <div>
+                        <div class="goal-variable-item">
+                            <input type="checkbox" id="goalAdjustPrice" checked>
+                            <label for="goalAdjustPrice">Purchase Price</label>
+                        </div>
+                        <div class="goal-price-range" id="goalPriceRange">
+                            <label>Min $</label>
+                            <input type="number" id="goalMinPrice" value="0" step="10000">
+                        </div>
+                    </div>
+                    <div class="goal-variable-item">
+                        <input type="checkbox" id="goalAdjustSellerCarry" checked>
+                        <label for="goalAdjustSellerCarry">Seller Carry %</label>
+                    </div>
+                    <div class="goal-variable-item">
+                        <input type="checkbox" id="goalAdjustSellerRate" checked>
+                        <label for="goalAdjustSellerRate">Seller Carry Interest Rate</label>
+                    </div>
+                    <div>
+                        <div class="goal-variable-item">
+                            <input type="checkbox" id="goalAdjustSellerAmort" checked>
+                            <label for="goalAdjustSellerAmort">Seller Carry Amortization</label>
+                        </div>
+                        <div class="goal-price-range" id="goalAmortRange">
+                            <label>Max</label>
+                            <input type="number" id="goalMaxAmort" value="99" step="1" min="15" max="99" style="width: 70px;">
+                            <label>yrs</label>
+                        </div>
+                    </div>
+                    <div class="goal-variable-item">
+                        <input type="checkbox" id="goalAdjustLTV" checked>
+                        <label for="goalAdjustLTV">First Position LTV %</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="goal-actions">
+                <button class="goal-find-btn" onclick="findGoalTerms()">
+                    <span>🔍</span> Find Optimal Terms
+                </button>
+                <label style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-secondary); font-size: 0.85rem;">
+                    <input type="checkbox" id="goalRequireSpread" checked style="accent-color: var(--accent-teal);">
+                    Require Positive Spread
+                </label>
+            </div>
+
+            <div class="goal-results" id="goalResults">
+                <div class="goal-results-header" id="goalResultsHeader">
+                    <span>✅</span>
+                    <span>Solution Found</span>
+                </div>
+                <div class="goal-results-grid" id="goalResultsGrid">
+                    <!-- Filled by JS -->
+                </div>
+                <div class="goal-metrics-achieved" id="goalMetricsAchieved">
+                    <!-- Filled by JS -->
+                </div>
+                <div style="margin-top: 1rem;">
+                    <button class="goal-apply-btn" onclick="applyGoalTerms()">
+                        <span>✓</span> Apply These Terms
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <!-- Export Buttons -->
         <div class="export-buttons">
             <button class="library-btn" onclick="saveToLibrary()">
@@ -2360,11 +2962,6 @@
         <div class="deal-library" id="dealLibrary">
             <div class="library-header">
                 <h3>📚 Deal Library</h3>
-                <div class="library-actions">
-                    <button class="library-export-btn" onclick="exportAllDeals()">⬇️ Export All</button>
-                    <button class="library-import-btn" onclick="document.getElementById('importLibraryInput').click()">⬆️ Import</button>
-                    <input type="file" id="importLibraryInput" accept=".json" style="display: none;" onchange="importAllDeals(event)">
-                </div>
             </div>
             
             <div class="library-controls">
@@ -2680,7 +3277,6 @@
                 category: deal.loanConfig?.category || 'DSCR Residential',
                 first_loan_ltv: parseFloat(deal.loanConfig?.firstLoanLTV) || 26,
                 seller_carry_pct: parseFloat(deal.loanConfig?.sellerCarryPct) || 80,
-                target_cash_to_seller: parseFloat(deal.loanConfig?.targetCashToSeller) || null,
                 interest_only: deal.loanConfig?.interestOnly || 'No',
                 interest_at_balloon: deal.loanConfig?.interestAtBalloon || 'No',
                 months_to_stabilize: parseInt(deal.loanConfig?.monthsToStabilize) || 0,
@@ -2741,7 +3337,6 @@
                     category: cloudDeal.category || base.loanConfig?.category || 'DSCR Residential',
                     firstLoanLTV: cloudDeal.first_loan_ltv || base.loanConfig?.firstLoanLTV || 26,
                     sellerCarryPct: cloudDeal.seller_carry_pct || base.loanConfig?.sellerCarryPct || 80,
-                    targetCashToSeller: cloudDeal.target_cash_to_seller || base.loanConfig?.targetCashToSeller || '',
                     interestOnly: cloudDeal.interest_only || base.loanConfig?.interestOnly || 'No',
                     interestAtBalloon: cloudDeal.interest_at_balloon || base.loanConfig?.interestAtBalloon || 'No',
                     monthsToStabilize: cloudDeal.months_to_stabilize || base.loanConfig?.monthsToStabilize || 0,
@@ -2911,52 +3506,7 @@
             }
         }
 
-        // Calculate First Loan % from Target Cash to Seller (NET after closing costs)
-        function calculateFromTarget() {
-            const purchasePrice = parseFloat(document.getElementById('purchasePrice').value) || 0;
-            const targetNetCash = parseFloat(document.getElementById('targetCashToSeller').value) || 0;
-            const closingCostPct = parseFloat(document.getElementById('closingCostPct').value) / 100 || 0;
-            const agentFee = parseFloat(document.getElementById('agentFee').value) || 0;
-            
-            if (purchasePrice > 0 && targetNetCash > 0) {
-                // Calculate closing costs based on purchase price
-                const closingCosts = purchasePrice * closingCostPct;
-                
-                // First Position Loan needs to cover: target net + closing costs + agent fee
-                const requiredFirstLoan = targetNetCash + closingCosts + agentFee;
-                
-                // Calculate what First Loan % should be
-                const firstLoanPct = (requiredFirstLoan / purchasePrice) * 100;
-                
-                // Update the First Loan % field (round to 1 decimal)
-                document.getElementById('firstLoanLTV').value = Math.round(firstLoanPct * 10) / 10;
-            }
-            
-            // Recalculate everything (but don't loop back)
-            calculateWithoutTargetAdjust();
-        }
-
-        // Main calculation without target adjustment (to prevent loops)
-        function calculateWithoutTargetAdjust() {
-            runCalculations();
-        }
-
         function calculate() {
-            // If target cash is set, recalculate First Loan % first
-            const targetNetCash = parseFloat(document.getElementById('targetCashToSeller').value) || 0;
-            if (targetNetCash > 0) {
-                const purchasePrice = parseFloat(document.getElementById('purchasePrice').value) || 0;
-                const closingCostPct = parseFloat(document.getElementById('closingCostPct').value) / 100 || 0;
-                const agentFee = parseFloat(document.getElementById('agentFee').value) || 0;
-                
-                if (purchasePrice > 0) {
-                    const closingCosts = purchasePrice * closingCostPct;
-                    const requiredFirstLoan = targetNetCash + closingCosts + agentFee;
-                    const firstLoanPct = (requiredFirstLoan / purchasePrice) * 100;
-                    document.getElementById('firstLoanLTV').value = Math.round(firstLoanPct * 10) / 10;
-                }
-            }
-            
             runCalculations();
         }
 
@@ -3189,7 +3739,580 @@
             calculate();
             renderLibrary();
             initAuth(); // Initialize authentication
+            checkForSharedDeal(); // Check if opening a shared deal link
+            
+            // Toggle price range visibility based on checkbox
+            document.getElementById('goalAdjustPrice').addEventListener('change', function() {
+                document.getElementById('goalPriceRange').style.display = this.checked ? 'flex' : 'none';
+            });
+            
+            // Toggle amort range visibility based on checkbox
+            document.getElementById('goalAdjustSellerAmort').addEventListener('change', function() {
+                document.getElementById('goalAmortRange').style.display = this.checked ? 'flex' : 'none';
+            });
         });
+
+        // =============================================
+        // SHARE DEAL FUNCTIONS
+        // =============================================
+        
+        let currentShareToken = null;
+        let currentSharedDealCloudId = null;
+        
+        async function shareDeal(dealId) {
+            const deals = getLibrary();
+            const deal = deals.find(d => String(d.id) === String(dealId));
+            
+            if (!deal) {
+                alert('Deal not found');
+                return;
+            }
+            
+            if (!deal.cloud_id) {
+                alert('Please save this deal first (it needs to sync to cloud before sharing)');
+                return;
+            }
+            
+            try {
+                // Generate share token via Supabase function
+                const { data, error } = await supabaseClient.rpc('generate_share_token', {
+                    p_deal_id: deal.cloud_id
+                });
+                
+                if (error) throw error;
+                
+                const shareToken = data;
+                currentShareToken = shareToken;
+                currentSharedDealCloudId = deal.cloud_id;
+                
+                // Update local deal with share token
+                deal.share_token = shareToken;
+                saveLibrary(deals);
+                
+                // Generate the share URL
+                const baseUrl = window.location.origin + window.location.pathname;
+                const shareUrl = `${baseUrl}?share=${shareToken}`;
+                
+                // Show the share modal
+                document.getElementById('shareLinkInput').value = shareUrl;
+                document.getElementById('shareModal').classList.add('show');
+                document.getElementById('shareCopyBtn').textContent = 'Copy';
+                document.getElementById('shareCopyBtn').classList.remove('copied');
+                
+            } catch (error) {
+                console.error('Error generating share link:', error);
+                alert('Error generating share link: ' + error.message);
+            }
+        }
+        
+        function copyShareLink() {
+            const input = document.getElementById('shareLinkInput');
+            input.select();
+            document.execCommand('copy');
+            
+            const btn = document.getElementById('shareCopyBtn');
+            btn.textContent = 'Copied!';
+            btn.classList.add('copied');
+            
+            setTimeout(() => {
+                btn.textContent = 'Copy';
+                btn.classList.remove('copied');
+            }, 2000);
+        }
+        
+        function closeShareModal() {
+            document.getElementById('shareModal').classList.remove('show');
+        }
+        
+        async function revokeShare() {
+            if (!confirm('Revoke access? Anyone with the link will no longer be able to view or edit this deal.')) {
+                return;
+            }
+            
+            try {
+                const { data, error } = await supabaseClient.rpc('revoke_share_token', {
+                    p_deal_id: currentSharedDealCloudId
+                });
+                
+                if (error) throw error;
+                
+                // Update local deal
+                const deals = getLibrary();
+                const deal = deals.find(d => d.cloud_id === currentSharedDealCloudId);
+                if (deal) {
+                    delete deal.share_token;
+                    saveLibrary(deals);
+                }
+                
+                closeShareModal();
+                alert('Share link has been revoked.');
+                
+            } catch (error) {
+                console.error('Error revoking share:', error);
+                alert('Error revoking share: ' + error.message);
+            }
+        }
+        
+        async function checkForSharedDeal() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const shareToken = urlParams.get('share');
+            
+            if (!shareToken) return;
+            
+            try {
+                // Fetch the shared deal
+                const { data, error } = await supabaseClient.rpc('get_deal_by_share_token', {
+                    p_token: shareToken
+                });
+                
+                if (error) throw error;
+                
+                if (!data || data.length === 0) {
+                    alert('Shared deal not found or link has expired.');
+                    // Clear the URL parameter
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                    return;
+                }
+                
+                const sharedDeal = data[0];
+                currentShareToken = shareToken;
+                currentSharedDealCloudId = sharedDeal.id;
+                
+                // Convert cloud deal to local format and populate form
+                const localDeal = cloudDealToLocal(sharedDeal);
+                populateFormFromDeal(localDeal);
+                calculate();
+                
+                // Show shared deal banner
+                document.getElementById('sharedDealBanner').classList.add('show');
+                
+                // Hide auth modal if showing (allow anonymous access to shared deals)
+                hideAuthModal();
+                
+            } catch (error) {
+                console.error('Error loading shared deal:', error);
+                alert('Error loading shared deal: ' + error.message);
+            }
+        }
+        
+        async function saveSharedDealChanges() {
+            if (!currentShareToken) {
+                alert('No shared deal loaded');
+                return;
+            }
+            
+            const btn = document.querySelector('.save-shared-btn');
+            const originalText = btn.textContent;
+            btn.textContent = '⏳ Saving...';
+            btn.disabled = true;
+            
+            try {
+                const deal = buildDealObject();
+                const cloudData = localDealToCloud(deal);
+                
+                const { data, error } = await supabaseClient.rpc('update_shared_deal', {
+                    p_token: currentShareToken,
+                    p_data: cloudData
+                });
+                
+                if (error) throw error;
+                
+                btn.textContent = '✓ Saved!';
+                btn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '';
+                    btn.disabled = false;
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Error saving shared deal:', error);
+                alert('Error saving changes: ' + error.message);
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        // =============================================
+        // GOAL FINDER FUNCTIONS
+        // =============================================
+        
+        let goalSolution = null; // Store the solution for applying later
+
+        function findGoalTerms() {
+            // Get current fixed values from the form
+            const askingPrice = parseFloat(document.getElementById('askingPrice').value) || 0;
+            const rentalRevenue = parseFloat(document.getElementById('rentalRevenue').value) || 0;
+            const category = document.getElementById('category').value;
+            
+            // Get operating expenses
+            const propertyTax = parseFloat(document.getElementById('propertyTax').value) || 0;
+            const insurance = parseFloat(document.getElementById('insurance').value) || 0;
+            const hoa = parseFloat(document.getElementById('hoa').value) || 0;
+            const otherExpenses = parseFloat(document.getElementById('otherExpenses').value) || 0;
+            const capexPct = parseFloat(document.getElementById('capexPct').value) || 5;
+            const managementPct = parseFloat(document.getElementById('managementPct').value) || 8;
+            const vacancyPct = parseFloat(document.getElementById('vacancyPct').value) || 5;
+            
+            // Get goals
+            const goalCapRate = parseFloat(document.getElementById('goalCapRate').value) / 100 || 0;
+            const goalCashFlow = parseFloat(document.getElementById('goalCashFlow').value) || 0;
+            const targetCashToSeller = parseFloat(document.getElementById('goalCashToSeller').value) || 0;
+            const requireSpread = document.getElementById('goalRequireSpread').checked;
+            
+            // Get which variables can be adjusted
+            const adjustPrice = document.getElementById('goalAdjustPrice').checked;
+            const adjustSellerCarry = document.getElementById('goalAdjustSellerCarry').checked;
+            const adjustSellerRate = document.getElementById('goalAdjustSellerRate').checked;
+            const adjustLTV = document.getElementById('goalAdjustLTV').checked;
+            const adjustSellerAmort = document.getElementById('goalAdjustSellerAmort').checked;
+            
+            // Price constraints
+            const minPrice = adjustPrice ? (parseFloat(document.getElementById('goalMinPrice').value) || askingPrice * 0.5) : askingPrice;
+            const maxPrice = askingPrice || 1000000;
+            
+            // Calculate fixed expenses
+            const fixedExpenses = propertyTax + insurance + hoa + otherExpenses;
+            
+            // Get rates based on category
+            const firstPositionRate = getInterestRate(category);
+            const firstPositionAmort = getAmortization(category);
+            const currentSellerCarryAmort = parseInt(document.getElementById('sellerCarryAmort').value) || 30;
+            
+            // Validation
+            if (rentalRevenue <= 0) {
+                showGoalResults('failure', 'Please enter rental revenue first', null, []);
+                return;
+            }
+            
+            if (maxPrice <= 0) {
+                showGoalResults('failure', 'Please enter an asking price first', null, []);
+                return;
+            }
+            
+            // Current values as defaults
+            const currentPrice = parseFloat(document.getElementById('purchasePrice').value) || maxPrice;
+            const currentSellerCarry = parseFloat(document.getElementById('sellerCarryPct').value) || 70;
+            const currentSellerRate = parseFloat(document.getElementById('sellerCarryRate').value) || 0;
+            const currentLTV = parseFloat(document.getElementById('firstLoanLTV').value) || 26;
+            
+            // Variable ranges
+            const sellerCarryValues = adjustSellerCarry ? [100, 95, 90, 85, 80, 75, 70, 65] : [currentSellerCarry];
+            const sellerRateValues = adjustSellerRate ? [0, 1, 2, 3, 4, 5, 6] : [currentSellerRate];
+            const ltvValues = adjustLTV ? [15, 20, 25, 30, 35, 40, 45, 50] : [currentLTV];
+            
+            // Get max amortization from user input
+            const maxAmort = parseInt(document.getElementById('goalMaxAmort').value) || 99;
+            const allAmortValues = [15, 20, 25, 30, 40, 50, 60, 70, 80, 99];
+            const sellerAmortValues = adjustSellerAmort 
+                ? allAmortValues.filter(v => v <= maxAmort)
+                : [currentSellerCarryAmort];
+            
+            // STRATEGY: Try at asking price first, only reduce price as last resort
+            // Price steps from high to low (more granular near asking price)
+            const priceValues = [];
+            if (adjustPrice) {
+                // Start with asking price, then gradually reduce
+                for (let pct = 100; pct >= 50; pct -= 1) {
+                    const price = maxPrice * (pct / 100);
+                    if (price >= minPrice) {
+                        priceValues.push(price);
+                    }
+                }
+            } else {
+                priceValues.push(currentPrice);
+            }
+            
+            // Search: For each price level (starting at asking), exhaust all other variables
+            let bestSolutionAtPrice = null;
+            let bestPartialSolution = null;
+            
+            for (const purchasePrice of priceValues) {
+                let solutionsAtThisPrice = [];
+                
+                // Try all combinations of OTHER variables at this price
+                for (const sellerCarryPct of sellerCarryValues) {
+                    for (const sellerRate of sellerRateValues) {
+                        for (const firstLoanLTV of ltvValues) {
+                            for (const sellerCarryAmort of sellerAmortValues) {
+                            
+                                // Check if seller carry + LTV meets minimum (115%) and maximum (145%)
+                                const totalFinancing = sellerCarryPct + firstLoanLTV;
+                                if (totalFinancing < 115) continue;
+                                if (totalFinancing > 145) continue;
+                                
+                                // Calculate cash to seller
+                                const cashToSeller = purchasePrice * (1 - sellerCarryPct / 100);
+                                
+                                // Must meet minimum cash to seller
+                                if (cashToSeller < targetCashToSeller) continue;
+                                
+                                // Calculate full metrics
+                                const metrics = calculateMetrics({
+                                    purchasePrice,
+                                    rentalRevenue,
+                                    sellerCarryPct: sellerCarryPct / 100,
+                                    sellerRate: sellerRate / 100,
+                                    sellerCarryAmort,
+                                    firstLoanLTV: firstLoanLTV / 100,
+                                    firstPositionRate,
+                                    firstPositionAmort,
+                                    fixedExpenses,
+                                    capexPct: capexPct / 100,
+                                    managementPct: managementPct / 100,
+                                    vacancyPct: vacancyPct / 100
+                                });
+                                
+                                // Check all constraints
+                                const meetsCapRate = metrics.capRate >= goalCapRate;
+                                const meetsCashFlow = metrics.monthlyCashFlow >= goalCashFlow;
+                                const meetsCashToSeller = cashToSeller >= targetCashToSeller;
+                                const meetsSpread = !requireSpread || metrics.spread > 0;
+                                
+                                const meetsAll = meetsCapRate && meetsCashFlow && meetsCashToSeller && meetsSpread;
+                                
+                                const solution = {
+                                    purchasePrice,
+                                    sellerCarryPct,
+                                    sellerRate,
+                                    firstLoanLTV,
+                                    sellerCarryAmort,
+                                    cashToSeller,
+                                    metrics,
+                                    meetsAll,
+                                    checks: { meetsCapRate, meetsCashFlow, meetsCashToSeller, meetsSpread }
+                                };
+                                
+                                if (meetsAll) {
+                                    solutionsAtThisPrice.push(solution);
+                                } else {
+                                    // Track best partial solution across all prices
+                                    const metCount = [meetsCapRate, meetsCashFlow, meetsCashToSeller, meetsSpread].filter(Boolean).length;
+                                    if (!bestPartialSolution || metCount > bestPartialSolution.metCount ||
+                                        (metCount === bestPartialSolution.metCount && purchasePrice > bestPartialSolution.purchasePrice)) {
+                                        bestPartialSolution = { ...solution, metCount };
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                // If we found valid solutions at this price, pick the best one and STOP
+                // (Don't look at lower prices since we want highest price possible)
+                if (solutionsAtThisPrice.length > 0) {
+                    // Sort by closest to target cash to seller
+                    solutionsAtThisPrice.sort((a, b) => {
+                        const aDiff = Math.abs(a.cashToSeller - targetCashToSeller);
+                        const bDiff = Math.abs(b.cashToSeller - targetCashToSeller);
+                        return aDiff - bDiff;
+                    });
+                    
+                    bestSolutionAtPrice = solutionsAtThisPrice[0];
+                    break; // Found solution at this price, don't go lower
+                }
+            }
+            
+            // Show results
+            if (bestSolutionAtPrice) {
+                goalSolution = bestSolutionAtPrice;
+                
+                showGoalResults('success', 'Solution Found!', bestSolutionAtPrice, [
+                    { label: 'Cap Rate', met: true, value: formatPercent(bestSolutionAtPrice.metrics.capRate), goal: formatPercent(goalCapRate) },
+                    { label: 'Monthly CF', met: true, value: formatCurrency(bestSolutionAtPrice.metrics.monthlyCashFlow), goal: formatCurrency(goalCashFlow) },
+                    { label: 'Cash to Seller', met: true, value: formatCurrency(bestSolutionAtPrice.cashToSeller), goal: formatCurrency(targetCashToSeller) },
+                    { label: 'Spread', met: true, value: formatPercent(bestSolutionAtPrice.metrics.spread), goal: 'Positive' }
+                ]);
+            } else if (bestPartialSolution) {
+                goalSolution = bestPartialSolution;
+                showGoalResults('partial', 'Best Possible Solution (Some Goals Unmet)', bestPartialSolution, [
+                    { label: 'Cap Rate', met: bestPartialSolution.checks.meetsCapRate, value: formatPercent(bestPartialSolution.metrics.capRate), goal: formatPercent(goalCapRate) },
+                    { label: 'Monthly CF', met: bestPartialSolution.checks.meetsCashFlow, value: formatCurrency(bestPartialSolution.metrics.monthlyCashFlow), goal: formatCurrency(goalCashFlow) },
+                    { label: 'Cash to Seller', met: bestPartialSolution.checks.meetsCashToSeller, value: formatCurrency(bestPartialSolution.cashToSeller), goal: formatCurrency(targetCashToSeller) },
+                    { label: 'Spread', met: bestPartialSolution.checks.meetsSpread, value: formatPercent(bestPartialSolution.metrics.spread), goal: 'Positive' }
+                ]);
+            } else {
+                showGoalResults('failure', 'No solution found with current constraints', null, []);
+            }
+        }
+
+        function calculateMetrics(params) {
+            const {
+                purchasePrice,
+                rentalRevenue,
+                sellerCarryPct,
+                sellerRate,
+                sellerCarryAmort,
+                firstLoanLTV,
+                firstPositionRate,
+                firstPositionAmort,
+                fixedExpenses,
+                capexPct,
+                managementPct,
+                vacancyPct
+            } = params;
+            
+            // Calculate variable expenses
+            const capexExpense = rentalRevenue * capexPct;
+            const managementExpense = rentalRevenue * managementPct;
+            const vacancyExpense = rentalRevenue * vacancyPct;
+            
+            // Total expenses
+            const totalExpenses = fixedExpenses + capexExpense + managementExpense + vacancyExpense;
+            
+            // NOI
+            const noi = rentalRevenue - totalExpenses;
+            
+            // Cap Rate
+            const capRate = purchasePrice > 0 ? noi / purchasePrice : 0;
+            
+            // Loan amounts
+            const firstPositionLoan = purchasePrice * firstLoanLTV;
+            const sellerCarryAmount = purchasePrice * sellerCarryPct;
+            
+            // Monthly payments
+            let firstPositionPayment = 0;
+            if (firstPositionLoan > 0) {
+                const monthlyRate = firstPositionRate / 12;
+                const numPayments = firstPositionAmort * 12;
+                firstPositionPayment = firstPositionLoan * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1);
+            }
+            
+            let sellerCarryPayment = 0;
+            if (sellerCarryAmount > 0) {
+                if (sellerRate === 0) {
+                    sellerCarryPayment = sellerCarryAmount / (sellerCarryAmort * 12);
+                } else {
+                    const monthlyRate = sellerRate / 12;
+                    const numPayments = sellerCarryAmort * 12;
+                    sellerCarryPayment = sellerCarryAmount * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1);
+                }
+            }
+            
+            // Annual debt service
+            const annualDebtService = (firstPositionPayment + sellerCarryPayment) * 12;
+            
+            // Cash flow
+            const annualCashFlow = noi - annualDebtService;
+            const monthlyCashFlow = annualCashFlow / 12;
+            
+            // Blended rate
+            const totalDebt = firstPositionLoan + sellerCarryAmount;
+            const blendedRate = totalDebt > 0 
+                ? (firstPositionLoan * firstPositionRate + sellerCarryAmount * sellerRate) / totalDebt 
+                : 0;
+            
+            // Spread
+            const spread = capRate - blendedRate;
+            
+            // Cash to buyer (down payment + costs)
+            const downPayment = purchasePrice * (1 - firstLoanLTV - sellerCarryPct);
+            const cashToBuyer = Math.max(0, downPayment);
+            
+            // Cash on Cash
+            const cashOnCash = cashToBuyer > 0 ? annualCashFlow / cashToBuyer : 0;
+            
+            return {
+                noi,
+                capRate,
+                monthlyCashFlow,
+                annualCashFlow,
+                cashOnCash,
+                blendedRate,
+                spread,
+                cashToBuyer
+            };
+        }
+
+        function showGoalResults(type, message, solution, metricChecks) {
+            const resultsEl = document.getElementById('goalResults');
+            const headerEl = document.getElementById('goalResultsHeader');
+            const gridEl = document.getElementById('goalResultsGrid');
+            const metricsEl = document.getElementById('goalMetricsAchieved');
+            
+            resultsEl.className = 'goal-results show ' + type;
+            
+            const icon = type === 'success' ? '✅' : type === 'partial' ? '⚠️' : '❌';
+            headerEl.innerHTML = `<span>${icon}</span><span>${message}</span>`;
+            
+            if (solution) {
+                const currentPrice = parseFloat(document.getElementById('purchasePrice').value) || 0;
+                const currentSellerCarry = parseFloat(document.getElementById('sellerCarryPct').value) || 0;
+                const currentSellerRate = parseFloat(document.getElementById('sellerCarryRate').value) || 0;
+                const currentLTV = parseFloat(document.getElementById('firstLoanLTV').value) || 0;
+                const currentSellerAmort = parseInt(document.getElementById('sellerCarryAmort').value) || 30;
+                const askingPrice = parseFloat(document.getElementById('askingPrice').value) || 0;
+                
+                // Calculate percent of asking
+                const pctOfAsking = askingPrice > 0 ? (solution.purchasePrice / askingPrice * 100).toFixed(1) : 0;
+                
+                gridEl.innerHTML = `
+                    <div class="goal-result-item">
+                        <div class="goal-result-label">Purchase Price</div>
+                        <div class="goal-result-value ${solution.purchasePrice !== currentPrice ? 'changed' : ''}">${formatCurrency(solution.purchasePrice)}</div>
+                        <div class="goal-result-note">${pctOfAsking}% of asking</div>
+                    </div>
+                    <div class="goal-result-item">
+                        <div class="goal-result-label">Seller Carry</div>
+                        <div class="goal-result-value ${solution.sellerCarryPct !== currentSellerCarry ? 'changed' : ''}">${solution.sellerCarryPct.toFixed(0)}%</div>
+                    </div>
+                    <div class="goal-result-item">
+                        <div class="goal-result-label">Seller Rate</div>
+                        <div class="goal-result-value ${solution.sellerRate !== currentSellerRate ? 'changed' : ''}">${solution.sellerRate.toFixed(1)}%</div>
+                    </div>
+                    <div class="goal-result-item">
+                        <div class="goal-result-label">Seller Amortization</div>
+                        <div class="goal-result-value ${solution.sellerCarryAmort !== currentSellerAmort ? 'changed' : ''}">${solution.sellerCarryAmort} yrs</div>
+                    </div>
+                    <div class="goal-result-item">
+                        <div class="goal-result-label">First Position LTV</div>
+                        <div class="goal-result-value ${solution.firstLoanLTV !== currentLTV ? 'changed' : ''}">${solution.firstLoanLTV.toFixed(0)}%</div>
+                    </div>
+                    <div class="goal-result-item">
+                        <div class="goal-result-label">Cash to Seller</div>
+                        <div class="goal-result-value">${formatCurrency(solution.cashToSeller)}</div>
+                    </div>
+                `;
+                
+                metricsEl.innerHTML = metricChecks.map(m => `
+                    <div class="goal-metric-badge ${m.met ? 'met' : 'unmet'}">
+                        <span>${m.met ? '✓' : '✗'}</span>
+                        <span>${m.label}: ${m.value}</span>
+                        <span class="goal-metric-target">(${m.label === 'Cash to Seller' ? 'target' : 'min'}: ${m.goal})</span>
+                    </div>
+                `).join('');
+                
+                document.querySelector('.goal-apply-btn').style.display = 'flex';
+            } else {
+                gridEl.innerHTML = '<p style="color: var(--text-secondary);">Try adjusting your goals or enabling more variables to adjust.</p>';
+                metricsEl.innerHTML = '';
+                document.querySelector('.goal-apply-btn').style.display = 'none';
+            }
+        }
+
+        function applyGoalTerms() {
+            if (!goalSolution) return;
+            
+            document.getElementById('purchasePrice').value = Math.round(goalSolution.purchasePrice);
+            document.getElementById('sellerCarryPct').value = goalSolution.sellerCarryPct.toFixed(1);
+            document.getElementById('sellerCarryRate').value = goalSolution.sellerRate.toFixed(1);
+            document.getElementById('sellerCarryAmort').value = goalSolution.sellerCarryAmort;
+            document.getElementById('firstLoanLTV').value = goalSolution.firstLoanLTV.toFixed(1);
+            
+            calculate();
+            
+            // Scroll to results
+            document.querySelector('.results-grid').scrollIntoView({ behavior: 'smooth' });
+            
+            // Flash the results to show they updated
+            const resultsSection = document.querySelector('.results-grid');
+            resultsSection.style.transition = 'box-shadow 0.3s';
+            resultsSection.style.boxShadow = '0 0 20px rgba(20, 184, 166, 0.5)';
+            setTimeout(() => {
+                resultsSection.style.boxShadow = '';
+            }, 1500);
+        }
 
         // Generate AI Prompt
         function generatePrompt() {
@@ -3356,32 +4479,57 @@ Please be direct and specific with your analysis.`;
         }
 
         async function saveToLibrary() {
-            const deal = buildDealObject();
-            deal.id = Date.now(); // Unique ID
-            
-            // Save to cloud first
-            if (currentUser) {
-                const cloudResult = await saveToCloud(deal);
-                if (cloudResult) {
-                    deal.cloud_id = cloudResult.id;
-                }
-            }
-            
-            // Also save to localStorage
-            const deals = getLibrary();
-            deals.unshift(deal); // Add to beginning
-            saveLibrary(deals);
-            renderLibrary();
-            
-            // Show success message (less intrusive than alert)
             const btn = document.querySelector('.library-btn');
             const originalText = btn.innerHTML;
-            btn.innerHTML = '<span>✓</span> Saved!';
-            btn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
-            setTimeout(() => {
+            
+            try {
+                // Show saving state
+                btn.innerHTML = '<span>⏳</span> Saving...';
+                btn.disabled = true;
+                
+                const deal = buildDealObject();
+                deal.id = Date.now(); // Unique ID
+                
+                // Validate minimum required fields
+                const hasAddress = deal.propertyInfo?.streetAddress || deal.propertyInfo?.city;
+                const hasPrice = deal.dealTerms?.purchasePrice > 0;
+                
+                if (!hasAddress && !hasPrice) {
+                    alert('Please enter at least an address or purchase price before saving.');
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    return;
+                }
+                
+                // Save to cloud first
+                if (currentUser) {
+                    const cloudResult = await saveToCloud(deal);
+                    if (cloudResult) {
+                        deal.cloud_id = cloudResult.id;
+                    }
+                }
+                
+                // Also save to localStorage
+                const deals = getLibrary();
+                deals.unshift(deal); // Add to beginning
+                saveLibrary(deals);
+                renderLibrary();
+                
+                // Show success message
+                btn.innerHTML = '<span>✓</span> Saved!';
+                btn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
+                btn.disabled = false;
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = '';
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Error saving deal:', error);
+                alert('Error saving deal: ' + error.message);
                 btn.innerHTML = originalText;
-                btn.style.background = '';
-            }, 2000);
+                btn.disabled = false;
+            }
         }
 
         function loadFromLibrary(dealId) {
@@ -3408,6 +4556,31 @@ Please be direct and specific with your analysis.`;
             deals = deals.filter(d => String(d.id) !== String(dealId));
             saveLibrary(deals);
             renderLibrary();
+        }
+
+        function downloadDeal(dealId) {
+            const deals = getLibrary();
+            const deal = deals.find(d => String(d.id) === String(dealId));
+            
+            if (!deal) {
+                console.error('Deal not found:', dealId);
+                return;
+            }
+            
+            // Create filename from address
+            const address = deal.propertyInfo?.streetAddress || deal.propertyInfo?.city || 'deal';
+            const safeAddress = address.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 40);
+            const date = new Date().toISOString().split('T')[0];
+            const filename = `${safeAddress}_${date}.json`;
+            
+            // Create and download file
+            const blob = new Blob([JSON.stringify(deal, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
         }
 
         function emailOffer(dealId) {
@@ -3566,8 +4739,14 @@ Note: Please find the attached LOI and PDF Summary documents for complete deal t
                         <div class="library-item-seller" title="${seller}">${seller}</div>
                         <div class="library-item-price">${price}</div>
                         <div class="library-item-actions">
+                            <button class="library-item-share" onclick="shareDeal('${deal.id}')" title="Share deal link">
+                                <span>🔗</span>
+                            </button>
                             <button class="library-item-email" onclick="emailOffer('${deal.id}')" ${hasSellerEmail ? '' : 'disabled'} title="${hasSellerEmail ? 'Email offer to seller' : 'No seller email saved'}">
-                                <span>📧</span> Email Seller
+                                <span>📧</span> Email
+                            </button>
+                            <button class="library-item-download" onclick="downloadDeal('${deal.id}')" title="Download deal as JSON">
+                                <span>⬇️</span>
                             </button>
                             <button class="library-item-delete" onclick="deleteFromLibrary('${deal.id}')" title="Delete">🗑️</button>
                         </div>
@@ -3642,76 +4821,6 @@ Note: Please find the attached LOI and PDF Summary documents for complete deal t
             });
         }
 
-        function exportAllDeals() {
-            const deals = getLibrary();
-            if (deals.length === 0) {
-                alert('No deals to export.');
-                return;
-            }
-            
-            const data = {
-                exportedAt: new Date().toISOString(),
-                version: '1.0',
-                dealCount: deals.length,
-                deals: deals
-            };
-            
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            const date = new Date().toISOString().split('T')[0];
-            
-            a.href = url;
-            a.download = `deal_library_backup_${date}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-            
-            alert(`Exported ${deals.length} deals.`);
-        }
-
-        function importAllDeals(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = JSON.parse(e.target.result);
-                    let importedDeals = [];
-                    
-                    // Handle both full library export and single deal files
-                    if (data.deals && Array.isArray(data.deals)) {
-                        importedDeals = data.deals;
-                    } else if (data.propertyInfo) {
-                        // Single deal file
-                        importedDeals = [data];
-                    } else {
-                        throw new Error('Invalid file format');
-                    }
-                    
-                    const existingDeals = getLibrary();
-                    
-                    // Add imported deals with new IDs
-                    let addedCount = 0;
-                    importedDeals.forEach(deal => {
-                        deal.id = Date.now() + addedCount;
-                        existingDeals.unshift(deal);
-                        addedCount++;
-                    });
-                    
-                    saveLibrary(existingDeals);
-                    renderLibrary();
-                    
-                    alert(`Imported ${addedCount} deal${addedCount !== 1 ? 's' : ''}.`);
-                } catch (err) {
-                    alert('Error importing file: ' + err.message);
-                }
-            };
-            reader.readAsText(file);
-            
-            event.target.value = '';
-        }
-
         function buildDealObject() {
             return {
                 version: '1.0',
@@ -3749,7 +4858,6 @@ Note: Please find the attached LOI and PDF Summary documents for complete deal t
                     sellerCarryAmort: document.getElementById('sellerCarryAmort').value,
                     interestAtBalloon: document.getElementById('interestAtBalloon').value,
                     yearsToBalloon: document.getElementById('yearsToBalloon').value,
-                    targetCashToSeller: document.getElementById('targetCashToSeller').value,
                 },
                 stabilization: {
                     monthsToStabilize: document.getElementById('monthsToStabilize').value,
@@ -3826,7 +4934,6 @@ Note: Please find the attached LOI and PDF Summary documents for complete deal t
                 document.getElementById('sellerCarryAmort').value = data.financing.sellerCarryAmort || '';
                 document.getElementById('interestAtBalloon').value = data.financing.interestAtBalloon || 'No';
                 document.getElementById('yearsToBalloon').value = data.financing.yearsToBalloon || '';
-                document.getElementById('targetCashToSeller').value = data.financing.targetCashToSeller || '';
             }
             
             // Stabilization
