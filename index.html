@@ -910,21 +910,6 @@
             opacity: 1;
         }
 
-        .library-item-download {
-            background: transparent;
-            color: var(--accent-teal);
-            border: none;
-            padding: 0.5rem;
-            cursor: pointer;
-            font-size: 1rem;
-            opacity: 0.6;
-            transition: opacity 0.2s;
-        }
-
-        .library-item-download:hover {
-            opacity: 1;
-        }
-
         .library-item-delete {
             background: transparent;
             color: #f87171;
@@ -4558,31 +4543,6 @@ Please be direct and specific with your analysis.`;
             renderLibrary();
         }
 
-        function downloadDeal(dealId) {
-            const deals = getLibrary();
-            const deal = deals.find(d => String(d.id) === String(dealId));
-            
-            if (!deal) {
-                console.error('Deal not found:', dealId);
-                return;
-            }
-            
-            // Create filename from address
-            const address = deal.propertyInfo?.streetAddress || deal.propertyInfo?.city || 'deal';
-            const safeAddress = address.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 40);
-            const date = new Date().toISOString().split('T')[0];
-            const filename = `${safeAddress}_${date}.json`;
-            
-            // Create and download file
-            const blob = new Blob([JSON.stringify(deal, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-
         function emailOffer(dealId) {
             const deals = getLibrary();
             const deal = deals.find(d => String(d.id) === String(dealId));
@@ -4744,9 +4704,6 @@ Note: Please find the attached LOI and PDF Summary documents for complete deal t
                             </button>
                             <button class="library-item-email" onclick="emailOffer('${deal.id}')" ${hasSellerEmail ? '' : 'disabled'} title="${hasSellerEmail ? 'Email offer to seller' : 'No seller email saved'}">
                                 <span>📧</span> Email
-                            </button>
-                            <button class="library-item-download" onclick="downloadDeal('${deal.id}')" title="Download deal as JSON">
-                                <span>⬇️</span>
                             </button>
                             <button class="library-item-delete" onclick="deleteFromLibrary('${deal.id}')" title="Delete">🗑️</button>
                         </div>
