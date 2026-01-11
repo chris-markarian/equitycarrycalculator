@@ -4791,9 +4791,9 @@
             const currentLTV = parseFloat(document.getElementById('firstLoanLTV').value) || 26;
             
             // Variable ranges
-            const sellerCarryValues = adjustSellerCarry ? [100, 95, 90, 85, 80, 75, 70, 65] : [currentSellerCarry];
+            const sellerCarryValues = adjustSellerCarry ? [100, 95, 90, 85, 80, 75, 70, 65, 60, 55, 50] : [currentSellerCarry];
             const sellerRateValues = adjustSellerRate ? [0, 1, 2, 3, 4, 5, 6] : [currentSellerRate];
-            const ltvValues = adjustLTV ? [15, 20, 25, 30, 35, 40, 45, 50] : [currentLTV];
+            const ltvValues = adjustLTV ? [15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75] : [currentLTV];
             
             // Get max amortization from user input
             const maxAmort = parseInt(document.getElementById('goalMaxAmort').value) || 99;
