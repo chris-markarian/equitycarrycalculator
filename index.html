@@ -849,10 +849,58 @@
             white-space: nowrap;
         }
 
-        .library-item-price {
-            color: var(--accent-teal);
+        .library-item-status {
+            cursor: pointer;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
             font-weight: 600;
-            font-size: 0.9rem;
+            transition: transform 0.15s;
+        }
+
+        .status-badge:hover {
+            transform: scale(1.05);
+        }
+
+        .status-working {
+            background: rgba(148, 163, 184, 0.2);
+            color: #94a3b8;
+        }
+
+        .status-loi-sent {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+        }
+
+        .status-loi-countered {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
+
+        .status-loi-signed {
+            background: rgba(74, 222, 128, 0.2);
+            color: #4ade80;
+        }
+
+        .status-won {
+            background: rgba(34, 197, 94, 0.25);
+            color: #22c55e;
+        }
+
+        .status-rejected {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .status-obe {
+            background: rgba(139, 92, 246, 0.2);
+            color: #8b5cf6;
         }
 
         .library-item-actions {
@@ -910,6 +958,21 @@
             opacity: 1;
         }
 
+        .library-item-rename {
+            background: transparent;
+            color: var(--accent-amber);
+            border: none;
+            padding: 0.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        .library-item-rename:hover {
+            opacity: 1;
+        }
+
         .library-item-delete {
             background: transparent;
             color: #f87171;
@@ -951,8 +1014,8 @@
                 color: var(--text-muted);
             }
             
-            .library-item-price::before {
-                content: 'Price: ';
+            .library-item-status::before {
+                content: 'Status: ';
                 color: var(--text-muted);
                 font-weight: normal;
             }
@@ -2037,6 +2100,22 @@
             transform: translateY(-1px);
         }
 
+        /* Rename Deal Modal */
+        .rename-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .rename-prefix {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .rename-input {
+            flex: 1;
+        }
+
         /* Shared Deal Banner */
         .shared-deal-banner {
             background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(20, 184, 166, 0.15));
@@ -2653,6 +2732,30 @@
             </div>
             
             <button class="save-choice-cancel" id="emailCancelBtn" onclick="closeEmailRecipientModal()">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Rename Deal Modal -->
+    <div class="save-choice-modal-overlay" id="renameDealModal">
+        <div class="save-choice-modal">
+            <h3>✏️ Rename Deal</h3>
+            <p class="subtitle" id="renameAddressPreview">4567 Any Street, Provo, UT 84601</p>
+            
+            <div class="copy-name-input-container">
+                <div class="rename-input-wrapper">
+                    <span class="rename-prefix" id="renamePrefix">-</span>
+                    <input type="text" id="renameDealInput" class="copy-name-input rename-input" placeholder="e.g. $60k to seller, Max cash flow">
+                </div>
+            </div>
+            
+            <p class="copy-name-hint">Leave blank to show address only</p>
+            
+            <div class="copy-name-buttons">
+                <button class="save-choice-cancel" onclick="closeRenameModal()">Cancel</button>
+                <button class="email-send-btn" onclick="confirmRename()">
+                    <span>💾</span> Save
+                </button>
+            </div>
         </div>
     </div>
 
@@ -3369,8 +3472,7 @@
                         <option value="city">City (A-Z)</option>
                         <option value="state">State (A-Z)</option>
                         <option value="seller">Seller (A-Z)</option>
-                        <option value="price-desc">Price (High-Low)</option>
-                        <option value="price-asc">Price (Low-High)</option>
+                        <option value="status">Status</option>
                     </select>
                 </div>
             </div>
@@ -3711,6 +3813,7 @@
                 copyNumber: base.copyNumber || null, // Preserve copy number
                 copyName: base.copyName || null, // Preserve custom copy name
                 originalAddress: base.originalAddress || null, // Preserve original address
+                status: base.status || 'working', // Preserve status
                 propertyInfo: {
                     streetAddress: cloudDeal.street_address || base.propertyInfo?.streetAddress || '',
                     city: cloudDeal.city || base.propertyInfo?.city || '',
@@ -5163,7 +5266,138 @@ Please be direct and specific with your analysis.`;
         }
 
         let currentEmailDealId = null;
+        let currentRenameDealId = null;
         
+        // Status options in order for cycling
+        const STATUS_ORDER = ['working', 'loi-sent', 'loi-countered', 'loi-signed', 'won', 'rejected', 'obe'];
+        const STATUS_LABELS = {
+            working: '⚪ Working',
+            'loi-sent': '🔵 LOI Sent',
+            'loi-countered': '🟡 LOI Countered',
+            'loi-signed': '🟢 LOI Signed',
+            won: '✅ Won',
+            rejected: '🔴 Rejected',
+            obe: '🟣 OBE'
+        };
+        
+        function getStatusDisplay(status) {
+            return STATUS_LABELS[status] || STATUS_LABELS.working;
+        }
+        
+        async function cycleStatus(dealId) {
+            let deals = getLibrary();
+            const dealIndex = deals.findIndex(d => String(d.id) === String(dealId));
+            
+            if (dealIndex === -1) return;
+            
+            const deal = deals[dealIndex];
+            const currentStatus = deal.status || 'working';
+            const currentIndex = STATUS_ORDER.indexOf(currentStatus);
+            const nextIndex = (currentIndex + 1) % STATUS_ORDER.length;
+            
+            deal.status = STATUS_ORDER[nextIndex];
+            deal.updatedAt = new Date().toISOString();
+            
+            deals[dealIndex] = deal;
+            saveLibrary(deals);
+            
+            // Sync to cloud
+            if (currentUser && deal.cloud_id) {
+                try {
+                    await Promise.race([
+                        updateInCloud(deal),
+                        new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 10000))
+                    ]);
+                } catch (e) {
+                    console.warn('Cloud sync failed:', e);
+                }
+            }
+            
+            renderLibrary();
+        }
+        
+        function renameDeal(dealId) {
+            currentRenameDealId = dealId;
+            const deals = getLibrary();
+            const deal = deals.find(d => String(d.id) === String(dealId));
+            
+            if (!deal) {
+                console.error('Deal not found:', dealId);
+                return;
+            }
+            
+            // Get the base address
+            const baseAddress = deal.originalAddress || getAddressFromParts(deal.propertyInfo);
+            document.getElementById('renameAddressPreview').textContent = baseAddress;
+            
+            // Pre-fill with current custom name if exists
+            document.getElementById('renameDealInput').value = deal.copyName || '';
+            
+            // Show modal
+            document.getElementById('renameDealModal').classList.add('show');
+            document.getElementById('renameDealInput').focus();
+        }
+        
+        function closeRenameModal() {
+            document.getElementById('renameDealModal').classList.remove('show');
+            currentRenameDealId = null;
+        }
+        
+        async function confirmRename() {
+            const newName = document.getElementById('renameDealInput').value.trim();
+            
+            let deals = getLibrary();
+            const dealIndex = deals.findIndex(d => String(d.id) === String(currentRenameDealId));
+            
+            if (dealIndex === -1) {
+                console.error('Deal not found');
+                closeRenameModal();
+                return;
+            }
+            
+            const deal = deals[dealIndex];
+            
+            // Update the name
+            if (newName) {
+                deal.copyName = newName;
+                deal.copyNumber = null; // Clear copy number if using custom name
+            } else {
+                deal.copyName = null;
+                // If this was a copy, restore the copy number or leave as original
+            }
+            
+            deal.updatedAt = new Date().toISOString();
+            
+            // Save locally
+            deals[dealIndex] = deal;
+            saveLibrary(deals);
+            
+            // Sync to cloud if logged in
+            if (currentUser && deal.cloud_id) {
+                try {
+                    await Promise.race([
+                        updateInCloud(deal),
+                        new Promise((_, reject) => setTimeout(() => reject(new Error('Cloud sync timeout')), 10000))
+                    ]);
+                } catch (cloudError) {
+                    console.warn('Cloud update failed:', cloudError);
+                }
+            }
+            
+            renderLibrary();
+            closeRenameModal();
+        }
+        
+        // Handle Enter key in rename input
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && document.getElementById('renameDealModal').classList.contains('show')) {
+                confirmRename();
+            }
+            if (e.key === 'Escape' && document.getElementById('renameDealModal').classList.contains('show')) {
+                closeRenameModal();
+            }
+        });
+
         function emailOffer(dealId) {
             currentEmailDealId = dealId;
             const deals = getLibrary();
@@ -5376,7 +5610,7 @@ Note: Please find the attached LOI and PDF Summary documents for complete deal t
                     <span>Address</span>
                     <span>${dateHeader}</span>
                     <span>Seller</span>
-                    <span>Price</span>
+                    <span>Status</span>
                     <span>Actions</span>
                 </div>
             `;
@@ -5391,8 +5625,6 @@ Note: Please find the attached LOI and PDF Summary documents for complete deal t
                     address = `${address} (${deal.copyNumber})`;
                 }
                 
-                const price = deal.dealTerms?.purchasePrice ? formatCurrency(parseFloat(deal.dealTerms.purchasePrice)) : '$0';
-                
                 // Show modified or created date based on sort
                 const dateValue = isModifiedSort 
                     ? (deal.updatedAt || deal.savedAt) 
@@ -5400,15 +5632,24 @@ Note: Please find the attached LOI and PDF Summary documents for complete deal t
                 const date = dateValue ? new Date(dateValue).toLocaleDateString() : '—';
                 const seller = deal.seller?.name || '—';
                 
+                // Status with emoji and label
+                const status = deal.status || 'working';
+                const statusDisplay = getStatusDisplay(status);
+                
                 return `
                     <div class="library-item">
                         <div class="library-item-address" onclick="loadFromLibrary('${deal.id}')" title="Click to load deal">${address}</div>
                         <div class="library-item-date">${date}</div>
                         <div class="library-item-seller" title="${seller}">${seller}</div>
-                        <div class="library-item-price">${price}</div>
+                        <div class="library-item-status" onclick="cycleStatus('${deal.id}')" title="Click to change status">
+                            <span class="status-badge status-${status}">${statusDisplay}</span>
+                        </div>
                         <div class="library-item-actions">
                             <button class="library-item-share" onclick="shareDeal('${deal.id}')" title="Share deal link">
                                 <span>🔗</span>
+                            </button>
+                            <button class="library-item-rename" onclick="renameDeal('${deal.id}')" title="Rename deal">
+                                <span>✏️</span>
                             </button>
                             <button class="library-item-email" onclick="emailOffer('${deal.id}')" title="Email offer">
                                 <span>📧</span> Email
@@ -5480,10 +5721,11 @@ Note: Please find the attached LOI and PDF Summary documents for complete deal t
                         return stateA.localeCompare(stateB);
                     case 'seller':
                         return (a.seller?.name || '').localeCompare(b.seller?.name || '');
-                    case 'price-desc':
-                        return (parseFloat(b.dealTerms?.purchasePrice) || 0) - (parseFloat(a.dealTerms?.purchasePrice) || 0);
-                    case 'price-asc':
-                        return (parseFloat(a.dealTerms?.purchasePrice) || 0) - (parseFloat(b.dealTerms?.purchasePrice) || 0);
+                    case 'status':
+                        const statusOrder = ['working', 'loi-sent', 'loi-countered', 'loi-signed', 'won', 'rejected', 'obe'];
+                        const statusA = statusOrder.indexOf(a.status || 'working');
+                        const statusB = statusOrder.indexOf(b.status || 'working');
+                        return statusA - statusB;
                     default:
                         return 0;
                 }
