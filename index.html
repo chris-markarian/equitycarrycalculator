@@ -613,6 +613,47 @@
             margin-top: 0.25rem;
         }
 
+        .equity-warning {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid var(--accent-amber);
+            border-radius: 8px;
+            padding: 0.6rem 0.9rem;
+            margin: 0.75rem 0;
+        }
+
+        .equity-warning.error {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: var(--accent-red);
+        }
+
+        .equity-warning .warning-icon {
+            font-size: 1rem;
+        }
+
+        .equity-warning .warning-text {
+            font-size: 0.85rem;
+            color: var(--accent-amber);
+        }
+
+        .equity-warning.error .warning-text {
+            color: var(--accent-red);
+        }
+
+        .equity-good {
+            color: var(--accent-green) !important;
+        }
+
+        .equity-low {
+            color: var(--accent-amber) !important;
+        }
+
+        .equity-bad {
+            color: var(--accent-red) !important;
+        }
+
         .badge {
             display: inline-block;
             padding: 0.25rem 0.75rem;
@@ -2896,14 +2937,19 @@
                 <div class="input-row">
                     <div class="form-group">
                         <label>First Loan % / LTV</label>
-                        <input type="number" id="firstLoanLTV" value="26" step="1" min="0" max="100" class="input-highlight" onchange="calculate()">
-                        <span class="helper-text">% of purchase price</span>
+                        <input type="number" id="firstLoanLTV" value="26" step="1" min="0" max="75" class="input-highlight" onchange="calculate()">
+                        <span class="helper-text">% of purchase price (max 75%)</span>
                     </div>
                     <div class="form-group">
                         <label>Seller Carry %</label>
                         <input type="number" id="sellerCarryPct" value="80" step="1" min="0" max="100" class="input-highlight" onchange="calculate()">
                         <span class="helper-text">% of purchase price</span>
                     </div>
+                </div>
+
+                <div class="equity-warning" id="firstPositionWarning" style="display: none;">
+                    <span class="warning-icon">⚠️</span>
+                    <span class="warning-text" id="firstPositionWarningText">First position warning</span>
                 </div>
 
                 <div class="input-row">
@@ -2955,6 +3001,28 @@
                 <div class="form-group">
                     <label>Asking Price ($)</label>
                     <input type="number" id="askingPrice" value="675000" step="1000" class="input-highlight" onchange="calculate()">
+                </div>
+
+                <div class="form-group">
+                    <label>Existing Debt ($)</label>
+                    <input type="number" id="existingDebt" value="0" step="1000" class="input-highlight" onchange="calculate()">
+                    <span class="helper-text">Current mortgage/loan balance on property</span>
+                </div>
+
+                <div class="result-grid">
+                    <div class="result-item">
+                        <div class="result-label">Seller Equity</div>
+                        <div class="result-value" id="sellerEquity">$0</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Equity %</div>
+                        <div class="result-value" id="equityPercent">0%</div>
+                    </div>
+                </div>
+
+                <div class="equity-warning" id="equityWarning" style="display: none;">
+                    <span class="warning-icon">⚠️</span>
+                    <span class="warning-text" id="equityWarningText">Low equity warning</span>
                 </div>
 
                 <div class="result-grid">
@@ -4022,6 +4090,7 @@
 
             const purchasePrice = parseFloat(document.getElementById('purchasePrice').value) || 0;
             const askingPrice = parseFloat(document.getElementById('askingPrice').value) || 0;
+            const existingDebt = parseFloat(document.getElementById('existingDebt').value) || 0;
             const rentalRevenueAnnual = parseFloat(document.getElementById('rentalRevenue').value) || 0;
             const rentalRevenueMonthly = rentalRevenueAnnual / 12;
             const appreciationRate = parseFloat(document.getElementById('appreciationRate').value) / 100 || 0;
@@ -4144,10 +4213,77 @@
             // Over/Under asking
             const overUnderAsking = askingPrice > 0 ? (purchasePrice - askingPrice) / askingPrice : 0;
 
+            // Seller Equity calculations
+            const sellerEquity = askingPrice - existingDebt;
+            const equityPercentOfAsking = askingPrice > 0 ? sellerEquity / askingPrice : 0;
+            const maxSellerCarry = Math.max(0, sellerEquity);
+            const sellerCarryExceedsEquity = sellerCarryAmount > maxSellerCarry;
+
             // Update UI
             document.getElementById('monthlyRevenue').textContent = formatCurrency(rentalRevenueMonthly);
             document.getElementById('overUnderAsking').textContent = formatPercent(overUnderAsking);
             document.getElementById('overUnderAsking').className = 'result-value ' + (overUnderAsking < 0 ? 'positive' : overUnderAsking > 0 ? 'negative' : '');
+
+            // Seller Equity UI
+            document.getElementById('sellerEquity').textContent = formatCurrency(sellerEquity);
+            document.getElementById('equityPercent').textContent = formatPercent(equityPercentOfAsking, 0);
+            
+            // Color code equity percent
+            const equityPercentEl = document.getElementById('equityPercent');
+            if (equityPercentOfAsking >= 0.4) {
+                equityPercentEl.className = 'result-value equity-good';
+            } else if (equityPercentOfAsking >= 0.25) {
+                equityPercentEl.className = 'result-value equity-low';
+            } else {
+                equityPercentEl.className = 'result-value equity-bad';
+            }
+
+            // Equity warning
+            const equityWarning = document.getElementById('equityWarning');
+            const equityWarningText = document.getElementById('equityWarningText');
+            
+            if (existingDebt > 0) {
+                if (sellerCarryExceedsEquity) {
+                    equityWarning.style.display = 'flex';
+                    equityWarning.className = 'equity-warning error';
+                    equityWarningText.textContent = `Seller carry (${formatCurrency(sellerCarryAmount)}) exceeds available equity (${formatCurrency(maxSellerCarry)})`;
+                } else if (equityPercentOfAsking < 0.4) {
+                    equityWarning.style.display = 'flex';
+                    equityWarning.className = 'equity-warning';
+                    equityWarningText.textContent = `Equity ${formatPercent(equityPercentOfAsking, 0)} is below 40% target`;
+                } else {
+                    equityWarning.style.display = 'none';
+                }
+            } else {
+                equityWarning.style.display = 'none';
+            }
+
+            // First position validation
+            const firstPositionWarning = document.getElementById('firstPositionWarning');
+            const firstPositionWarningText = document.getElementById('firstPositionWarningText');
+            const minFirstPositionNeeded = existingDebt;
+            const minLTVNeeded = purchasePrice > 0 ? (existingDebt / purchasePrice) : 0;
+            const maxLTV = 0.75;
+            
+            if (existingDebt > 0 && purchasePrice > 0) {
+                if (firstLoanLTV > maxLTV) {
+                    firstPositionWarning.style.display = 'flex';
+                    firstPositionWarning.className = 'equity-warning error';
+                    firstPositionWarningText.textContent = `First position LTV (${formatPercent(firstLoanLTV, 0)}) exceeds 75% maximum`;
+                } else if (firstPositionLoan < existingDebt) {
+                    firstPositionWarning.style.display = 'flex';
+                    firstPositionWarning.className = 'equity-warning error';
+                    firstPositionWarningText.textContent = `First position (${formatCurrency(firstPositionLoan)}) must cover existing debt (${formatCurrency(existingDebt)}). Min LTV: ${formatPercent(minLTVNeeded, 0)}`;
+                } else {
+                    firstPositionWarning.style.display = 'none';
+                }
+            } else if (firstLoanLTV > maxLTV) {
+                firstPositionWarning.style.display = 'flex';
+                firstPositionWarning.className = 'equity-warning error';
+                firstPositionWarningText.textContent = `First position LTV (${formatPercent(firstLoanLTV, 0)}) exceeds 75% maximum`;
+            } else {
+                firstPositionWarning.style.display = 'none';
+            }
 
             // Financing
             document.getElementById('firstPositionLoan').textContent = formatCurrency(firstPositionLoan);
@@ -5759,6 +5895,7 @@ Note: Please find the attached LOI and PDF Summary documents for complete deal t
                     category: document.getElementById('category').value,
                     purchasePrice: document.getElementById('purchasePrice').value,
                     askingPrice: document.getElementById('askingPrice').value,
+                    existingDebt: document.getElementById('existingDebt').value,
                     rentalRevenue: document.getElementById('rentalRevenue').value,
                     appreciationRate: document.getElementById('appreciationRate').value,
                 },
@@ -5833,6 +5970,7 @@ Note: Please find the attached LOI and PDF Summary documents for complete deal t
                 document.getElementById('category').value = data.dealTerms.category || 'DSCR Residential';
                 document.getElementById('purchasePrice').value = data.dealTerms.purchasePrice || '';
                 document.getElementById('askingPrice').value = data.dealTerms.askingPrice || '';
+                document.getElementById('existingDebt').value = data.dealTerms.existingDebt || '0';
                 document.getElementById('rentalRevenue').value = data.dealTerms.rentalRevenue || '';
                 document.getElementById('appreciationRate').value = data.dealTerms.appreciationRate || '';
             }
