@@ -699,6 +699,28 @@
             box-shadow: 0 6px 25px rgba(245, 158, 11, 0.5);
         }
 
+        .new-deal-btn {
+            background: linear-gradient(135deg, var(--accent-blue), #6366f1);
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+        }
+
+        .new-deal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(59, 130, 246, 0.5);
+        }
+
         .library-btn {
             background: linear-gradient(135deg, #22c55e, #16a34a);
             color: white;
@@ -942,7 +964,7 @@
             }
             
             .library-item-date::before {
-                content: 'Created: ';
+                content: 'Date: ';
                 color: var(--text-muted);
             }
             
@@ -2932,6 +2954,9 @@
 
         <!-- Export Buttons -->
         <div class="export-buttons">
+            <button class="new-deal-btn" onclick="startNewDeal()">
+                <span>➕</span> New Deal
+            </button>
             <button class="library-btn" onclick="saveToLibrary()">
                 <span>💾</span> Save Deal to Library
             </button>
@@ -2956,8 +2981,10 @@
                 <div class="library-sort">
                     <label>Sort by:</label>
                     <select id="librarySort" onchange="renderLibrary()">
-                        <option value="date-desc">Date (Newest)</option>
-                        <option value="date-asc">Date (Oldest)</option>
+                        <option value="modified-desc">Last Modified</option>
+                        <option value="modified-asc">First Modified</option>
+                        <option value="created-desc">Last Created</option>
+                        <option value="created-asc">First Created</option>
                         <option value="address">Address (A-Z)</option>
                         <option value="city">City (A-Z)</option>
                         <option value="state">State (A-Z)</option>
@@ -4463,6 +4490,9 @@ Please be direct and specific with your analysis.`;
             localStorage.setItem('dealLibrary', JSON.stringify(deals));
         }
 
+        // Track currently loaded deal for update vs create
+        let currentLoadedDealId = null;
+
         async function saveToLibrary() {
             const btn = document.querySelector('.library-btn');
             const originalText = btn.innerHTML;
@@ -4473,7 +4503,6 @@ Please be direct and specific with your analysis.`;
                 btn.disabled = true;
                 
                 const deal = buildDealObject();
-                deal.id = Date.now(); // Unique ID
                 
                 // Validate minimum required fields
                 const hasAddress = deal.propertyInfo?.streetAddress || deal.propertyInfo?.city;
@@ -4486,22 +4515,62 @@ Please be direct and specific with your analysis.`;
                     return;
                 }
                 
-                // Save to cloud first
-                if (currentUser) {
-                    const cloudResult = await saveToCloud(deal);
-                    if (cloudResult) {
-                        deal.cloud_id = cloudResult.id;
+                let deals = getLibrary();
+                let isUpdate = false;
+                let existingDeal = null;
+                
+                // Check if we're updating an existing deal
+                if (currentLoadedDealId) {
+                    existingDeal = deals.find(d => String(d.id) === String(currentLoadedDealId));
+                    if (existingDeal) {
+                        isUpdate = true;
                     }
                 }
                 
-                // Also save to localStorage
-                const deals = getLibrary();
-                deals.unshift(deal); // Add to beginning
+                if (isUpdate && existingDeal) {
+                    // Update existing deal
+                    deal.id = existingDeal.id;
+                    deal.savedAt = existingDeal.savedAt; // Preserve original created date
+                    deal.updatedAt = new Date().toISOString();
+                    deal.cloud_id = existingDeal.cloud_id;
+                    deal.share_token = existingDeal.share_token;
+                    
+                    // Update in cloud
+                    if (currentUser && deal.cloud_id) {
+                        await updateInCloud(deal);
+                    } else if (currentUser && !deal.cloud_id) {
+                        const cloudResult = await saveToCloud(deal);
+                        if (cloudResult) {
+                            deal.cloud_id = cloudResult.id;
+                        }
+                    }
+                    
+                    // Replace in local array
+                    const index = deals.findIndex(d => String(d.id) === String(deal.id));
+                    if (index !== -1) {
+                        deals[index] = deal;
+                    }
+                } else {
+                    // Create new deal
+                    deal.id = Date.now();
+                    currentLoadedDealId = deal.id; // Track as current deal
+                    
+                    // Save to cloud first
+                    if (currentUser) {
+                        const cloudResult = await saveToCloud(deal);
+                        if (cloudResult) {
+                            deal.cloud_id = cloudResult.id;
+                        }
+                    }
+                    
+                    deals.unshift(deal); // Add to beginning
+                }
+                
                 saveLibrary(deals);
                 renderLibrary();
                 
                 // Show success message
-                btn.innerHTML = '<span>✓</span> Saved!';
+                btn.innerHTML = isUpdate ? '<span>✓</span> Updated!' : '<span>✓</span> Saved!';
                 btn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
                 btn.disabled = false;
                 setTimeout(() => {
@@ -4516,11 +4585,68 @@ Please be direct and specific with your analysis.`;
                 btn.disabled = false;
             }
         }
+        
+        function clearCurrentDeal() {
+            currentLoadedDealId = null;
+            // Could also clear form fields here if needed
+        }
+        
+        function startNewDeal() {
+            if (!confirm('Start a new deal? Any unsaved changes will be lost.')) {
+                return;
+            }
+            
+            currentLoadedDealId = null;
+            
+            // Clear all form fields
+            document.getElementById('streetAddress').value = '';
+            document.getElementById('city').value = '';
+            document.getElementById('state').value = '';
+            document.getElementById('zip').value = '';
+            document.getElementById('propertyLink').value = '';
+            document.getElementById('preparerName').value = '';
+            document.getElementById('preparerEmail').value = '';
+            document.getElementById('preparerPhone').value = '';
+            document.getElementById('sellerName').value = '';
+            document.getElementById('sellerEmail').value = '';
+            document.getElementById('sellerPhone').value = '';
+            document.getElementById('purchasePrice').value = '';
+            document.getElementById('askingPrice').value = '';
+            document.getElementById('rentalRevenue').value = '';
+            document.getElementById('appreciationRate').value = '2';
+            document.getElementById('category').value = 'DSCR Residential';
+            document.getElementById('firstLoanLTV').value = '26';
+            document.getElementById('sellerCarryPct').value = '80';
+            document.getElementById('interestOnly').value = 'No';
+            document.getElementById('interestAtBalloon').value = 'No';
+            document.getElementById('monthsToStabilize').value = '0';
+            document.getElementById('revenueDuringStab').value = '100';
+            document.getElementById('yearsToBalloon').value = '8';
+            document.getElementById('sellerCarryRate').value = '0';
+            document.getElementById('sellerCarryAmort').value = '30';
+            document.getElementById('propertyTax').value = '';
+            document.getElementById('insurance').value = '';
+            document.getElementById('hoa').value = '';
+            document.getElementById('otherExpenses').value = '';
+            document.getElementById('capexPct').value = '5';
+            document.getElementById('managementPct').value = '8';
+            document.getElementById('vacancyPct').value = '5';
+            document.getElementById('agentFee').value = '';
+            document.getElementById('rehabCost').value = '';
+            document.getElementById('assignmentFeePct').value = '5';
+            document.getElementById('appraisalCost').value = '';
+            document.getElementById('closingCostPct').value = '5';
+            
+            // Recalculate and scroll to top
+            calculate();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
         function loadFromLibrary(dealId) {
             const deals = getLibrary();
             const deal = deals.find(d => String(d.id) === String(dealId));
             if (deal) {
+                currentLoadedDealId = deal.id; // Track which deal is loaded
                 populateFormFromDeal(deal);
                 // Scroll to top to see the form
                 window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -4637,7 +4763,7 @@ Note: Please find the attached LOI and PDF Summary documents for complete deal t
             const listEl = document.getElementById('libraryList');
             const statsEl = document.getElementById('libraryStats');
             const searchTerm = document.getElementById('librarySearch')?.value?.toLowerCase() || '';
-            const sortBy = document.getElementById('librarySort')?.value || 'date-desc';
+            const sortBy = document.getElementById('librarySort')?.value || 'modified-desc';
             
             // Filter by search term
             if (searchTerm) {
@@ -4672,11 +4798,15 @@ Note: Please find the attached LOI and PDF Summary documents for complete deal t
                 return;
             }
             
+            // Determine date column header based on sort
+            const isModifiedSort = sortBy.startsWith('modified');
+            const dateHeader = isModifiedSort ? 'Modified' : 'Created';
+            
             // Build table header + rows
             const tableHeader = `
                 <div class="library-table-header">
                     <span>Address</span>
-                    <span>Date Created</span>
+                    <span>${dateHeader}</span>
                     <span>Seller</span>
                     <span>Price</span>
                     <span>Actions</span>
@@ -4686,7 +4816,12 @@ Note: Please find the attached LOI and PDF Summary documents for complete deal t
             const tableRows = deals.map(deal => {
                 const address = deal.propertyInfo?.address || getAddressFromParts(deal.propertyInfo) || 'Untitled Deal';
                 const price = deal.dealTerms?.purchasePrice ? formatCurrency(parseFloat(deal.dealTerms.purchasePrice)) : '$0';
-                const date = deal.savedAt ? new Date(deal.savedAt).toLocaleDateString() : '—';
+                
+                // Show modified or created date based on sort
+                const dateValue = isModifiedSort 
+                    ? (deal.updatedAt || deal.savedAt) 
+                    : deal.savedAt;
+                const date = dateValue ? new Date(dateValue).toLocaleDateString() : '—';
                 const seller = deal.seller?.name || '—';
                 
                 const sellerEmail = deal.seller?.email || '';
@@ -4750,9 +4885,13 @@ Note: Please find the attached LOI and PDF Summary documents for complete deal t
         function sortDeals(deals, sortBy) {
             return [...deals].sort((a, b) => {
                 switch (sortBy) {
-                    case 'date-desc':
+                    case 'modified-desc':
+                        return new Date(b.updatedAt || b.savedAt || 0) - new Date(a.updatedAt || a.savedAt || 0);
+                    case 'modified-asc':
+                        return new Date(a.updatedAt || a.savedAt || 0) - new Date(b.updatedAt || b.savedAt || 0);
+                    case 'created-desc':
                         return new Date(b.savedAt || 0) - new Date(a.savedAt || 0);
-                    case 'date-asc':
+                    case 'created-asc':
                         return new Date(a.savedAt || 0) - new Date(b.savedAt || 0);
                     case 'address':
                         const addrA = a.propertyInfo?.streetAddress || a.propertyInfo?.address || '';
@@ -4782,6 +4921,7 @@ Note: Please find the attached LOI and PDF Summary documents for complete deal t
             return {
                 version: '1.0',
                 savedAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
                 propertyInfo: {
                     streetAddress: document.getElementById('streetAddress').value,
                     city: document.getElementById('city').value,
