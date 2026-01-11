@@ -4405,6 +4405,7 @@
         
         function capturePendingParams() {
             const params = new URLSearchParams(window.location.search);
+            console.log('[ECC Debug] capturePendingParams called, search:', window.location.search);
             
             // Check if we have property data params (not share params)
             if (params.has('street') || params.has('asking') || params.has('price')) {
@@ -4417,16 +4418,23 @@
                     price: params.get('price'),
                     rent: params.get('rent'),
                     debt: params.get('debt'),
-                    url: params.get('url')
+                    url: params.get('url'),
+                    sellerName: params.get('sellerName'),
+                    sellerPhone: params.get('sellerPhone'),
+                    sellerEmail: params.get('sellerEmail')
                 };
+                console.log('[ECC Debug] Captured params:', pendingPropertyParams);
                 
                 // Clean up URL immediately (remove params without refreshing)
                 const cleanUrl = window.location.origin + window.location.pathname;
                 window.history.replaceState({}, document.title, cleanUrl);
+            } else {
+                console.log('[ECC Debug] No property params found');
             }
         }
         
         function applyPendingParams() {
+            console.log('[ECC Debug] applyPendingParams called, pending:', pendingPropertyParams);
             if (!pendingPropertyParams) return;
             
             const params = pendingPropertyParams;
@@ -4475,6 +4483,17 @@
             // Property link (the source URL)
             if (params.url) {
                 document.getElementById('propertyLink').value = params.url;
+            }
+            
+            // Seller info
+            if (params.sellerName) {
+                document.getElementById('sellerName').value = params.sellerName;
+            }
+            if (params.sellerPhone) {
+                document.getElementById('sellerPhone').value = params.sellerPhone;
+            }
+            if (params.sellerEmail) {
+                document.getElementById('sellerEmail').value = params.sellerEmail;
             }
             
             // Recalculate with new values
