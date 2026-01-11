@@ -3442,6 +3442,9 @@
                 cloud_id: cloudDeal.id,
                 version: '1.0',
                 savedAt: cloudDeal.created_at,
+                updatedAt: cloudDeal.updated_at || base.updatedAt,
+                copyNumber: base.copyNumber || null, // Preserve copy number
+                originalAddress: base.originalAddress || null, // Preserve original address
                 propertyInfo: {
                     streetAddress: cloudDeal.street_address || base.propertyInfo?.streetAddress || '',
                     city: cloudDeal.city || base.propertyInfo?.city || '',
