@@ -4663,11 +4663,25 @@ Please be direct and specific with your analysis.`;
                     
                     // Update in cloud
                     if (currentUser && deal.cloud_id) {
-                        await updateInCloud(deal);
+                        try {
+                            await Promise.race([
+                                updateInCloud(deal),
+                                new Promise((_, reject) => setTimeout(() => reject(new Error('Cloud sync timeout')), 10000))
+                            ]);
+                        } catch (cloudError) {
+                            console.warn('Cloud update failed, saved locally:', cloudError);
+                        }
                     } else if (currentUser && !deal.cloud_id) {
-                        const cloudResult = await saveToCloud(deal);
-                        if (cloudResult) {
-                            deal.cloud_id = cloudResult.id;
+                        try {
+                            const cloudResult = await Promise.race([
+                                saveToCloud(deal),
+                                new Promise((_, reject) => setTimeout(() => reject(new Error('Cloud sync timeout')), 10000))
+                            ]);
+                            if (cloudResult) {
+                                deal.cloud_id = cloudResult.id;
+                            }
+                        } catch (cloudError) {
+                            console.warn('Cloud save failed, saved locally:', cloudError);
                         }
                     }
                     
@@ -4695,11 +4709,18 @@ Please be direct and specific with your analysis.`;
                     
                     currentLoadedDealId = deal.id; // Track as current deal
                     
-                    // Save to cloud
+                    // Save to cloud (with timeout)
                     if (currentUser) {
-                        const cloudResult = await saveToCloud(deal);
-                        if (cloudResult) {
-                            deal.cloud_id = cloudResult.id;
+                        try {
+                            const cloudResult = await Promise.race([
+                                saveToCloud(deal),
+                                new Promise((_, reject) => setTimeout(() => reject(new Error('Cloud sync timeout')), 10000))
+                            ]);
+                            if (cloudResult) {
+                                deal.cloud_id = cloudResult.id;
+                            }
+                        } catch (cloudError) {
+                            console.warn('Cloud save failed, saved locally:', cloudError);
                         }
                     }
                     
@@ -4742,6 +4763,20 @@ Please be direct and specific with your analysis.`;
                 saveChoiceResolver = null;
             }
         }
+        
+        // Close modal if clicking outside
+        document.addEventListener('click', function(e) {
+            if (e.target.id === 'saveChoiceModal') {
+                resolveSaveChoice('cancel');
+            }
+        });
+        
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && document.getElementById('saveChoiceModal').classList.contains('show')) {
+                resolveSaveChoice('cancel');
+            }
+        });
         
         function getNextCopyNumber(deals, baseFullAddress) {
             // Find the highest copy number for deals with matching address
