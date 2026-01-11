@@ -1112,10 +1112,11 @@
             margin-bottom: 0.75rem;
         }
 
-        .goal-variable-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 0.75rem;
+        .goal-variable-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
         }
 
         .goal-variable-item {
@@ -1135,33 +1136,58 @@
             font-size: 0.85rem;
             color: var(--text-secondary);
             cursor: pointer;
+            white-space: nowrap;
         }
 
         .goal-variable-item label:hover {
             color: var(--text-primary);
         }
 
-        .goal-price-range {
+        .goal-variable-options {
+            display: flex;
+            gap: 2rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .goal-option {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            margin-left: 1.5rem;
-            margin-top: 0.5rem;
+            gap: 0.75rem;
         }
 
-        .goal-price-range label {
-            font-size: 0.75rem;
+        .goal-option label {
+            font-size: 0.8rem;
             color: var(--text-muted);
+            white-space: nowrap;
         }
 
-        .goal-price-range input {
-            width: 100px;
+        .goal-option-input {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
             background: var(--bg-input);
             border: 1px solid var(--input-border);
             border-radius: 6px;
             padding: 0.4rem 0.6rem;
-            color: var(--text-primary);
+        }
+
+        .goal-option-input span {
             font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .goal-option-input input {
+            width: 80px;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            padding: 0;
+        }
+
+        .goal-option-input input:focus {
+            outline: none;
         }
 
         .goal-actions {
@@ -1831,6 +1857,186 @@
             color: var(--text-primary);
         }
 
+        /* Copy Name Input */
+        .copy-name-input-container {
+            margin-bottom: 0.75rem;
+        }
+
+        .copy-name-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--bg-input);
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        .copy-name-input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        .copy-name-input::placeholder {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        #copyNamePreview {
+            font-family: monospace;
+            background: var(--bg-tertiary);
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            word-break: break-all;
+        }
+
+        .copy-name-hint {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .copy-name-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Email Recipient Modal */
+        .email-recipient-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1002;
+        }
+
+        .email-recipient-overlay.show {
+            display: flex;
+        }
+
+        .email-recipient-modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            width: 100%;
+            max-width: 360px;
+            margin: 1rem;
+            text-align: center;
+        }
+
+        .email-recipient-modal h3 {
+            margin: 0 0 0.5rem 0;
+            color: var(--text-primary);
+        }
+
+        .email-recipient-modal .subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .email-recipient-options {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .email-recipient-btn {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 1rem 0.75rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            color: var(--text-primary);
+            transition: all 0.2s;
+        }
+
+        .email-recipient-btn:hover {
+            border-color: var(--accent-teal);
+            background: rgba(20, 184, 166, 0.1);
+        }
+
+        .email-recipient-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .email-recipient-btn:disabled:hover {
+            border-color: var(--border-color);
+            background: var(--bg-tertiary);
+        }
+
+        .email-recipient-btn span:first-child {
+            font-size: 1.5rem;
+        }
+
+        .email-recipient-btn span:nth-child(2) {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .email-recipient-hint {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .email-other-input {
+            text-align: left;
+            margin-bottom: 1rem;
+        }
+
+        .email-other-input label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .email-other-input input {
+            margin-bottom: 1rem;
+        }
+
+        .email-other-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .email-send-btn {
+            background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+            border: none;
+            border-radius: 8px;
+            color: white;
+            padding: 0.75rem 1.25rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: transform 0.2s;
+        }
+
+        .email-send-btn:hover {
+            transform: translateY(-1px);
+        }
+
         /* Shared Deal Banner */
         .shared-deal-banner {
             background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(20, 184, 166, 0.15));
@@ -2383,7 +2589,7 @@
                     <span>Overwrite</span>
                     <span class="btn-hint">Update the existing deal</span>
                 </button>
-                <button class="save-choice-btn copy" onclick="resolveSaveChoice('copy')">
+                <button class="save-choice-btn copy" onclick="showCopyNameInput()">
                     <span>📋</span>
                     <span>Create Copy</span>
                     <span class="btn-hint">Save as a new version</span>
@@ -2391,6 +2597,62 @@
             </div>
             
             <button class="save-choice-cancel" onclick="resolveSaveChoice('cancel')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Copy Name Modal -->
+    <div class="save-choice-modal-overlay" id="copyNameModal">
+        <div class="save-choice-modal">
+            <h3>📋 Name Your Copy</h3>
+            <p class="subtitle" id="copyNamePreview">4567 Any Street, Provo, UT 84601 - </p>
+            
+            <div class="copy-name-input-container">
+                <input type="text" id="copyNameInput" class="copy-name-input" placeholder="e.g. $60k to seller, Max cash flow, Counter offer">
+            </div>
+            
+            <p class="copy-name-hint">Leave blank for automatic numbering (1), (2), etc.</p>
+            
+            <div class="copy-name-buttons">
+                <button class="save-choice-cancel" onclick="closeCopyNameModal()">Back</button>
+                <button class="save-choice-btn copy" onclick="confirmCopyName()" style="flex: none; padding: 0.75rem 1.5rem;">
+                    <span>💾</span>
+                    <span>Save Copy</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Recipient Modal -->
+    <div class="email-recipient-overlay" id="emailRecipientModal">
+        <div class="email-recipient-modal">
+            <h3>📧 Email Offer</h3>
+            <p class="subtitle">Who would you like to send this to?</p>
+            
+            <div class="email-recipient-options">
+                <button class="email-recipient-btn" id="emailSellerBtn" onclick="selectEmailRecipient('seller')">
+                    <span>👤</span>
+                    <span>Seller</span>
+                    <span class="email-recipient-hint" id="sellerEmailHint"></span>
+                </button>
+                <button class="email-recipient-btn" onclick="selectEmailRecipient('other')">
+                    <span>✉️</span>
+                    <span>Other</span>
+                    <span class="email-recipient-hint">Enter email address</span>
+                </button>
+            </div>
+            
+            <div class="email-other-input" id="emailOtherInput" style="display: none;">
+                <label>Email Address</label>
+                <input type="email" id="otherEmailAddress" class="copy-name-input" placeholder="recipient@example.com">
+                <div class="email-other-buttons">
+                    <button class="save-choice-cancel" onclick="backToRecipientChoice()">Back</button>
+                    <button class="email-send-btn" onclick="confirmOtherEmail()">
+                        <span>📧</span> Send Email
+                    </button>
+                </div>
+            </div>
+            
+            <button class="save-choice-cancel" id="emailCancelBtn" onclick="closeEmailRecipientModal()">Cancel</button>
         </div>
     </div>
 
@@ -3004,16 +3266,10 @@
 
             <div class="goal-variables">
                 <div class="goal-variables-title">Variables to Adjust</div>
-                <div class="goal-variable-grid">
-                    <div>
-                        <div class="goal-variable-item">
-                            <input type="checkbox" id="goalAdjustPrice" checked>
-                            <label for="goalAdjustPrice">Purchase Price</label>
-                        </div>
-                        <div class="goal-price-range" id="goalPriceRange">
-                            <label>Min $</label>
-                            <input type="number" id="goalMinPrice" value="0" step="10000">
-                        </div>
+                <div class="goal-variable-row">
+                    <div class="goal-variable-item">
+                        <input type="checkbox" id="goalAdjustPrice" checked>
+                        <label for="goalAdjustPrice">Purchase Price</label>
                     </div>
                     <div class="goal-variable-item">
                         <input type="checkbox" id="goalAdjustSellerCarry" checked>
@@ -3021,22 +3277,31 @@
                     </div>
                     <div class="goal-variable-item">
                         <input type="checkbox" id="goalAdjustSellerRate" checked>
-                        <label for="goalAdjustSellerRate">Seller Carry Interest Rate</label>
+                        <label for="goalAdjustSellerRate">Seller Carry Rate</label>
                     </div>
-                    <div>
-                        <div class="goal-variable-item">
-                            <input type="checkbox" id="goalAdjustSellerAmort" checked>
-                            <label for="goalAdjustSellerAmort">Seller Carry Amortization</label>
-                        </div>
-                        <div class="goal-price-range" id="goalAmortRange">
-                            <label>Max</label>
-                            <input type="number" id="goalMaxAmort" value="99" step="1" min="15" max="99" style="width: 70px;">
-                            <label>yrs</label>
-                        </div>
+                    <div class="goal-variable-item">
+                        <input type="checkbox" id="goalAdjustSellerAmort" checked>
+                        <label for="goalAdjustSellerAmort">Seller Amortization</label>
                     </div>
                     <div class="goal-variable-item">
                         <input type="checkbox" id="goalAdjustLTV" checked>
                         <label for="goalAdjustLTV">First Position LTV %</label>
+                    </div>
+                </div>
+                <div class="goal-variable-options">
+                    <div class="goal-option" id="goalPriceRange">
+                        <label>Min Price</label>
+                        <div class="goal-option-input">
+                            <span>$</span>
+                            <input type="number" id="goalMinPrice" value="0" step="10000">
+                        </div>
+                    </div>
+                    <div class="goal-option" id="goalAmortRange">
+                        <label>Max Amortization</label>
+                        <div class="goal-option-input">
+                            <input type="number" id="goalMaxAmort" value="99" step="1" min="15" max="99">
+                            <span>yrs</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -3444,6 +3709,7 @@
                 savedAt: cloudDeal.created_at,
                 updatedAt: cloudDeal.updated_at || base.updatedAt,
                 copyNumber: base.copyNumber || null, // Preserve copy number
+                copyName: base.copyName || null, // Preserve custom copy name
                 originalAddress: base.originalAddress || null, // Preserve original address
                 propertyInfo: {
                     streetAddress: cloudDeal.street_address || base.propertyInfo?.streetAddress || '',
@@ -4636,24 +4902,51 @@ Please be direct and specific with your analysis.`;
                 let deals = getLibrary();
                 let existingDeal = null;
                 let saveAsCopy = false;
+                let isNewAddress = false;
                 
                 // Check if we're working with an existing deal
                 if (currentLoadedDealId) {
                     existingDeal = deals.find(d => String(d.id) === String(currentLoadedDealId));
                     if (existingDeal) {
-                        // Ask user: update or copy?
-                        btn.innerHTML = originalText;
-                        btn.disabled = false;
+                        // Check if the address has changed significantly
+                        const currentAddress = getAddressFromParts(deal.propertyInfo);
+                        const originalAddress = existingDeal.originalAddress || getAddressFromParts(existingDeal.propertyInfo);
                         
-                        const choice = await showSaveChoiceDialog();
-                        if (choice === 'cancel') {
-                            return;
+                        // Compare street addresses (most important identifier)
+                        const currentStreet = (deal.propertyInfo?.streetAddress || '').toLowerCase().trim();
+                        const originalStreet = (existingDeal.propertyInfo?.streetAddress || '').toLowerCase().trim();
+                        
+                        // If street address changed, treat as a new deal
+                        if (currentStreet && originalStreet && currentStreet !== originalStreet) {
+                            isNewAddress = true;
+                            existingDeal = null;
+                            currentLoadedDealId = null;
                         }
-                        saveAsCopy = (choice === 'copy');
-                        
-                        btn.innerHTML = '<span>⏳</span> Saving...';
-                        btn.disabled = true;
                     }
+                }
+                
+                // Only show overwrite/copy dialog if address hasn't changed
+                if (existingDeal) {
+                    // Ask user: update or copy?
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    
+                    // Get the base address for the copy name preview
+                    const baseAddress = existingDeal.originalAddress || getAddressFromParts(existingDeal.propertyInfo);
+                    const result = await showSaveChoiceDialog(baseAddress);
+                    
+                    if (result.choice === 'cancel') {
+                        return;
+                    }
+                    saveAsCopy = (result.choice === 'copy');
+                    
+                    // Store the copy name if provided
+                    if (saveAsCopy && result.copyName) {
+                        deal.copyName = result.copyName;
+                    }
+                    
+                    btn.innerHTML = '<span>⏳</span> Saving...';
+                    btn.disabled = true;
                 }
                 
                 if (existingDeal && !saveAsCopy) {
@@ -4703,11 +4996,15 @@ Please be direct and specific with your analysis.`;
                     deal.id = Date.now();
                     
                     if (saveAsCopy) {
-                        // Add copy number to the full address display
-                        const fullAddress = getAddressFromParts(existingDeal.propertyInfo);
-                        const copyNumber = getNextCopyNumber(deals, fullAddress);
-                        deal.copyNumber = copyNumber; // Store copy number
-                        deal.originalAddress = fullAddress; // Store original for reference
+                        // Get the ORIGINAL address (not the copy's address)
+                        const originalAddress = existingDeal.originalAddress || getAddressFromParts(existingDeal.propertyInfo);
+                        deal.originalAddress = originalAddress; // Store original for reference
+                        
+                        // Use custom name if provided, otherwise use copy number
+                        if (!deal.copyName) {
+                            const copyNumber = getNextCopyNumber(deals, originalAddress);
+                            deal.copyNumber = copyNumber;
+                        }
                     }
                     
                     currentLoadedDealId = deal.id; // Track as current deal
@@ -4751,8 +5048,10 @@ Please be direct and specific with your analysis.`;
         }
         
         let saveChoiceResolver = null;
+        let currentCopyBaseAddress = null;
         
-        function showSaveChoiceDialog() {
+        function showSaveChoiceDialog(baseAddress) {
+            currentCopyBaseAddress = baseAddress;
             return new Promise((resolve) => {
                 saveChoiceResolver = resolve;
                 document.getElementById('saveChoiceModal').classList.add('show');
@@ -4762,7 +5061,29 @@ Please be direct and specific with your analysis.`;
         function resolveSaveChoice(choice) {
             document.getElementById('saveChoiceModal').classList.remove('show');
             if (saveChoiceResolver) {
-                saveChoiceResolver(choice);
+                saveChoiceResolver({ choice: choice, copyName: null });
+                saveChoiceResolver = null;
+            }
+        }
+        
+        function showCopyNameInput() {
+            document.getElementById('saveChoiceModal').classList.remove('show');
+            document.getElementById('copyNamePreview').textContent = currentCopyBaseAddress + ' - ';
+            document.getElementById('copyNameInput').value = '';
+            document.getElementById('copyNameModal').classList.add('show');
+            document.getElementById('copyNameInput').focus();
+        }
+        
+        function closeCopyNameModal() {
+            document.getElementById('copyNameModal').classList.remove('show');
+            document.getElementById('saveChoiceModal').classList.add('show');
+        }
+        
+        function confirmCopyName() {
+            const copyName = document.getElementById('copyNameInput').value.trim();
+            document.getElementById('copyNameModal').classList.remove('show');
+            if (saveChoiceResolver) {
+                saveChoiceResolver({ choice: 'copy', copyName: copyName || null });
                 saveChoiceResolver = null;
             }
         }
@@ -4772,12 +5093,22 @@ Please be direct and specific with your analysis.`;
             if (e.target.id === 'saveChoiceModal') {
                 resolveSaveChoice('cancel');
             }
+            if (e.target.id === 'copyNameModal') {
+                closeCopyNameModal();
+            }
         });
         
-        // Close modal on Escape key
+        // Handle Enter key in copy name input
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && document.getElementById('saveChoiceModal').classList.contains('show')) {
-                resolveSaveChoice('cancel');
+            if (e.key === 'Escape') {
+                if (document.getElementById('copyNameModal').classList.contains('show')) {
+                    closeCopyNameModal();
+                } else if (document.getElementById('saveChoiceModal').classList.contains('show')) {
+                    resolveSaveChoice('cancel');
+                }
+            }
+            if (e.key === 'Enter' && document.getElementById('copyNameModal').classList.contains('show')) {
+                confirmCopyName();
             }
         });
         
@@ -4831,7 +5162,83 @@ Please be direct and specific with your analysis.`;
             renderLibrary();
         }
 
+        let currentEmailDealId = null;
+        
         function emailOffer(dealId) {
+            currentEmailDealId = dealId;
+            const deals = getLibrary();
+            const deal = deals.find(d => String(d.id) === String(dealId));
+            
+            if (!deal) {
+                console.error('Deal not found:', dealId);
+                return;
+            }
+            
+            // Set up the modal with seller email hint
+            const sellerEmail = deal.seller?.email || '';
+            const sellerEmailHint = document.getElementById('sellerEmailHint');
+            const sellerBtn = document.getElementById('emailSellerBtn');
+            
+            if (sellerEmail) {
+                sellerEmailHint.textContent = sellerEmail;
+                sellerBtn.disabled = false;
+            } else {
+                sellerEmailHint.textContent = 'No email saved';
+                sellerBtn.disabled = true;
+            }
+            
+            // Reset modal state
+            document.getElementById('emailOtherInput').style.display = 'none';
+            document.getElementById('emailCancelBtn').style.display = 'block';
+            document.querySelector('.email-recipient-options').style.display = 'flex';
+            document.getElementById('otherEmailAddress').value = '';
+            
+            // Show modal
+            document.getElementById('emailRecipientModal').classList.add('show');
+        }
+        
+        function closeEmailRecipientModal() {
+            document.getElementById('emailRecipientModal').classList.remove('show');
+            currentEmailDealId = null;
+        }
+        
+        function selectEmailRecipient(type) {
+            if (type === 'seller') {
+                const deals = getLibrary();
+                const deal = deals.find(d => String(d.id) === String(currentEmailDealId));
+                const sellerEmail = deal?.seller?.email || '';
+                sendEmailOffer(currentEmailDealId, sellerEmail);
+                closeEmailRecipientModal();
+            } else if (type === 'other') {
+                // Show email input
+                document.querySelector('.email-recipient-options').style.display = 'none';
+                document.getElementById('emailCancelBtn').style.display = 'none';
+                document.getElementById('emailOtherInput').style.display = 'block';
+                document.getElementById('otherEmailAddress').focus();
+            }
+        }
+        
+        function backToRecipientChoice() {
+            document.getElementById('emailOtherInput').style.display = 'none';
+            document.getElementById('emailCancelBtn').style.display = 'block';
+            document.querySelector('.email-recipient-options').style.display = 'flex';
+        }
+        
+        function confirmOtherEmail() {
+            const email = document.getElementById('otherEmailAddress').value.trim();
+            if (!email) {
+                alert('Please enter an email address');
+                return;
+            }
+            if (!email.includes('@')) {
+                alert('Please enter a valid email address');
+                return;
+            }
+            sendEmailOffer(currentEmailDealId, email);
+            closeEmailRecipientModal();
+        }
+        
+        function sendEmailOffer(dealId, recipientEmail) {
             const deals = getLibrary();
             const deal = deals.find(d => String(d.id) === String(dealId));
             
@@ -4841,8 +5248,7 @@ Please be direct and specific with your analysis.`;
             }
             
             // Get deal details
-            const sellerName = deal.seller?.name || 'Seller';
-            const sellerEmail = deal.seller?.email || '';
+            const sellerName = deal.seller?.name || 'Property Owner';
             const preparerName = deal.preparer?.name || '';
             const preparerEmail = deal.preparer?.email || '';
             const preparerPhone = deal.preparer?.phone || '';
@@ -4910,7 +5316,7 @@ ${preparerPhone}
 Note: Please find the attached LOI and PDF Summary documents for complete deal terms.`;
 
             // Encode for mailto
-            const mailtoLink = `mailto:${encodeURIComponent(sellerEmail)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            const mailtoLink = `mailto:${encodeURIComponent(recipientEmail)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
             
             // Open email client using window.open as fallback
             const emailWindow = window.open(mailtoLink, '_blank');
@@ -4978,8 +5384,10 @@ Note: Please find the attached LOI and PDF Summary documents for complete deal t
             const tableRows = deals.map(deal => {
                 let address = deal.propertyInfo?.address || getAddressFromParts(deal.propertyInfo) || 'Untitled Deal';
                 
-                // Add copy number to end of address if this is a copy
-                if (deal.copyNumber) {
+                // Add custom copy name or copy number if this is a copy
+                if (deal.copyName) {
+                    address = `${address} - ${deal.copyName}`;
+                } else if (deal.copyNumber) {
                     address = `${address} (${deal.copyNumber})`;
                 }
                 
@@ -4992,9 +5400,6 @@ Note: Please find the attached LOI and PDF Summary documents for complete deal t
                 const date = dateValue ? new Date(dateValue).toLocaleDateString() : '—';
                 const seller = deal.seller?.name || '—';
                 
-                const sellerEmail = deal.seller?.email || '';
-                const hasSellerEmail = sellerEmail.length > 0;
-                
                 return `
                     <div class="library-item">
                         <div class="library-item-address" onclick="loadFromLibrary('${deal.id}')" title="Click to load deal">${address}</div>
@@ -5005,7 +5410,7 @@ Note: Please find the attached LOI and PDF Summary documents for complete deal t
                             <button class="library-item-share" onclick="shareDeal('${deal.id}')" title="Share deal link">
                                 <span>🔗</span>
                             </button>
-                            <button class="library-item-email" onclick="emailOffer('${deal.id}')" ${hasSellerEmail ? '' : 'disabled'} title="${hasSellerEmail ? 'Email offer to seller' : 'No seller email saved'}">
+                            <button class="library-item-email" onclick="emailOffer('${deal.id}')" title="Email offer">
                                 <span>📧</span> Email
                             </button>
                             <button class="library-item-delete" onclick="deleteFromLibrary('${deal.id}')" title="Delete">🗑️</button>
