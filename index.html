@@ -4618,7 +4618,10 @@
                     url: params.get('url'),
                     sellerName: params.get('sellerName'),
                     sellerPhone: params.get('sellerPhone'),
-                    sellerEmail: params.get('sellerEmail')
+                    sellerEmail: params.get('sellerEmail'),
+                    propertyTax: params.get('propertyTax'),
+                    insurance: params.get('insurance'),
+                    hoa: params.get('hoa')
                 };
                 console.log('[ECC Debug] Captured params:', pendingPropertyParams);
                 
@@ -4693,6 +4696,20 @@
                 document.getElementById('sellerEmail').value = params.sellerEmail;
             }
             
+            // Expense fields (annual values from extension)
+            if (params.propertyTax) {
+                const tax = params.propertyTax.replace(/[^0-9.]/g, '');
+                document.getElementById('propertyTax').value = tax;
+            }
+            if (params.insurance) {
+                const ins = params.insurance.replace(/[^0-9.]/g, '');
+                document.getElementById('insurance').value = ins;
+            }
+            if (params.hoa) {
+                const hoa = params.hoa.replace(/[^0-9.]/g, '');
+                document.getElementById('hoa').value = hoa;
+            }
+            
             // Mark imported fields as touched
             if (params.asking || params.price) {
                 markFieldTouched('purchasePrice');
@@ -4703,6 +4720,15 @@
             }
             if (params.debt) {
                 markFieldTouched('existingDebt');
+            }
+            if (params.propertyTax) {
+                markFieldTouched('propertyTax');
+            }
+            if (params.insurance) {
+                markFieldTouched('insurance');
+            }
+            if (params.hoa) {
+                markFieldTouched('hoa');
             }
             
             // Recalculate with new values
