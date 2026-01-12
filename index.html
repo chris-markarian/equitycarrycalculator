@@ -4613,7 +4613,6 @@
                     zip: params.get('zip'),
                     asking: params.get('asking'),
                     price: params.get('price'),
-                    rent: params.get('rent'),
                     debt: params.get('debt'),
                     url: params.get('url'),
                     sellerName: params.get('sellerName'),
@@ -4714,9 +4713,6 @@
             if (params.asking || params.price) {
                 markFieldTouched('purchasePrice');
                 markFieldTouched('askingPrice');
-            }
-            if (params.rent) {
-                markFieldTouched('rentalRevenue');
             }
             if (params.debt) {
                 markFieldTouched('existingDebt');
