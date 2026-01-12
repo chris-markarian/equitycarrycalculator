@@ -426,6 +426,50 @@
             font-style: italic;
         }
 
+        /* Needs Review Styling */
+        input.needs-review {
+            border-color: var(--accent-amber) !important;
+            background: rgba(245, 158, 11, 0.08) !important;
+            animation: subtle-pulse 2s ease-in-out infinite;
+        }
+
+        input.needs-review:focus {
+            border-color: var(--accent-teal) !important;
+            background: var(--bg-input) !important;
+            animation: none;
+        }
+
+        @keyframes subtle-pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+            50% { box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.15); }
+        }
+
+        /* Card completion indicator */
+        .card-status {
+            margin-left: auto;
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 0.25rem 0.6rem;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .card-status.complete {
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--accent-green);
+        }
+
+        .card-status.needs-review {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--accent-amber);
+        }
+
+        .card-status-icon {
+            font-size: 0.85rem;
+        }
+
         select {
             cursor: pointer;
             appearance: none;
@@ -2921,6 +2965,10 @@
                 <div class="card-header">
                     <div class="card-icon icon-teal">⚙️</div>
                     <h2 class="card-title">Loan Configuration</h2>
+                    <div class="card-status complete" id="loanConfigStatus">
+                        <span class="card-status-icon">✓</span>
+                        <span>Complete</span>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -2991,16 +3039,20 @@
                 <div class="card-header">
                     <div class="card-icon icon-amber">💰</div>
                     <h2 class="card-title">Purchase & Pricing</h2>
+                    <div class="card-status needs-review" id="purchasePricingStatus">
+                        <span class="card-status-icon">!</span>
+                        <span>3 to review</span>
+                    </div>
                 </div>
 
                 <div class="form-group">
                     <label>Purchase Price ($)</label>
-                    <input type="number" id="purchasePrice" value="675000" step="1000" class="input-highlight" onchange="calculate()">
+                    <input type="number" id="purchasePrice" value="" step="1000" class="input-highlight" onchange="calculate()" placeholder="0">
                 </div>
 
                 <div class="form-group">
                     <label>Asking Price ($)</label>
-                    <input type="number" id="askingPrice" value="675000" step="1000" class="input-highlight" onchange="calculate()">
+                    <input type="number" id="askingPrice" value="" step="1000" class="input-highlight" onchange="calculate()" placeholder="0">
                 </div>
 
                 <div class="form-group">
@@ -3036,7 +3088,7 @@
 
                 <div class="form-group">
                     <label>Annual Rental Revenue ($)</label>
-                    <input type="number" id="rentalRevenue" value="48000" step="100" class="input-highlight" onchange="calculate()">
+                    <input type="number" id="rentalRevenue" value="" step="100" class="input-highlight" onchange="calculate()" placeholder="0">
                     <span class="helper-text">Monthly: <span id="monthlyRevenue">$202,993</span></span>
                 </div>
 
@@ -3051,12 +3103,16 @@
                 <div class="card-header">
                     <div class="card-icon icon-green">🏦</div>
                     <h2 class="card-title">Cash to Buyer Analysis</h2>
+                    <div class="card-status needs-review" id="cashToBuyerStatus">
+                        <span class="card-status-icon">!</span>
+                        <span>3 to review</span>
+                    </div>
                 </div>
 
                 <div class="input-row">
                     <div class="form-group">
                         <label>Agent Fee ($)</label>
-                        <input type="number" id="agentFee" value="16500" step="100" class="input-highlight" onchange="calculate()">
+                        <input type="number" id="agentFee" value="0" step="100" class="input-highlight" onchange="calculate()">
                     </div>
                     <div class="form-group">
                         <label>Rehab Cost ($)</label>
@@ -3183,16 +3239,20 @@
                 <div class="card-header">
                     <div class="card-icon icon-red">📋</div>
                     <h2 class="card-title">Operating Expenses</h2>
+                    <div class="card-status needs-review" id="operatingExpensesStatus">
+                        <span class="card-status-icon">!</span>
+                        <span>2 to review</span>
+                    </div>
                 </div>
 
                 <div class="percentage-inputs">
                     <div class="form-group">
                         <label>Property Tax ($/yr)</label>
-                        <input type="number" id="propertyTax" value="3000" step="100" onchange="calculate()">
+                        <input type="number" id="propertyTax" value="" step="100" onchange="calculate()" placeholder="0">
                     </div>
                     <div class="form-group">
                         <label>Insurance ($/yr)</label>
-                        <input type="number" id="insurance" value="3000" step="100" onchange="calculate()">
+                        <input type="number" id="insurance" value="" step="100" onchange="calculate()" placeholder="0">
                     </div>
                     <div class="form-group">
                         <label>HOA ($/yr)</label>
@@ -3209,11 +3269,11 @@
                 <div class="percentage-inputs">
                     <div class="form-group">
                         <label>CapEx & Maint (% Revenue)</label>
-                        <input type="number" id="capexPct" value="2" step="1" min="0" max="50" onchange="calculate()">
+                        <input type="number" id="capexPct" value="5" step="1" min="0" max="50" onchange="calculate()">
                     </div>
                     <div class="form-group">
                         <label>Management (% Revenue)</label>
-                        <input type="number" id="managementPct" value="8" step="1" min="0" max="50" onchange="calculate()">
+                        <input type="number" id="managementPct" value="10" step="1" min="0" max="50" onchange="calculate()">
                     </div>
                     <div class="form-group">
                         <label>Vacancy (% Revenue)</label>
@@ -3393,23 +3453,6 @@
             </div>
         </div>
 
-        <!-- AI Prompt Generator Section -->
-        <div class="market-analysis-section" style="margin-top: 2rem;">
-            <div class="market-header">
-                <div class="market-header-left">
-                    <div class="card-icon icon-blue">🤖</div>
-                    <h2 class="card-title">AI Deal Analysis</h2>
-                </div>
-                <button class="generate-prompt-btn" onclick="generatePrompt()">
-                    <span>✨ Generate AI Prompt</span>
-                </button>
-            </div>
-
-            <div class="prompt-section" id="promptSection">
-                <p class="prompt-instructions">Click "Generate AI Prompt" to create a prompt with all your deal data that you can paste into ChatGPT, Claude, or any AI assistant for a detailed deal and market analysis.</p>
-            </div>
-        </div>
-
         <!-- Goal Finder -->
         <div class="goal-finder">
             <div class="goal-finder-header">
@@ -3439,38 +3482,34 @@
                 <div class="goal-variables-title">Variables to Adjust</div>
                 <div class="goal-variable-row">
                     <div class="goal-variable-item">
-                        <input type="checkbox" id="goalAdjustPrice" checked>
-                        <label for="goalAdjustPrice">Purchase Price</label>
+                        <input type="checkbox" id="goalAdjustLTV" checked>
+                        <label for="goalAdjustLTV">First Position LTV %</label>
                     </div>
                     <div class="goal-variable-item">
                         <input type="checkbox" id="goalAdjustSellerCarry" checked>
                         <label for="goalAdjustSellerCarry">Seller Carry %</label>
                     </div>
                     <div class="goal-variable-item">
-                        <input type="checkbox" id="goalAdjustSellerRate" checked>
-                        <label for="goalAdjustSellerRate">Seller Carry Rate</label>
-                    </div>
-                    <div class="goal-variable-item">
-                        <input type="checkbox" id="goalAdjustSellerAmort" checked>
+                        <input type="checkbox" id="goalAdjustSellerAmort">
                         <label for="goalAdjustSellerAmort">Seller Amortization</label>
                     </div>
                     <div class="goal-variable-item">
-                        <input type="checkbox" id="goalAdjustLTV" checked>
-                        <label for="goalAdjustLTV">First Position LTV %</label>
+                        <input type="checkbox" id="goalAdjustPrice">
+                        <label for="goalAdjustPrice">Purchase Price</label>
                     </div>
                 </div>
                 <div class="goal-variable-options">
-                    <div class="goal-option" id="goalPriceRange">
+                    <div class="goal-option" id="goalPriceRange" style="display: none;">
                         <label>Min Price</label>
                         <div class="goal-option-input">
                             <span>$</span>
                             <input type="number" id="goalMinPrice" value="0" step="10000">
                         </div>
                     </div>
-                    <div class="goal-option" id="goalAmortRange">
+                    <div class="goal-option" id="goalAmortRange" style="display: none;">
                         <label>Max Amortization</label>
                         <div class="goal-option-input">
-                            <input type="number" id="goalMaxAmort" value="99" step="1" min="15" max="99">
+                            <input type="number" id="goalMaxAmort" value="99" step="1" min="30" max="99">
                             <span>yrs</span>
                         </div>
                     </div>
@@ -3481,10 +3520,6 @@
                 <button class="goal-find-btn" onclick="findGoalTerms()">
                     <span>🔍</span> Find Optimal Terms
                 </button>
-                <label style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-secondary); font-size: 0.85rem;">
-                    <input type="checkbox" id="goalRequireSpread" checked style="accent-color: var(--accent-teal);">
-                    Require Positive Spread
-                </label>
             </div>
 
             <div class="goal-results" id="goalResults">
@@ -3503,6 +3538,23 @@
                         <span>✓</span> Apply These Terms
                     </button>
                 </div>
+            </div>
+        </div>
+
+        <!-- AI Prompt Generator Section -->
+        <div class="market-analysis-section" style="margin-top: 2rem;">
+            <div class="market-header">
+                <div class="market-header-left">
+                    <div class="card-icon icon-blue">🤖</div>
+                    <h2 class="card-title">AI Deal Analysis</h2>
+                </div>
+                <button class="generate-prompt-btn" onclick="generatePrompt()">
+                    <span>✨ Generate AI Prompt</span>
+                </button>
+            </div>
+
+            <div class="prompt-section" id="promptSection">
+                <p class="prompt-instructions">Click "Generate AI Prompt" to create a prompt with all your deal data that you can paste into ChatGPT, Claude, or any AI assistant for a detailed deal and market analysis.</p>
             </div>
         </div>
 
@@ -4373,6 +4425,135 @@
             document.getElementById('dashMonthlyCF').textContent = formatCurrency(monthlyCashFlow);
             document.getElementById('dashMonthlyCF').className = 'dashboard-value ' + (monthlyCashFlow >= 0 ? 'positive' : 'negative');
             document.getElementById('dashCashToSeller').textContent = formatCurrency(cashToSellerAtClosing);
+            
+            // Update field validation status
+            updateFieldValidation();
+        }
+
+        // =============================================
+        // FIELD VALIDATION & STATUS INDICATORS
+        // =============================================
+        
+        function updateFieldValidation() {
+            // Define fields that need review (just need to be touched/confirmed by user)
+            const requiredFields = {
+                purchasePricing: [
+                    { id: 'purchasePrice' },
+                    { id: 'askingPrice' },
+                    { id: 'rentalRevenue' },
+                    { id: 'existingDebt' }
+                ],
+                operatingExpenses: [
+                    { id: 'propertyTax' },
+                    { id: 'insurance' },
+                    { id: 'hoa' },
+                    { id: 'otherExpenses' }
+                ],
+                cashToBuyer: [
+                    { id: 'agentFee' },
+                    { id: 'rehabCost' },
+                    { id: 'appraisalCost' }
+                ]
+            };
+            
+            // Field needs review if it hasn't been touched yet
+            function needsReview(field) {
+                const input = document.getElementById(field.id);
+                if (!input) return false;
+                
+                const hasBeenTouched = input.dataset.touched === 'true';
+                return !hasBeenTouched;
+            }
+            
+            // Update Purchase & Pricing section
+            let purchasePricingCount = 0;
+            requiredFields.purchasePricing.forEach(field => {
+                const input = document.getElementById(field.id);
+                if (input) {
+                    if (needsReview(field)) {
+                        input.classList.add('needs-review');
+                        purchasePricingCount++;
+                    } else {
+                        input.classList.remove('needs-review');
+                    }
+                }
+            });
+            
+            const purchaseStatus = document.getElementById('purchasePricingStatus');
+            if (purchaseStatus) {
+                if (purchasePricingCount === 0) {
+                    purchaseStatus.className = 'card-status complete';
+                    purchaseStatus.innerHTML = '<span class="card-status-icon">✓</span><span>Complete</span>';
+                } else {
+                    purchaseStatus.className = 'card-status needs-review';
+                    purchaseStatus.innerHTML = `<span class="card-status-icon">!</span><span>${purchasePricingCount} to review</span>`;
+                }
+            }
+            
+            // Update Operating Expenses section
+            let operatingExpensesCount = 0;
+            requiredFields.operatingExpenses.forEach(field => {
+                const input = document.getElementById(field.id);
+                if (input) {
+                    if (needsReview(field)) {
+                        input.classList.add('needs-review');
+                        operatingExpensesCount++;
+                    } else {
+                        input.classList.remove('needs-review');
+                    }
+                }
+            });
+            
+            const operatingStatus = document.getElementById('operatingExpensesStatus');
+            if (operatingStatus) {
+                if (operatingExpensesCount === 0) {
+                    operatingStatus.className = 'card-status complete';
+                    operatingStatus.innerHTML = '<span class="card-status-icon">✓</span><span>Complete</span>';
+                } else {
+                    operatingStatus.className = 'card-status needs-review';
+                    operatingStatus.innerHTML = `<span class="card-status-icon">!</span><span>${operatingExpensesCount} to review</span>`;
+                }
+            }
+            
+            // Update Cash to Buyer section
+            let cashToBuyerCount = 0;
+            requiredFields.cashToBuyer.forEach(field => {
+                const input = document.getElementById(field.id);
+                if (input) {
+                    if (needsReview(field)) {
+                        input.classList.add('needs-review');
+                        cashToBuyerCount++;
+                    } else {
+                        input.classList.remove('needs-review');
+                    }
+                }
+            });
+            
+            const cashToBuyerStatus = document.getElementById('cashToBuyerStatus');
+            if (cashToBuyerStatus) {
+                if (cashToBuyerCount === 0) {
+                    cashToBuyerStatus.className = 'card-status complete';
+                    cashToBuyerStatus.innerHTML = '<span class="card-status-icon">✓</span><span>Complete</span>';
+                } else {
+                    cashToBuyerStatus.className = 'card-status needs-review';
+                    cashToBuyerStatus.innerHTML = `<span class="card-status-icon">!</span><span>${cashToBuyerCount} to review</span>`;
+                }
+            }
+            
+            // Loan Config is always complete (has defaults)
+            const loanStatus = document.getElementById('loanConfigStatus');
+            if (loanStatus) {
+                loanStatus.className = 'card-status complete';
+                loanStatus.innerHTML = '<span class="card-status-icon">✓</span><span>Complete</span>';
+            }
+        }
+        
+        // Mark field as touched when user interacts with it
+        function markFieldTouched(fieldId) {
+            const input = document.getElementById(fieldId);
+            if (input) {
+                input.dataset.touched = 'true';
+            }
         }
 
         // Initialize on load
@@ -4382,6 +4563,22 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Capture URL params immediately before anything else
             capturePendingParams();
+            
+            // Add touch listeners to tracked fields
+            const trackedFields = ['purchasePrice', 'askingPrice', 'rentalRevenue', 'existingDebt', 'propertyTax', 'insurance', 'hoa', 'otherExpenses', 'agentFee', 'rehabCost', 'appraisalCost'];
+            trackedFields.forEach(fieldId => {
+                const input = document.getElementById(fieldId);
+                if (input) {
+                    input.addEventListener('focus', () => {
+                        markFieldTouched(fieldId);
+                        updateFieldValidation();
+                    });
+                    input.addEventListener('change', () => {
+                        markFieldTouched(fieldId);
+                        updateFieldValidation();
+                    });
+                }
+            });
             
             calculate();
             renderLibrary();
@@ -4494,6 +4691,18 @@
             }
             if (params.sellerEmail) {
                 document.getElementById('sellerEmail').value = params.sellerEmail;
+            }
+            
+            // Mark imported fields as touched
+            if (params.asking || params.price) {
+                markFieldTouched('purchasePrice');
+                markFieldTouched('askingPrice');
+            }
+            if (params.rent) {
+                markFieldTouched('rentalRevenue');
+            }
+            if (params.debt) {
+                markFieldTouched('existingDebt');
             }
             
             // Recalculate with new values
@@ -4752,14 +4961,18 @@
             const goalCapRate = parseFloat(document.getElementById('goalCapRate').value) / 100 || 0;
             const goalCashFlow = parseFloat(document.getElementById('goalCashFlow').value) || 0;
             const targetCashToSeller = parseFloat(document.getElementById('goalCashToSeller').value) || 0;
-            const requireSpread = document.getElementById('goalRequireSpread').checked;
+            
+            // Positive spread is ALWAYS required (no checkbox)
+            const requireSpread = true;
             
             // Get which variables can be adjusted
             const adjustPrice = document.getElementById('goalAdjustPrice').checked;
             const adjustSellerCarry = document.getElementById('goalAdjustSellerCarry').checked;
-            const adjustSellerRate = document.getElementById('goalAdjustSellerRate').checked;
             const adjustLTV = document.getElementById('goalAdjustLTV').checked;
             const adjustSellerAmort = document.getElementById('goalAdjustSellerAmort').checked;
+            
+            // Seller rate is always 0% in equity carry (not adjustable)
+            const sellerRate = 0;
             
             // Price constraints
             const minPrice = adjustPrice ? (parseFloat(document.getElementById('goalMinPrice').value) || askingPrice * 0.5) : askingPrice;
@@ -4787,26 +5000,37 @@
             // Current values as defaults
             const currentPrice = parseFloat(document.getElementById('purchasePrice').value) || maxPrice;
             const currentSellerCarry = parseFloat(document.getElementById('sellerCarryPct').value) || 70;
-            const currentSellerRate = parseFloat(document.getElementById('sellerCarryRate').value) || 0;
             const currentLTV = parseFloat(document.getElementById('firstLoanLTV').value) || 26;
             
-            // Variable ranges
-            const sellerCarryValues = adjustSellerCarry ? [100, 95, 90, 85, 80, 75, 70, 65, 60, 55, 50] : [currentSellerCarry];
-            const sellerRateValues = adjustSellerRate ? [0, 1, 2, 3, 4, 5, 6] : [currentSellerRate];
-            const ltvValues = adjustLTV ? [15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75] : [currentLTV];
+            // GRANULAR Variable ranges (1% increments for LTV and Seller Carry)
+            const ltvValues = [];
+            if (adjustLTV) {
+                for (let ltv = 75; ltv >= 15; ltv--) {
+                    ltvValues.push(ltv);
+                }
+            } else {
+                ltvValues.push(currentLTV);
+            }
             
-            // Get max amortization from user input
+            const sellerCarryValues = [];
+            if (adjustSellerCarry) {
+                for (let sc = 100; sc >= 40; sc--) {
+                    sellerCarryValues.push(sc);
+                }
+            } else {
+                sellerCarryValues.push(currentSellerCarry);
+            }
+            
+            // Amortization values (min 30 years, realistic increments)
             const maxAmort = parseInt(document.getElementById('goalMaxAmort').value) || 99;
-            const allAmortValues = [15, 20, 25, 30, 40, 50, 60, 70, 80, 99];
+            const allAmortValues = [30, 35, 40, 45, 50, 60, 70, 80, 99];
             const sellerAmortValues = adjustSellerAmort 
                 ? allAmortValues.filter(v => v <= maxAmort)
                 : [currentSellerCarryAmort];
             
-            // STRATEGY: Try at asking price first, only reduce price as last resort
-            // Price steps from high to low (more granular near asking price)
+            // Price values (only if adjusting price - last resort)
             const priceValues = [];
             if (adjustPrice) {
-                // Start with asking price, then gradually reduce
                 for (let pct = 100; pct >= 50; pct -= 1) {
                     const price = maxPrice * (pct / 100);
                     if (price >= minPrice) {
@@ -4817,105 +5041,145 @@
                 priceValues.push(currentPrice);
             }
             
-            // Search: For each price level (starting at asking), exhaust all other variables
-            let bestSolutionAtPrice = null;
+            // =============================================
+            // SEARCH STRATEGY: Prioritized variable adjustment
+            // 1. First try LTV + Seller Carry % combinations (at current amort & price)
+            // 2. Then try adjusting amortization
+            // 3. Finally try reducing price (last resort)
+            // =============================================
+            
+            let bestSolution = null;
             let bestPartialSolution = null;
             
-            for (const purchasePrice of priceValues) {
-                let solutionsAtThisPrice = [];
+            // Helper function to evaluate a combination
+            function evaluateCombination(purchasePrice, sellerCarryPct, firstLoanLTV, sellerCarryAmort) {
+                // Check if seller carry + LTV meets minimum (115%) and maximum (145%)
+                const totalFinancing = sellerCarryPct + firstLoanLTV;
+                if (totalFinancing < 115) return null;
+                if (totalFinancing > 145) return null;
                 
-                // Try all combinations of OTHER variables at this price
+                // Calculate cash to seller
+                const cashToSeller = purchasePrice * (1 - sellerCarryPct / 100);
+                
+                // Must meet minimum cash to seller
+                if (cashToSeller < targetCashToSeller * 0.99) return null; // 1% tolerance
+                
+                // Calculate full metrics
+                const metrics = calculateMetrics({
+                    purchasePrice,
+                    rentalRevenue,
+                    sellerCarryPct: sellerCarryPct / 100,
+                    sellerRate: sellerRate / 100,
+                    sellerCarryAmort,
+                    firstLoanLTV: firstLoanLTV / 100,
+                    firstPositionRate,
+                    firstPositionAmort,
+                    fixedExpenses,
+                    capexPct: capexPct / 100,
+                    managementPct: managementPct / 100,
+                    vacancyPct: vacancyPct / 100
+                });
+                
+                // Check all constraints
+                const meetsCapRate = metrics.capRate >= goalCapRate;
+                const meetsCashFlow = metrics.monthlyCashFlow >= goalCashFlow;
+                const meetsCashToSeller = cashToSeller >= targetCashToSeller * 0.99;
+                const meetsSpread = metrics.spread > 0;
+                
+                const meetsAll = meetsCapRate && meetsCashFlow && meetsCashToSeller && meetsSpread;
+                
+                return {
+                    purchasePrice,
+                    sellerCarryPct,
+                    sellerRate,
+                    firstLoanLTV,
+                    sellerCarryAmort,
+                    cashToSeller,
+                    metrics,
+                    meetsAll,
+                    checks: { meetsCapRate, meetsCashFlow, meetsCashToSeller, meetsSpread },
+                    metCount: [meetsCapRate, meetsCashFlow, meetsCashToSeller, meetsSpread].filter(Boolean).length
+                };
+            }
+            
+            // PHASE 1: Try LTV + Seller Carry at current price and amortization
+            const phase1Amort = currentSellerCarryAmort >= 30 ? currentSellerCarryAmort : 30;
+            
+            for (const firstLoanLTV of ltvValues) {
                 for (const sellerCarryPct of sellerCarryValues) {
-                    for (const sellerRate of sellerRateValues) {
+                    const result = evaluateCombination(currentPrice, sellerCarryPct, firstLoanLTV, phase1Amort);
+                    if (result) {
+                        if (result.meetsAll) {
+                            if (!bestSolution || result.cashToSeller < bestSolution.cashToSeller) {
+                                // Prefer solution closest to target (not over by too much)
+                                bestSolution = result;
+                            }
+                        } else if (!bestPartialSolution || result.metCount > bestPartialSolution.metCount) {
+                            bestPartialSolution = result;
+                        }
+                    }
+                }
+                if (bestSolution) break; // Found a solution, stop searching
+            }
+            
+            // PHASE 2: If no solution, try adjusting amortization (if enabled)
+            if (!bestSolution && adjustSellerAmort) {
+                for (const sellerCarryAmort of sellerAmortValues) {
+                    if (sellerCarryAmort === phase1Amort) continue; // Already tried
+                    
+                    for (const firstLoanLTV of ltvValues) {
+                        for (const sellerCarryPct of sellerCarryValues) {
+                            const result = evaluateCombination(currentPrice, sellerCarryPct, firstLoanLTV, sellerCarryAmort);
+                            if (result) {
+                                if (result.meetsAll) {
+                                    if (!bestSolution || result.cashToSeller < bestSolution.cashToSeller) {
+                                        bestSolution = result;
+                                    }
+                                } else if (!bestPartialSolution || result.metCount > bestPartialSolution.metCount) {
+                                    bestPartialSolution = result;
+                                }
+                            }
+                        }
+                    }
+                    if (bestSolution) break;
+                }
+            }
+            
+            // PHASE 3: If still no solution, try reducing price (if enabled) - LAST RESORT
+            if (!bestSolution && adjustPrice) {
+                for (const purchasePrice of priceValues) {
+                    if (purchasePrice === currentPrice) continue; // Already tried
+                    
+                    for (const sellerCarryAmort of sellerAmortValues) {
                         for (const firstLoanLTV of ltvValues) {
-                            for (const sellerCarryAmort of sellerAmortValues) {
-                            
-                                // Check if seller carry + LTV meets minimum (115%) and maximum (145%)
-                                const totalFinancing = sellerCarryPct + firstLoanLTV;
-                                if (totalFinancing < 115) continue;
-                                if (totalFinancing > 145) continue;
-                                
-                                // Calculate cash to seller
-                                const cashToSeller = purchasePrice * (1 - sellerCarryPct / 100);
-                                
-                                // Must meet minimum cash to seller
-                                if (cashToSeller < targetCashToSeller) continue;
-                                
-                                // Calculate full metrics
-                                const metrics = calculateMetrics({
-                                    purchasePrice,
-                                    rentalRevenue,
-                                    sellerCarryPct: sellerCarryPct / 100,
-                                    sellerRate: sellerRate / 100,
-                                    sellerCarryAmort,
-                                    firstLoanLTV: firstLoanLTV / 100,
-                                    firstPositionRate,
-                                    firstPositionAmort,
-                                    fixedExpenses,
-                                    capexPct: capexPct / 100,
-                                    managementPct: managementPct / 100,
-                                    vacancyPct: vacancyPct / 100
-                                });
-                                
-                                // Check all constraints
-                                const meetsCapRate = metrics.capRate >= goalCapRate;
-                                const meetsCashFlow = metrics.monthlyCashFlow >= goalCashFlow;
-                                const meetsCashToSeller = cashToSeller >= targetCashToSeller;
-                                const meetsSpread = !requireSpread || metrics.spread > 0;
-                                
-                                const meetsAll = meetsCapRate && meetsCashFlow && meetsCashToSeller && meetsSpread;
-                                
-                                const solution = {
-                                    purchasePrice,
-                                    sellerCarryPct,
-                                    sellerRate,
-                                    firstLoanLTV,
-                                    sellerCarryAmort,
-                                    cashToSeller,
-                                    metrics,
-                                    meetsAll,
-                                    checks: { meetsCapRate, meetsCashFlow, meetsCashToSeller, meetsSpread }
-                                };
-                                
-                                if (meetsAll) {
-                                    solutionsAtThisPrice.push(solution);
-                                } else {
-                                    // Track best partial solution across all prices
-                                    const metCount = [meetsCapRate, meetsCashFlow, meetsCashToSeller, meetsSpread].filter(Boolean).length;
-                                    if (!bestPartialSolution || metCount > bestPartialSolution.metCount ||
-                                        (metCount === bestPartialSolution.metCount && purchasePrice > bestPartialSolution.purchasePrice)) {
-                                        bestPartialSolution = { ...solution, metCount };
+                            for (const sellerCarryPct of sellerCarryValues) {
+                                const result = evaluateCombination(purchasePrice, sellerCarryPct, firstLoanLTV, sellerCarryAmort);
+                                if (result) {
+                                    if (result.meetsAll) {
+                                        if (!bestSolution || result.purchasePrice > bestSolution.purchasePrice) {
+                                            // Prefer highest price
+                                            bestSolution = result;
+                                        }
+                                    } else if (!bestPartialSolution || result.metCount > bestPartialSolution.metCount) {
+                                        bestPartialSolution = result;
                                     }
                                 }
                             }
                         }
                     }
-                }
-                
-                // If we found valid solutions at this price, pick the best one and STOP
-                // (Don't look at lower prices since we want highest price possible)
-                if (solutionsAtThisPrice.length > 0) {
-                    // Sort by closest to target cash to seller
-                    solutionsAtThisPrice.sort((a, b) => {
-                        const aDiff = Math.abs(a.cashToSeller - targetCashToSeller);
-                        const bDiff = Math.abs(b.cashToSeller - targetCashToSeller);
-                        return aDiff - bDiff;
-                    });
-                    
-                    bestSolutionAtPrice = solutionsAtThisPrice[0];
-                    break; // Found solution at this price, don't go lower
+                    if (bestSolution) break; // Found solution at this price, don't go lower
                 }
             }
             
             // Show results
-            if (bestSolutionAtPrice) {
-                goalSolution = bestSolutionAtPrice;
+            if (bestSolution) {
+                goalSolution = bestSolution;
                 
-                showGoalResults('success', 'Solution Found!', bestSolutionAtPrice, [
-                    { label: 'Cap Rate', met: true, value: formatPercent(bestSolutionAtPrice.metrics.capRate), goal: formatPercent(goalCapRate) },
-                    { label: 'Monthly CF', met: true, value: formatCurrency(bestSolutionAtPrice.metrics.monthlyCashFlow), goal: formatCurrency(goalCashFlow) },
-                    { label: 'Cash to Seller', met: true, value: formatCurrency(bestSolutionAtPrice.cashToSeller), goal: formatCurrency(targetCashToSeller) },
-                    { label: 'Spread', met: true, value: formatPercent(bestSolutionAtPrice.metrics.spread), goal: 'Positive' }
+                showGoalResults('success', 'Solution Found!', bestSolution, [
+                    { label: 'Cap Rate', met: true, value: formatPercent(bestSolution.metrics.capRate), goal: formatPercent(goalCapRate) },
+                    { label: 'Monthly CF', met: true, value: formatCurrency(bestSolution.metrics.monthlyCashFlow), goal: formatCurrency(goalCashFlow) },
+                    { label: 'Cash to Seller', met: true, value: formatCurrency(bestSolution.cashToSeller), goal: formatCurrency(targetCashToSeller) },
+                    { label: 'Spread', met: true, value: formatPercent(bestSolution.metrics.spread), goal: 'Positive' }
                 ]);
             } else if (bestPartialSolution) {
                 goalSolution = bestPartialSolution;
@@ -6169,6 +6433,10 @@ Note: Please find the attached LOI and PDF Summary documents for complete deal t
                 document.getElementById('appraisalCost').value = data.cashToBuyer.appraisalCost || '';
                 document.getElementById('closingCostPct').value = data.cashToBuyer.closingCostPct || '';
             }
+            
+            // Mark all tracked fields as touched since we loaded a deal
+            const trackedFields = ['purchasePrice', 'askingPrice', 'rentalRevenue', 'existingDebt', 'propertyTax', 'insurance', 'hoa', 'otherExpenses', 'agentFee', 'rehabCost', 'appraisalCost'];
+            trackedFields.forEach(fieldId => markFieldTouched(fieldId));
             
             // Recalculate
             calculate();
