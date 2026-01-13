@@ -6352,6 +6352,14 @@ Please be direct and specific with your analysis.`;
         }
 
         function buildDealObject() {
+            // Helper to parse currency/percentage values from display elements
+            const parseDisplayValue = (id) => {
+                const el = document.getElementById(id);
+                if (!el) return 0;
+                const text = el.textContent || el.innerText || '';
+                return parseFloat(text.replace(/[$,%]/g, '').replace(/,/g, '')) || 0;
+            };
+            
             return {
                 version: '1.0',
                 savedAt: new Date().toISOString(),
@@ -6410,6 +6418,26 @@ Please be direct and specific with your analysis.`;
                     assignmentFeePct: document.getElementById('assignmentFeePct').value,
                     appraisalCost: document.getElementById('appraisalCost').value,
                     closingCostPct: document.getElementById('closingCostPct').value,
+                },
+                // Store computed metrics for email/PDF generation
+                metrics: {
+                    noi: parseDisplayValue('noiValue'),
+                    capRate: parseDisplayValue('capRate') / 100,
+                    blendedRate: parseDisplayValue('blendedRate') / 100,
+                    spread: parseDisplayValue('capBlendedSpread') / 100,
+                    annualCashFlow: parseDisplayValue('annualCashFlow'),
+                    monthlyCashFlow: parseDisplayValue('monthlyCashFlow'),
+                    cocReturn: parseDisplayValue('cocReturn') / 100,
+                    valueAtBalloon: parseDisplayValue('valueAtBalloon'),
+                    balanceAtBalloon: parseDisplayValue('balanceAtBalloon'),
+                    equityAtBalloon: parseDisplayValue('equityAtBalloon'),
+                    equityPctBalloon: parseDisplayValue('equityPctBalloon') / 100,
+                },
+                firstPosition: {
+                    loanAmount: parseDisplayValue('firstPositionLoan'),
+                    rate: parseDisplayValue('firstPositionRate'),
+                    amortization: parseInt((document.getElementById('firstPositionAmort')?.textContent || '30').replace(/[^0-9]/g, '')) || 30,
+                    payment: parseDisplayValue('firstPositionPayment'),
                 },
             };
         }
