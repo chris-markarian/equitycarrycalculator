@@ -995,39 +995,6 @@
             justify-content: flex-end;
         }
 
-        .library-item-email {
-            background: transparent;
-            color: var(--accent-blue);
-            border: 1px solid var(--accent-blue);
-            padding: 0.4rem 0.75rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.7rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 0.35rem;
-            transition: all 0.2s;
-            white-space: nowrap;
-        }
-
-        .library-item-email:hover {
-            background: var(--accent-blue);
-            color: white;
-        }
-
-        .library-item-email:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-            border-color: var(--text-muted);
-            color: var(--text-muted);
-        }
-
-        .library-item-email:disabled:hover {
-            background: transparent;
-            color: var(--text-muted);
-        }
-
         .library-item-share {
             background: transparent;
             color: var(--accent-blue);
@@ -2053,8 +2020,8 @@
             align-items: center;
         }
 
-        /* Email Recipient Modal */
-        .email-recipient-overlay {
+        /* Email Offer Modal */
+        .email-modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
@@ -2067,100 +2034,111 @@
             z-index: 1002;
         }
 
-        .email-recipient-overlay.show {
+        .email-modal-overlay.show {
             display: flex;
         }
 
-        .email-recipient-modal {
+        .email-modal {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 16px;
             padding: 1.5rem;
             width: 100%;
-            max-width: 360px;
+            max-width: 420px;
             margin: 1rem;
+        }
+
+        .email-modal h3 {
+            margin: 0 0 0.5rem 0;
+            color: var(--text-primary);
             text-align: center;
         }
 
-        .email-recipient-modal h3 {
-            margin: 0 0 0.5rem 0;
-            color: var(--text-primary);
-        }
-
-        .email-recipient-modal .subtitle {
+        .email-modal .subtitle {
             color: var(--text-secondary);
             font-size: 0.9rem;
             margin-bottom: 1.25rem;
+            text-align: center;
         }
 
-        .email-recipient-options {
+        .email-form {
             display: flex;
+            flex-direction: column;
             gap: 1rem;
             margin-bottom: 1rem;
         }
 
-        .email-recipient-btn {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.35rem;
-            padding: 1rem 0.75rem;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            cursor: pointer;
+        .email-field label {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.4rem;
+        }
+
+        .email-field input {
+            width: 100%;
+            padding: 0.7rem 0.9rem;
+            background: var(--bg-input);
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
             color: var(--text-primary);
-            transition: all 0.2s;
+            font-size: 0.95rem;
         }
 
-        .email-recipient-btn:hover {
+        .email-field input:focus {
+            outline: none;
             border-color: var(--accent-teal);
+        }
+
+        .email-preview {
             background: rgba(20, 184, 166, 0.1);
-        }
-
-        .email-recipient-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .email-recipient-btn:disabled:hover {
-            border-color: var(--border-color);
-            background: var(--bg-tertiary);
-        }
-
-        .email-recipient-btn span:first-child {
-            font-size: 1.5rem;
-        }
-
-        .email-recipient-btn span:nth-child(2) {
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        .email-recipient-hint {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            font-weight: 400;
-        }
-
-        .email-other-input {
-            text-align: left;
+            border: 1px solid rgba(20, 184, 166, 0.2);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
             margin-bottom: 1rem;
         }
 
-        .email-other-input label {
-            display: block;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
+        .email-preview-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
             margin-bottom: 0.5rem;
         }
 
-        .email-other-input input {
-            margin-bottom: 1rem;
+        .email-preview-items {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            font-size: 0.85rem;
+            color: var(--accent-teal);
         }
 
-        .email-other-buttons {
+        .email-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .email-status.sending {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent-blue);
+        }
+
+        .email-status.success {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--accent-green);
+        }
+
+        .email-status.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--accent-red);
+        }
+
+        .email-buttons {
             display: flex;
             gap: 1rem;
             justify-content: center;
@@ -2171,18 +2149,45 @@
             border: none;
             border-radius: 8px;
             color: white;
-            padding: 0.75rem 1.25rem;
+            padding: 0.75rem 1.5rem;
             font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            transition: transform 0.2s;
+            transition: transform 0.2s, opacity 0.2s;
         }
 
         .email-send-btn:hover {
             transform: translateY(-1px);
+        }
+
+        .email-send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .library-item-email {
+            background: transparent;
+            color: var(--accent-blue);
+            border: 1px solid var(--accent-blue);
+            padding: 0.4rem 0.75rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .library-item-email:hover {
+            background: var(--accent-blue);
+            color: white;
         }
 
         /* Rename Deal Modal */
@@ -2786,37 +2791,42 @@
         </div>
     </div>
 
-    <!-- Email Recipient Modal -->
-    <div class="email-recipient-overlay" id="emailRecipientModal">
-        <div class="email-recipient-modal">
-            <h3>📧 Email Offer</h3>
-            <p class="subtitle">Who would you like to send this to?</p>
+    <!-- Email Offer Modal -->
+    <div class="email-modal-overlay" id="emailOfferModal">
+        <div class="email-modal">
+            <h3>📧 Send Offer</h3>
+            <p class="subtitle">Send LOI and Deal Summary to recipient</p>
             
-            <div class="email-recipient-options">
-                <button class="email-recipient-btn" id="emailSellerBtn" onclick="selectEmailRecipient('seller')">
-                    <span>👤</span>
-                    <span>Seller</span>
-                    <span class="email-recipient-hint" id="sellerEmailHint"></span>
-                </button>
-                <button class="email-recipient-btn" onclick="selectEmailRecipient('other')">
-                    <span>✉️</span>
-                    <span>Other</span>
-                    <span class="email-recipient-hint">Enter email address</span>
-                </button>
-            </div>
-            
-            <div class="email-other-input" id="emailOtherInput" style="display: none;">
-                <label>Email Address</label>
-                <input type="email" id="otherEmailAddress" class="copy-name-input" placeholder="recipient@example.com">
-                <div class="email-other-buttons">
-                    <button class="save-choice-cancel" onclick="backToRecipientChoice()">Back</button>
-                    <button class="email-send-btn" onclick="confirmOtherEmail()">
-                        <span>📧</span> Send Email
-                    </button>
+            <div class="email-form">
+                <div class="email-field">
+                    <label>Recipient Email *</label>
+                    <input type="email" id="emailRecipientAddress" placeholder="seller@example.com">
+                </div>
+                <div class="email-field">
+                    <label>Recipient Name</label>
+                    <input type="text" id="emailRecipientName" placeholder="Property Owner">
                 </div>
             </div>
             
-            <button class="save-choice-cancel" id="emailCancelBtn" onclick="closeEmailRecipientModal()">Cancel</button>
+            <div class="email-preview">
+                <div class="email-preview-label">Will include:</div>
+                <div class="email-preview-items">
+                    <span>📄 Letter of Intent (PDF)</span>
+                    <span>📊 Deal Summary (PDF)</span>
+                </div>
+            </div>
+            
+            <div class="email-status" id="emailStatus" style="display: none;">
+                <span class="email-status-icon">⏳</span>
+                <span class="email-status-text">Sending...</span>
+            </div>
+            
+            <div class="email-buttons">
+                <button class="save-choice-cancel" onclick="closeEmailModal()">Cancel</button>
+                <button class="email-send-btn" id="emailSendBtn" onclick="sendOfferEmail()">
+                    <span>📧</span> Send Email
+                </button>
+            </div>
         </div>
     </div>
 
@@ -2837,7 +2847,7 @@
             
             <div class="copy-name-buttons">
                 <button class="save-choice-cancel" onclick="closeRenameModal()">Cancel</button>
-                <button class="email-send-btn" onclick="confirmRename()">
+                <button class="goal-apply-btn" onclick="confirmRename()">
                     <span>💾</span> Save
                 </button>
             </div>
@@ -5848,6 +5858,191 @@ Please be direct and specific with your analysis.`;
         let currentEmailDealId = null;
         let currentRenameDealId = null;
         
+        // Email Edge Function URL
+        const EMAIL_FUNCTION_URL = SUPABASE_URL + '/functions/v1/send-offer-email';
+        
+        function emailOffer(dealId) {
+            currentEmailDealId = dealId;
+            const deals = getLibrary();
+            const deal = deals.find(d => String(d.id) === String(dealId));
+            
+            if (!deal) {
+                console.error('Deal not found:', dealId);
+                return;
+            }
+            
+            // Pre-fill with seller info if available
+            const sellerEmail = deal.seller?.email || '';
+            const sellerName = deal.seller?.name || '';
+            
+            document.getElementById('emailRecipientAddress').value = sellerEmail;
+            document.getElementById('emailRecipientName').value = sellerName;
+            
+            // Reset status
+            const statusEl = document.getElementById('emailStatus');
+            statusEl.style.display = 'none';
+            document.getElementById('emailSendBtn').disabled = false;
+            
+            // Show modal
+            document.getElementById('emailOfferModal').classList.add('show');
+            document.getElementById('emailRecipientAddress').focus();
+        }
+        
+        function closeEmailModal() {
+            document.getElementById('emailOfferModal').classList.remove('show');
+            currentEmailDealId = null;
+        }
+        
+        function updateEmailStatus(type, message) {
+            const statusEl = document.getElementById('emailStatus');
+            statusEl.style.display = 'flex';
+            statusEl.className = 'email-status ' + type;
+            
+            const icons = { sending: '⏳', success: '✅', error: '❌' };
+            statusEl.querySelector('.email-status-icon').textContent = icons[type] || '⏳';
+            statusEl.querySelector('.email-status-text').textContent = message;
+        }
+        
+        async function sendOfferEmail() {
+            const recipientEmail = document.getElementById('emailRecipientAddress').value.trim();
+            const recipientName = document.getElementById('emailRecipientName').value.trim() || 'Property Owner';
+            
+            if (!recipientEmail) {
+                alert('Please enter a recipient email address');
+                return;
+            }
+            
+            if (!recipientEmail.includes('@')) {
+                alert('Please enter a valid email address');
+                return;
+            }
+            
+            const deals = getLibrary();
+            const deal = deals.find(d => String(d.id) === String(currentEmailDealId));
+            
+            if (!deal) {
+                alert('Deal not found');
+                closeEmailModal();
+                return;
+            }
+            
+            // Disable button and show sending status
+            document.getElementById('emailSendBtn').disabled = true;
+            updateEmailStatus('sending', 'Generating PDFs and sending email...');
+            
+            try {
+                // Build the data payload
+                const purchasePrice = parseFloat(deal.dealTerms?.purchasePrice) || 0;
+                const sellerCarryPct = parseFloat(deal.loanConfig?.sellerCarryPct) || 0;
+                const sellerCarryAmount = purchasePrice * (sellerCarryPct / 100);
+                const cashToSeller = purchasePrice - sellerCarryAmount;
+                const sellerCarryRate = parseFloat(deal.sellerFinancing?.rate) || 0;
+                const sellerCarryAmort = parseInt(deal.sellerFinancing?.amortization) || 30;
+                const yearsToBalloon = parseInt(deal.loanConfig?.yearsToBalloon) || 8;
+                
+                // Calculate monthly payment
+                let monthlyPayment = 0;
+                if (sellerCarryAmount > 0) {
+                    if (sellerCarryRate === 0) {
+                        monthlyPayment = sellerCarryAmount / (sellerCarryAmort * 12);
+                    } else {
+                        const monthlyRate = sellerCarryRate / 100 / 12;
+                        const numPayments = sellerCarryAmort * 12;
+                        monthlyPayment = sellerCarryAmount * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1);
+                    }
+                }
+                
+                const propertyAddress = [
+                    deal.propertyInfo?.streetAddress,
+                    deal.propertyInfo?.city,
+                    deal.propertyInfo?.state,
+                    deal.propertyInfo?.zip
+                ].filter(Boolean).join(', ');
+                
+                const payload = {
+                    recipientEmail,
+                    recipientName,
+                    propertyAddress,
+                    propertyLink: deal.propertyInfo?.propertyLink || '',
+                    preparer: {
+                        name: deal.preparer?.name || '',
+                        email: deal.preparer?.email || '',
+                        phone: deal.preparer?.phone || ''
+                    },
+                    seller: {
+                        name: deal.seller?.name || '',
+                        email: deal.seller?.email || '',
+                        phone: deal.seller?.phone || ''
+                    },
+                    financials: {
+                        purchasePrice,
+                        askingPrice: parseFloat(deal.dealTerms?.askingPrice) || purchasePrice,
+                        cashToSeller,
+                        sellerCarryAmount,
+                        sellerCarryPct,
+                        sellerCarryRate,
+                        sellerCarryAmort,
+                        monthlyPayment,
+                        yearsToBalloon,
+                        firstPositionLoan: parseFloat(deal.firstPosition?.loanAmount) || 0,
+                        firstPositionRate: parseFloat(deal.firstPosition?.rate) || 0,
+                        firstPositionAmort: parseInt(deal.firstPosition?.amortization) || 30,
+                        firstPositionPayment: parseFloat(deal.firstPosition?.payment) || 0,
+                        downPayment: parseFloat(deal.loanConfig?.downPaymentPct) || 0,
+                        totalFinancingPct: parseFloat(deal.loanConfig?.totalFinancingPct) || 100,
+                        noi: parseFloat(deal.metrics?.noi) || 0,
+                        capRate: parseFloat(deal.metrics?.capRate) || 0,
+                        blendedRate: parseFloat(deal.metrics?.blendedRate) || 0,
+                        spread: parseFloat(deal.metrics?.spread) || 0,
+                        annualCashFlow: parseFloat(deal.metrics?.annualCashFlow) || 0,
+                        monthlyCashFlow: parseFloat(deal.metrics?.monthlyCashFlow) || 0,
+                        cocReturn: parseFloat(deal.metrics?.cocReturn) || 0,
+                        valueAtBalloon: parseFloat(deal.metrics?.valueAtBalloon) || 0,
+                        balanceAtBalloon: parseFloat(deal.metrics?.balanceAtBalloon) || 0,
+                        equityAtBalloon: parseFloat(deal.metrics?.equityAtBalloon) || 0,
+                        equityPctBalloon: parseFloat(deal.metrics?.equityPctBalloon) || 0
+                    }
+                };
+                
+                // Call the Edge Function
+                const response = await fetch(EMAIL_FUNCTION_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    updateEmailStatus('success', 'Email sent successfully!');
+                    
+                    // Update deal status to LOI Sent
+                    const dealIndex = deals.findIndex(d => String(d.id) === String(currentEmailDealId));
+                    if (dealIndex !== -1 && deals[dealIndex].status === 'working') {
+                        deals[dealIndex].status = 'loi-sent';
+                        deals[dealIndex].updatedAt = new Date().toISOString();
+                        saveLibrary(deals);
+                        renderLibrary();
+                    }
+                    
+                    // Close modal after a delay
+                    setTimeout(() => {
+                        closeEmailModal();
+                    }, 2000);
+                } else {
+                    throw new Error(result.error || 'Failed to send email');
+                }
+                
+            } catch (error) {
+                console.error('Email error:', error);
+                updateEmailStatus('error', error.message || 'Failed to send email');
+                document.getElementById('emailSendBtn').disabled = false;
+            }
+        }
+        
         // Status options in order for cycling
         const STATUS_ORDER = ['working', 'loi-sent', 'loi-countered', 'loi-signed', 'won', 'rejected', 'obe'];
         const STATUS_LABELS = {
@@ -5977,168 +6172,6 @@ Please be direct and specific with your analysis.`;
                 closeRenameModal();
             }
         });
-
-        function emailOffer(dealId) {
-            currentEmailDealId = dealId;
-            const deals = getLibrary();
-            const deal = deals.find(d => String(d.id) === String(dealId));
-            
-            if (!deal) {
-                console.error('Deal not found:', dealId);
-                return;
-            }
-            
-            // Set up the modal with seller email hint
-            const sellerEmail = deal.seller?.email || '';
-            const sellerEmailHint = document.getElementById('sellerEmailHint');
-            const sellerBtn = document.getElementById('emailSellerBtn');
-            
-            if (sellerEmail) {
-                sellerEmailHint.textContent = sellerEmail;
-                sellerBtn.disabled = false;
-            } else {
-                sellerEmailHint.textContent = 'No email saved';
-                sellerBtn.disabled = true;
-            }
-            
-            // Reset modal state
-            document.getElementById('emailOtherInput').style.display = 'none';
-            document.getElementById('emailCancelBtn').style.display = 'block';
-            document.querySelector('.email-recipient-options').style.display = 'flex';
-            document.getElementById('otherEmailAddress').value = '';
-            
-            // Show modal
-            document.getElementById('emailRecipientModal').classList.add('show');
-        }
-        
-        function closeEmailRecipientModal() {
-            document.getElementById('emailRecipientModal').classList.remove('show');
-            currentEmailDealId = null;
-        }
-        
-        function selectEmailRecipient(type) {
-            if (type === 'seller') {
-                const deals = getLibrary();
-                const deal = deals.find(d => String(d.id) === String(currentEmailDealId));
-                const sellerEmail = deal?.seller?.email || '';
-                sendEmailOffer(currentEmailDealId, sellerEmail);
-                closeEmailRecipientModal();
-            } else if (type === 'other') {
-                // Show email input
-                document.querySelector('.email-recipient-options').style.display = 'none';
-                document.getElementById('emailCancelBtn').style.display = 'none';
-                document.getElementById('emailOtherInput').style.display = 'block';
-                document.getElementById('otherEmailAddress').focus();
-            }
-        }
-        
-        function backToRecipientChoice() {
-            document.getElementById('emailOtherInput').style.display = 'none';
-            document.getElementById('emailCancelBtn').style.display = 'block';
-            document.querySelector('.email-recipient-options').style.display = 'flex';
-        }
-        
-        function confirmOtherEmail() {
-            const email = document.getElementById('otherEmailAddress').value.trim();
-            if (!email) {
-                alert('Please enter an email address');
-                return;
-            }
-            if (!email.includes('@')) {
-                alert('Please enter a valid email address');
-                return;
-            }
-            sendEmailOffer(currentEmailDealId, email);
-            closeEmailRecipientModal();
-        }
-        
-        function sendEmailOffer(dealId, recipientEmail) {
-            const deals = getLibrary();
-            const deal = deals.find(d => String(d.id) === String(dealId));
-            
-            if (!deal) {
-                console.error('Deal not found:', dealId);
-                return;
-            }
-            
-            // Get deal details
-            const sellerName = deal.seller?.name || 'Property Owner';
-            const preparerName = deal.preparer?.name || '';
-            const preparerEmail = deal.preparer?.email || '';
-            const preparerPhone = deal.preparer?.phone || '';
-            
-            // Property info
-            const streetAddress = deal.propertyInfo?.streetAddress || '';
-            const city = deal.propertyInfo?.city || '';
-            const state = deal.propertyInfo?.state || '';
-            const zip = deal.propertyInfo?.zip || '';
-            const fullAddress = [streetAddress, city, state, zip].filter(Boolean).join(', ');
-            
-            // Financial details
-            const purchasePrice = parseFloat(deal.dealTerms?.purchasePrice) || 0;
-            const sellerCarryPct = parseFloat(deal.loanConfig?.sellerCarryPct) / 100 || 0;
-            const sellerCarryAmount = purchasePrice * sellerCarryPct;
-            const cashToSeller = purchasePrice * (1 - sellerCarryPct);
-            const sellerCarryRate = parseFloat(deal.sellerFinancing?.rate) || 0;
-            const sellerCarryAmort = parseInt(deal.sellerFinancing?.amortization) || 30;
-            const yearsToBalloon = parseInt(deal.loanConfig?.yearsToBalloon) || 8;
-            
-            // Calculate monthly payment to seller
-            let monthlyPayment = 0;
-            if (sellerCarryAmount > 0) {
-                if (sellerCarryRate === 0) {
-                    monthlyPayment = sellerCarryAmount / (sellerCarryAmort * 12);
-                } else {
-                    const monthlyRate = sellerCarryRate / 100 / 12;
-                    const numPayments = sellerCarryAmort * 12;
-                    monthlyPayment = sellerCarryAmount * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1);
-                }
-            }
-            
-            // Format currency helper
-            const fmt = (num) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(num);
-            
-            // Build email subject
-            const subject = `Letter of Intent - ${fullAddress}`;
-            
-            // Build email body
-            const body = `Dear ${sellerName},
-
-I hope this message finds you well. I am writing to express our interest in acquiring your property located at:
-
-${fullAddress}
-
-PROPOSED TERMS:
-• Purchase Price: ${fmt(purchasePrice)}
-• Cash to Seller at Closing: ${fmt(cashToSeller)}
-• Seller Carry Amount: ${fmt(sellerCarryAmount)} (${(sellerCarryPct * 100).toFixed(0)}%)
-• Monthly Payment to Seller: ${fmt(monthlyPayment)}
-• Interest Rate: ${sellerCarryRate}%
-• Amortization: ${sellerCarryAmort} years
-• Balloon: ${yearsToBalloon} years
-
-We believe this structure offers you immediate liquidity while providing ongoing monthly income and potential tax advantages through an installment sale.
-
-I have attached a formal Letter of Intent and Deal Summary with complete details for your review. Please feel free to reach out with any questions.
-
-Best regards,
-${preparerName}
-${preparerEmail}
-${preparerPhone}
-
----
-Note: Please find the attached LOI and PDF Summary documents for complete deal terms.`;
-
-            // Encode for mailto
-            const mailtoLink = `mailto:${encodeURIComponent(recipientEmail)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-            
-            // Open email client using window.open as fallback
-            const emailWindow = window.open(mailtoLink, '_blank');
-            if (!emailWindow) {
-                // If popup blocked, try location.href
-                window.location.href = mailtoLink;
-            }
-        }
 
         function renderLibrary() {
             let deals = getLibrary();
