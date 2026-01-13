@@ -6,6 +6,7 @@
     <title>Real Estate Underwriting Calculator</title>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <style>
         :root {
             --bg-primary: #0a0f1a;
@@ -993,39 +994,6 @@
             align-items: center;
             gap: 0.5rem;
             justify-content: flex-end;
-        }
-
-        .library-item-email {
-            background: transparent;
-            color: var(--accent-blue);
-            border: 1px solid var(--accent-blue);
-            padding: 0.4rem 0.75rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.7rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 0.35rem;
-            transition: all 0.2s;
-            white-space: nowrap;
-        }
-
-        .library-item-email:hover {
-            background: var(--accent-blue);
-            color: white;
-        }
-
-        .library-item-email:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-            border-color: var(--text-muted);
-            color: var(--text-muted);
-        }
-
-        .library-item-email:disabled:hover {
-            background: transparent;
-            color: var(--text-muted);
         }
 
         .library-item-share {
@@ -2053,8 +2021,8 @@
             align-items: center;
         }
 
-        /* Email Recipient Modal */
-        .email-recipient-overlay {
+        /* Email Offer Modal */
+        .email-modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
@@ -2067,100 +2035,111 @@
             z-index: 1002;
         }
 
-        .email-recipient-overlay.show {
+        .email-modal-overlay.show {
             display: flex;
         }
 
-        .email-recipient-modal {
+        .email-modal {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 16px;
             padding: 1.5rem;
             width: 100%;
-            max-width: 360px;
+            max-width: 420px;
             margin: 1rem;
+        }
+
+        .email-modal h3 {
+            margin: 0 0 0.5rem 0;
+            color: var(--text-primary);
             text-align: center;
         }
 
-        .email-recipient-modal h3 {
-            margin: 0 0 0.5rem 0;
-            color: var(--text-primary);
-        }
-
-        .email-recipient-modal .subtitle {
+        .email-modal .subtitle {
             color: var(--text-secondary);
             font-size: 0.9rem;
             margin-bottom: 1.25rem;
+            text-align: center;
         }
 
-        .email-recipient-options {
+        .email-form {
             display: flex;
+            flex-direction: column;
             gap: 1rem;
             margin-bottom: 1rem;
         }
 
-        .email-recipient-btn {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.35rem;
-            padding: 1rem 0.75rem;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            cursor: pointer;
+        .email-field label {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.4rem;
+        }
+
+        .email-field input {
+            width: 100%;
+            padding: 0.7rem 0.9rem;
+            background: var(--bg-input);
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
             color: var(--text-primary);
-            transition: all 0.2s;
+            font-size: 0.95rem;
         }
 
-        .email-recipient-btn:hover {
+        .email-field input:focus {
+            outline: none;
             border-color: var(--accent-teal);
+        }
+
+        .email-preview {
             background: rgba(20, 184, 166, 0.1);
-        }
-
-        .email-recipient-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .email-recipient-btn:disabled:hover {
-            border-color: var(--border-color);
-            background: var(--bg-tertiary);
-        }
-
-        .email-recipient-btn span:first-child {
-            font-size: 1.5rem;
-        }
-
-        .email-recipient-btn span:nth-child(2) {
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        .email-recipient-hint {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            font-weight: 400;
-        }
-
-        .email-other-input {
-            text-align: left;
+            border: 1px solid rgba(20, 184, 166, 0.2);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
             margin-bottom: 1rem;
         }
 
-        .email-other-input label {
-            display: block;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
+        .email-preview-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
             margin-bottom: 0.5rem;
         }
 
-        .email-other-input input {
-            margin-bottom: 1rem;
+        .email-preview-items {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            font-size: 0.85rem;
+            color: var(--accent-teal);
         }
 
-        .email-other-buttons {
+        .email-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .email-status.sending {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent-blue);
+        }
+
+        .email-status.success {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--accent-green);
+        }
+
+        .email-status.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--accent-red);
+        }
+
+        .email-buttons {
             display: flex;
             gap: 1rem;
             justify-content: center;
@@ -2171,18 +2150,45 @@
             border: none;
             border-radius: 8px;
             color: white;
-            padding: 0.75rem 1.25rem;
+            padding: 0.75rem 1.5rem;
             font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            transition: transform 0.2s;
+            transition: transform 0.2s, opacity 0.2s;
         }
 
         .email-send-btn:hover {
             transform: translateY(-1px);
+        }
+
+        .email-send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .library-item-email {
+            background: transparent;
+            color: var(--accent-blue);
+            border: 1px solid var(--accent-blue);
+            padding: 0.4rem 0.75rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .library-item-email:hover {
+            background: var(--accent-blue);
+            color: white;
         }
 
         /* Rename Deal Modal */
@@ -2786,37 +2792,42 @@
         </div>
     </div>
 
-    <!-- Email Recipient Modal -->
-    <div class="email-recipient-overlay" id="emailRecipientModal">
-        <div class="email-recipient-modal">
-            <h3>📧 Email Offer</h3>
-            <p class="subtitle">Who would you like to send this to?</p>
+    <!-- Email Offer Modal -->
+    <div class="email-modal-overlay" id="emailOfferModal">
+        <div class="email-modal">
+            <h3>📧 Send Offer</h3>
+            <p class="subtitle">Send LOI and Deal Summary to recipient</p>
             
-            <div class="email-recipient-options">
-                <button class="email-recipient-btn" id="emailSellerBtn" onclick="selectEmailRecipient('seller')">
-                    <span>👤</span>
-                    <span>Seller</span>
-                    <span class="email-recipient-hint" id="sellerEmailHint"></span>
-                </button>
-                <button class="email-recipient-btn" onclick="selectEmailRecipient('other')">
-                    <span>✉️</span>
-                    <span>Other</span>
-                    <span class="email-recipient-hint">Enter email address</span>
-                </button>
-            </div>
-            
-            <div class="email-other-input" id="emailOtherInput" style="display: none;">
-                <label>Email Address</label>
-                <input type="email" id="otherEmailAddress" class="copy-name-input" placeholder="recipient@example.com">
-                <div class="email-other-buttons">
-                    <button class="save-choice-cancel" onclick="backToRecipientChoice()">Back</button>
-                    <button class="email-send-btn" onclick="confirmOtherEmail()">
-                        <span>📧</span> Send Email
-                    </button>
+            <div class="email-form">
+                <div class="email-field">
+                    <label>Recipient Email *</label>
+                    <input type="email" id="emailRecipientAddress" placeholder="seller@example.com">
+                </div>
+                <div class="email-field">
+                    <label>Recipient Name</label>
+                    <input type="text" id="emailRecipientName" placeholder="Property Owner">
                 </div>
             </div>
             
-            <button class="save-choice-cancel" id="emailCancelBtn" onclick="closeEmailRecipientModal()">Cancel</button>
+            <div class="email-preview">
+                <div class="email-preview-label">Will include:</div>
+                <div class="email-preview-items">
+                    <span>📄 Letter of Intent (PDF)</span>
+                    <span>📊 Deal Summary (PDF)</span>
+                </div>
+            </div>
+            
+            <div class="email-status" id="emailStatus" style="display: none;">
+                <span class="email-status-icon">⏳</span>
+                <span class="email-status-text">Sending...</span>
+            </div>
+            
+            <div class="email-buttons">
+                <button class="save-choice-cancel" onclick="closeEmailModal()">Cancel</button>
+                <button class="email-send-btn" id="emailSendBtn" onclick="sendOfferEmail()">
+                    <span>📧</span> Send Email
+                </button>
+            </div>
         </div>
     </div>
 
@@ -2837,7 +2848,7 @@
             
             <div class="copy-name-buttons">
                 <button class="save-choice-cancel" onclick="closeRenameModal()">Cancel</button>
-                <button class="email-send-btn" onclick="confirmRename()">
+                <button class="goal-apply-btn" onclick="confirmRename()">
                     <span>💾</span> Save
                 </button>
             </div>
@@ -2927,6 +2938,12 @@
                         <input type="email" id="sellerEmail" placeholder="Seller's email" class="info-input">
                         <input type="tel" id="sellerPhone" placeholder="Seller's phone" class="info-input">
                     </div>
+                </div>
+            </div>
+            <div class="info-row-full">
+                <div class="info-section">
+                    <div class="info-section-title">📝 Notes <span style="font-weight: normal; font-size: 0.8em; color: #64748b;">(internal use only - not included in LOI or summaries)</span></div>
+                    <textarea id="dealNotes" placeholder="Add notes about this deal - phone call details, agent feedback, property conditions, etc." class="info-input" style="width: 100%; min-height: 80px; resize: vertical; font-family: inherit; box-sizing: border-box;"></textarea>
                 </div>
             </div>
         </div>
@@ -4082,6 +4099,11 @@
             }
             return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(num);
         }
+        
+        function parseCurrency(str) {
+            if (!str) return 0;
+            return parseFloat(str.replace(/[$,]/g, '')) || 0;
+        }
 
         function formatPercent(num, decimals = 2) {
             if (isNaN(num) || !isFinite(num)) return '0%';
@@ -4613,12 +4635,14 @@
                     zip: params.get('zip'),
                     asking: params.get('asking'),
                     price: params.get('price'),
-                    rent: params.get('rent'),
                     debt: params.get('debt'),
                     url: params.get('url'),
                     sellerName: params.get('sellerName'),
                     sellerPhone: params.get('sellerPhone'),
-                    sellerEmail: params.get('sellerEmail')
+                    sellerEmail: params.get('sellerEmail'),
+                    propertyTax: params.get('propertyTax'),
+                    insurance: params.get('insurance'),
+                    hoa: params.get('hoa')
                 };
                 console.log('[ECC Debug] Captured params:', pendingPropertyParams);
                 
@@ -4693,16 +4717,36 @@
                 document.getElementById('sellerEmail').value = params.sellerEmail;
             }
             
+            // Expense fields (annual values from extension)
+            if (params.propertyTax) {
+                const tax = params.propertyTax.replace(/[^0-9.]/g, '');
+                document.getElementById('propertyTax').value = tax;
+            }
+            if (params.insurance) {
+                const ins = params.insurance.replace(/[^0-9.]/g, '');
+                document.getElementById('insurance').value = ins;
+            }
+            if (params.hoa) {
+                const hoa = params.hoa.replace(/[^0-9.]/g, '');
+                document.getElementById('hoa').value = hoa;
+            }
+            
             // Mark imported fields as touched
             if (params.asking || params.price) {
                 markFieldTouched('purchasePrice');
                 markFieldTouched('askingPrice');
             }
-            if (params.rent) {
-                markFieldTouched('rentalRevenue');
-            }
             if (params.debt) {
                 markFieldTouched('existingDebt');
+            }
+            if (params.propertyTax) {
+                markFieldTouched('propertyTax');
+            }
+            if (params.insurance) {
+                markFieldTouched('insurance');
+            }
+            if (params.hoa) {
+                markFieldTouched('hoa');
             }
             
             // Recalculate with new values
@@ -5826,6 +5870,191 @@ Please be direct and specific with your analysis.`;
         let currentEmailDealId = null;
         let currentRenameDealId = null;
         
+        // Email Edge Function URL
+        const EMAIL_FUNCTION_URL = SUPABASE_URL + '/functions/v1/send-offer-email';
+        
+        function emailOffer(dealId) {
+            currentEmailDealId = dealId;
+            const deals = getLibrary();
+            const deal = deals.find(d => String(d.id) === String(dealId));
+            
+            if (!deal) {
+                console.error('Deal not found:', dealId);
+                return;
+            }
+            
+            // Pre-fill with seller info if available
+            const sellerEmail = deal.seller?.email || '';
+            const sellerName = deal.seller?.name || '';
+            
+            document.getElementById('emailRecipientAddress').value = sellerEmail;
+            document.getElementById('emailRecipientName').value = sellerName;
+            
+            // Reset status
+            const statusEl = document.getElementById('emailStatus');
+            statusEl.style.display = 'none';
+            document.getElementById('emailSendBtn').disabled = false;
+            
+            // Show modal
+            document.getElementById('emailOfferModal').classList.add('show');
+            document.getElementById('emailRecipientAddress').focus();
+        }
+        
+        function closeEmailModal() {
+            document.getElementById('emailOfferModal').classList.remove('show');
+            currentEmailDealId = null;
+        }
+        
+        function updateEmailStatus(type, message) {
+            const statusEl = document.getElementById('emailStatus');
+            statusEl.style.display = 'flex';
+            statusEl.className = 'email-status ' + type;
+            
+            const icons = { sending: '⏳', success: '✅', error: '❌' };
+            statusEl.querySelector('.email-status-icon').textContent = icons[type] || '⏳';
+            statusEl.querySelector('.email-status-text').textContent = message;
+        }
+        
+        async function sendOfferEmail() {
+            const recipientEmail = document.getElementById('emailRecipientAddress').value.trim();
+            const recipientName = document.getElementById('emailRecipientName').value.trim() || 'Property Owner';
+            
+            if (!recipientEmail) {
+                alert('Please enter a recipient email address');
+                return;
+            }
+            
+            if (!recipientEmail.includes('@')) {
+                alert('Please enter a valid email address');
+                return;
+            }
+            
+            const deals = getLibrary();
+            const deal = deals.find(d => String(d.id) === String(currentEmailDealId));
+            
+            if (!deal) {
+                alert('Deal not found');
+                closeEmailModal();
+                return;
+            }
+            
+            // Disable button and show sending status
+            document.getElementById('emailSendBtn').disabled = true;
+            updateEmailStatus('sending', 'Generating PDFs and sending email...');
+            
+            try {
+                // Build the data payload
+                const purchasePrice = parseFloat(deal.dealTerms?.purchasePrice) || 0;
+                const sellerCarryPct = parseFloat(deal.loanConfig?.sellerCarryPct) || 0;
+                const sellerCarryAmount = purchasePrice * (sellerCarryPct / 100);
+                const cashToSeller = purchasePrice - sellerCarryAmount;
+                const sellerCarryRate = parseFloat(deal.sellerFinancing?.rate) || 0;
+                const sellerCarryAmort = parseInt(deal.sellerFinancing?.amortization) || 30;
+                const yearsToBalloon = parseInt(deal.loanConfig?.yearsToBalloon) || 8;
+                
+                // Calculate monthly payment
+                let monthlyPayment = 0;
+                if (sellerCarryAmount > 0) {
+                    if (sellerCarryRate === 0) {
+                        monthlyPayment = sellerCarryAmount / (sellerCarryAmort * 12);
+                    } else {
+                        const monthlyRate = sellerCarryRate / 100 / 12;
+                        const numPayments = sellerCarryAmort * 12;
+                        monthlyPayment = sellerCarryAmount * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1);
+                    }
+                }
+                
+                const propertyAddress = [
+                    deal.propertyInfo?.streetAddress,
+                    deal.propertyInfo?.city,
+                    deal.propertyInfo?.state,
+                    deal.propertyInfo?.zip
+                ].filter(Boolean).join(', ');
+                
+                const payload = {
+                    recipientEmail,
+                    recipientName,
+                    propertyAddress,
+                    propertyLink: deal.propertyInfo?.propertyLink || '',
+                    preparer: {
+                        name: deal.preparer?.name || '',
+                        email: deal.preparer?.email || '',
+                        phone: deal.preparer?.phone || ''
+                    },
+                    seller: {
+                        name: deal.seller?.name || '',
+                        email: deal.seller?.email || '',
+                        phone: deal.seller?.phone || ''
+                    },
+                    financials: {
+                        purchasePrice,
+                        askingPrice: parseFloat(deal.dealTerms?.askingPrice) || purchasePrice,
+                        cashToSeller,
+                        sellerCarryAmount,
+                        sellerCarryPct,
+                        sellerCarryRate,
+                        sellerCarryAmort,
+                        monthlyPayment,
+                        yearsToBalloon,
+                        firstPositionLoan: parseFloat(deal.firstPosition?.loanAmount) || 0,
+                        firstPositionRate: parseFloat(deal.firstPosition?.rate) || 0,
+                        firstPositionAmort: parseInt(deal.firstPosition?.amortization) || 30,
+                        firstPositionPayment: parseFloat(deal.firstPosition?.payment) || 0,
+                        downPayment: parseFloat(deal.loanConfig?.downPaymentPct) || 0,
+                        totalFinancingPct: parseFloat(deal.loanConfig?.totalFinancingPct) || 100,
+                        noi: parseFloat(deal.metrics?.noi) || 0,
+                        capRate: parseFloat(deal.metrics?.capRate) || 0,
+                        blendedRate: parseFloat(deal.metrics?.blendedRate) || 0,
+                        spread: parseFloat(deal.metrics?.spread) || 0,
+                        annualCashFlow: parseFloat(deal.metrics?.annualCashFlow) || 0,
+                        monthlyCashFlow: parseFloat(deal.metrics?.monthlyCashFlow) || 0,
+                        cocReturn: parseFloat(deal.metrics?.cocReturn) || 0,
+                        valueAtBalloon: parseFloat(deal.metrics?.valueAtBalloon) || 0,
+                        balanceAtBalloon: parseFloat(deal.metrics?.balanceAtBalloon) || 0,
+                        equityAtBalloon: parseFloat(deal.metrics?.equityAtBalloon) || 0,
+                        equityPctBalloon: parseFloat(deal.metrics?.equityPctBalloon) || 0
+                    }
+                };
+                
+                // Call the Edge Function
+                const response = await fetch(EMAIL_FUNCTION_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    updateEmailStatus('success', 'Email sent successfully!');
+                    
+                    // Update deal status to LOI Sent
+                    const dealIndex = deals.findIndex(d => String(d.id) === String(currentEmailDealId));
+                    if (dealIndex !== -1 && deals[dealIndex].status === 'working') {
+                        deals[dealIndex].status = 'loi-sent';
+                        deals[dealIndex].updatedAt = new Date().toISOString();
+                        saveLibrary(deals);
+                        renderLibrary();
+                    }
+                    
+                    // Close modal after a delay
+                    setTimeout(() => {
+                        closeEmailModal();
+                    }, 2000);
+                } else {
+                    throw new Error(result.error || 'Failed to send email');
+                }
+                
+            } catch (error) {
+                console.error('Email error:', error);
+                updateEmailStatus('error', error.message || 'Failed to send email');
+                document.getElementById('emailSendBtn').disabled = false;
+            }
+        }
+        
         // Status options in order for cycling
         const STATUS_ORDER = ['working', 'loi-sent', 'loi-countered', 'loi-signed', 'won', 'rejected', 'obe'];
         const STATUS_LABELS = {
@@ -5955,168 +6184,6 @@ Please be direct and specific with your analysis.`;
                 closeRenameModal();
             }
         });
-
-        function emailOffer(dealId) {
-            currentEmailDealId = dealId;
-            const deals = getLibrary();
-            const deal = deals.find(d => String(d.id) === String(dealId));
-            
-            if (!deal) {
-                console.error('Deal not found:', dealId);
-                return;
-            }
-            
-            // Set up the modal with seller email hint
-            const sellerEmail = deal.seller?.email || '';
-            const sellerEmailHint = document.getElementById('sellerEmailHint');
-            const sellerBtn = document.getElementById('emailSellerBtn');
-            
-            if (sellerEmail) {
-                sellerEmailHint.textContent = sellerEmail;
-                sellerBtn.disabled = false;
-            } else {
-                sellerEmailHint.textContent = 'No email saved';
-                sellerBtn.disabled = true;
-            }
-            
-            // Reset modal state
-            document.getElementById('emailOtherInput').style.display = 'none';
-            document.getElementById('emailCancelBtn').style.display = 'block';
-            document.querySelector('.email-recipient-options').style.display = 'flex';
-            document.getElementById('otherEmailAddress').value = '';
-            
-            // Show modal
-            document.getElementById('emailRecipientModal').classList.add('show');
-        }
-        
-        function closeEmailRecipientModal() {
-            document.getElementById('emailRecipientModal').classList.remove('show');
-            currentEmailDealId = null;
-        }
-        
-        function selectEmailRecipient(type) {
-            if (type === 'seller') {
-                const deals = getLibrary();
-                const deal = deals.find(d => String(d.id) === String(currentEmailDealId));
-                const sellerEmail = deal?.seller?.email || '';
-                sendEmailOffer(currentEmailDealId, sellerEmail);
-                closeEmailRecipientModal();
-            } else if (type === 'other') {
-                // Show email input
-                document.querySelector('.email-recipient-options').style.display = 'none';
-                document.getElementById('emailCancelBtn').style.display = 'none';
-                document.getElementById('emailOtherInput').style.display = 'block';
-                document.getElementById('otherEmailAddress').focus();
-            }
-        }
-        
-        function backToRecipientChoice() {
-            document.getElementById('emailOtherInput').style.display = 'none';
-            document.getElementById('emailCancelBtn').style.display = 'block';
-            document.querySelector('.email-recipient-options').style.display = 'flex';
-        }
-        
-        function confirmOtherEmail() {
-            const email = document.getElementById('otherEmailAddress').value.trim();
-            if (!email) {
-                alert('Please enter an email address');
-                return;
-            }
-            if (!email.includes('@')) {
-                alert('Please enter a valid email address');
-                return;
-            }
-            sendEmailOffer(currentEmailDealId, email);
-            closeEmailRecipientModal();
-        }
-        
-        function sendEmailOffer(dealId, recipientEmail) {
-            const deals = getLibrary();
-            const deal = deals.find(d => String(d.id) === String(dealId));
-            
-            if (!deal) {
-                console.error('Deal not found:', dealId);
-                return;
-            }
-            
-            // Get deal details
-            const sellerName = deal.seller?.name || 'Property Owner';
-            const preparerName = deal.preparer?.name || '';
-            const preparerEmail = deal.preparer?.email || '';
-            const preparerPhone = deal.preparer?.phone || '';
-            
-            // Property info
-            const streetAddress = deal.propertyInfo?.streetAddress || '';
-            const city = deal.propertyInfo?.city || '';
-            const state = deal.propertyInfo?.state || '';
-            const zip = deal.propertyInfo?.zip || '';
-            const fullAddress = [streetAddress, city, state, zip].filter(Boolean).join(', ');
-            
-            // Financial details
-            const purchasePrice = parseFloat(deal.dealTerms?.purchasePrice) || 0;
-            const sellerCarryPct = parseFloat(deal.loanConfig?.sellerCarryPct) / 100 || 0;
-            const sellerCarryAmount = purchasePrice * sellerCarryPct;
-            const cashToSeller = purchasePrice * (1 - sellerCarryPct);
-            const sellerCarryRate = parseFloat(deal.sellerFinancing?.rate) || 0;
-            const sellerCarryAmort = parseInt(deal.sellerFinancing?.amortization) || 30;
-            const yearsToBalloon = parseInt(deal.loanConfig?.yearsToBalloon) || 8;
-            
-            // Calculate monthly payment to seller
-            let monthlyPayment = 0;
-            if (sellerCarryAmount > 0) {
-                if (sellerCarryRate === 0) {
-                    monthlyPayment = sellerCarryAmount / (sellerCarryAmort * 12);
-                } else {
-                    const monthlyRate = sellerCarryRate / 100 / 12;
-                    const numPayments = sellerCarryAmort * 12;
-                    monthlyPayment = sellerCarryAmount * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1);
-                }
-            }
-            
-            // Format currency helper
-            const fmt = (num) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(num);
-            
-            // Build email subject
-            const subject = `Letter of Intent - ${fullAddress}`;
-            
-            // Build email body
-            const body = `Dear ${sellerName},
-
-I hope this message finds you well. I am writing to express our interest in acquiring your property located at:
-
-${fullAddress}
-
-PROPOSED TERMS:
-• Purchase Price: ${fmt(purchasePrice)}
-• Cash to Seller at Closing: ${fmt(cashToSeller)}
-• Seller Carry Amount: ${fmt(sellerCarryAmount)} (${(sellerCarryPct * 100).toFixed(0)}%)
-• Monthly Payment to Seller: ${fmt(monthlyPayment)}
-• Interest Rate: ${sellerCarryRate}%
-• Amortization: ${sellerCarryAmort} years
-• Balloon: ${yearsToBalloon} years
-
-We believe this structure offers you immediate liquidity while providing ongoing monthly income and potential tax advantages through an installment sale.
-
-I have attached a formal Letter of Intent and Deal Summary with complete details for your review. Please feel free to reach out with any questions.
-
-Best regards,
-${preparerName}
-${preparerEmail}
-${preparerPhone}
-
----
-Note: Please find the attached LOI and PDF Summary documents for complete deal terms.`;
-
-            // Encode for mailto
-            const mailtoLink = `mailto:${encodeURIComponent(recipientEmail)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-            
-            // Open email client using window.open as fallback
-            const emailWindow = window.open(mailtoLink, '_blank');
-            if (!emailWindow) {
-                // If popup blocked, try location.href
-                window.location.href = mailtoLink;
-            }
-        }
 
         function renderLibrary() {
             let deals = getLibrary();
@@ -6291,6 +6358,14 @@ Note: Please find the attached LOI and PDF Summary documents for complete deal t
         }
 
         function buildDealObject() {
+            // Helper to parse currency/percentage values from display elements
+            const parseDisplayValue = (id) => {
+                const el = document.getElementById(id);
+                if (!el) return 0;
+                const text = el.textContent || el.innerText || '';
+                return parseFloat(text.replace(/[$,%]/g, '').replace(/,/g, '')) || 0;
+            };
+            
             return {
                 version: '1.0',
                 savedAt: new Date().toISOString(),
@@ -6349,6 +6424,28 @@ Note: Please find the attached LOI and PDF Summary documents for complete deal t
                     assignmentFeePct: document.getElementById('assignmentFeePct').value,
                     appraisalCost: document.getElementById('appraisalCost').value,
                     closingCostPct: document.getElementById('closingCostPct').value,
+                },
+                // Internal notes - not included in LOI or summaries
+                notes: document.getElementById('dealNotes').value,
+                // Store computed metrics for email/PDF generation
+                metrics: {
+                    noi: parseDisplayValue('noiValue'),
+                    capRate: parseDisplayValue('capRate') / 100,
+                    blendedRate: parseDisplayValue('blendedRate') / 100,
+                    spread: parseDisplayValue('capBlendedSpread') / 100,
+                    annualCashFlow: parseDisplayValue('annualCashFlow'),
+                    monthlyCashFlow: parseDisplayValue('monthlyCashFlow'),
+                    cocReturn: parseDisplayValue('cocReturn') / 100,
+                    valueAtBalloon: parseDisplayValue('valueAtBalloon'),
+                    balanceAtBalloon: parseDisplayValue('balanceAtBalloon'),
+                    equityAtBalloon: parseDisplayValue('equityAtBalloon'),
+                    equityPctBalloon: parseDisplayValue('equityPctBalloon') / 100,
+                },
+                firstPosition: {
+                    loanAmount: parseDisplayValue('firstPositionLoan'),
+                    rate: parseDisplayValue('firstPositionRate'),
+                    amortization: parseInt((document.getElementById('firstPositionAmort')?.textContent || '30').replace(/[^0-9]/g, '')) || 30,
+                    payment: parseDisplayValue('firstPositionPayment'),
                 },
             };
         }
@@ -6433,6 +6530,9 @@ Note: Please find the attached LOI and PDF Summary documents for complete deal t
                 document.getElementById('appraisalCost').value = data.cashToBuyer.appraisalCost || '';
                 document.getElementById('closingCostPct').value = data.cashToBuyer.closingCostPct || '';
             }
+            
+            // Notes
+            document.getElementById('dealNotes').value = data.notes || '';
             
             // Mark all tracked fields as touched since we loaded a deal
             const trackedFields = ['purchasePrice', 'askingPrice', 'rentalRevenue', 'existingDebt', 'propertyTax', 'insurance', 'hoa', 'otherExpenses', 'agentFee', 'rehabCost', 'appraisalCost'];
@@ -6551,137 +6651,394 @@ Note: Please find the attached LOI and PDF Summary documents for complete deal t
             }, 1000);
         }
 
-        // LOI Generation
-        function generateLOI() {
+        // LOI Generation using pdf-lib (matches email attachment format)
+        async function generateLOI() {
+            const { PDFDocument, rgb, StandardFonts } = PDFLib;
+            
             // Get values
             const propertyAddress = getFullAddress();
-            const propertyLink = document.getElementById('propertyLink').value || '';
             const preparerName = document.getElementById('preparerName').value || '[Name]';
             const preparerEmail = document.getElementById('preparerEmail').value || '';
             const preparerPhone = document.getElementById('preparerPhone').value || '';
-            
-            // Seller info
             const sellerName = document.getElementById('sellerName').value || '[Seller Name]';
             const sellerEmail = document.getElementById('sellerEmail').value || '';
             const sellerPhone = document.getElementById('sellerPhone').value || '';
-            
             const purchasePrice = parseFloat(document.getElementById('purchasePrice').value) || 0;
             const sellerCarryAmort = parseInt(document.getElementById('sellerCarryAmort').value) || 30;
             const yearsToBalloon = parseInt(document.getElementById('yearsToBalloon').value) || 8;
-
-            // Get calculated values
-            const cashAtClosing = document.getElementById('firstPositionLoan').textContent;
-            const sellerEquity = document.getElementById('sellerCarryAmount').textContent;
-            const monthlyPayment = document.getElementById('sellerCarryPayment').textContent;
-
-            // Format dates
-            const today = new Date();
-            const dateStr = today.toLocaleDateString('en-US', { year: 'numeric', month: 'numeric', day: 'numeric' });
             
-            // Expiry date (30 days from now)
+            // Get calculated values (parse from displayed text)
+            const cashToSeller = parseCurrency(document.getElementById('firstPositionLoan').textContent);
+            const sellerCarryAmount = parseCurrency(document.getElementById('sellerCarryAmount').textContent);
+            const monthlyPayment = parseCurrency(document.getElementById('sellerCarryPayment').textContent);
+            
+            // Dates
+            const today = new Date();
+            const dateStr = today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
             const expiryDate = new Date(today);
             expiryDate.setDate(expiryDate.getDate() + 30);
-            const expiryStr = expiryDate.toISOString().split('T')[0];
-
-            // Generate tracking number (format: StreetNum-AllWordsBeforeStreetType-YYYYMMDDSEQ)
-            // Example: 3053 S Edgewater Lane → 3053-S-EDGEWATER-2026010701
+            const expiryStr = expiryDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
             
-            // Street type words to stop at
-            const streetTypes = ['STREET', 'ST', 'AVENUE', 'AVE', 'LANE', 'LN', 'DRIVE', 'DR', 'ROAD', 'RD', 
-                                'BOULEVARD', 'BLVD', 'COURT', 'CT', 'CIRCLE', 'CIR', 'WAY', 'PLACE', 'PL', 
-                                'TERRACE', 'TER', 'TRAIL', 'TRL', 'PARKWAY', 'PKWY', 'HIGHWAY', 'HWY'];
+            // Tracking number
+            const streetMatch = propertyAddress.match(/^(\d+)/);
+            const streetNum = streetMatch ? streetMatch[1] : 'XXXXX';
+            const datePart = today.toISOString().slice(0, 10).replace(/-/g, '');
+            const trackingNum = `${streetNum}-${datePart}01`;
             
-            // Extract street number
-            const streetNumMatch = propertyAddress.match(/^(\d+)/);
-            let streetNum = streetNumMatch ? streetNumMatch[1] : 'XXXXX';
+            // Create PDF
+            const pdfDoc = await PDFDocument.create();
+            const helvetica = await pdfDoc.embedFont(StandardFonts.Helvetica);
+            const helveticaBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
             
-            // Get words after street number, before street type
-            const addressWithoutNum = propertyAddress.replace(/^\d+\s*/, '');
-            const words = addressWithoutNum.split(/[\s,]+/);
-            let streetParts = [];
-            
-            for (let word of words) {
-                const cleanWord = word.toUpperCase().replace(/[^A-Z]/g, '');
-                if (!cleanWord) continue;
-                if (streetTypes.includes(cleanWord)) break;
-                streetParts.push(cleanWord);
+            // PDF Writer helper class
+            class PDFWriter {
+                constructor() {
+                    this.pageWidth = 612;
+                    this.pageHeight = 792;
+                    this.marginLeft = 50;
+                    this.marginRight = 50;
+                    this.marginBottom = 50;
+                    this.lineHeight = 14;
+                    this.page = pdfDoc.addPage([this.pageWidth, this.pageHeight]);
+                    this.y = this.pageHeight - 50;
+                }
+                
+                checkNewPage(needed = 30) {
+                    if (this.y < this.marginBottom + needed) {
+                        this.page = pdfDoc.addPage([this.pageWidth, this.pageHeight]);
+                        this.y = this.pageHeight - 50;
+                    }
+                }
+                
+                wrapText(text, font, fontSize) {
+                    const maxWidth = this.pageWidth - this.marginLeft - this.marginRight;
+                    const words = text.split(' ');
+                    const lines = [];
+                    let currentLine = '';
+                    for (const word of words) {
+                        const testLine = currentLine ? `${currentLine} ${word}` : word;
+                        const testWidth = font.widthOfTextAtSize(testLine, fontSize);
+                        if (testWidth > maxWidth && currentLine) {
+                            lines.push(currentLine);
+                            currentLine = word;
+                        } else {
+                            currentLine = testLine;
+                        }
+                    }
+                    if (currentLine) lines.push(currentLine);
+                    return lines;
+                }
+                
+                drawTitle(text, fontSize = 18) {
+                    this.checkNewPage(40);
+                    this.page.drawText(text, {
+                        x: this.marginLeft, y: this.y, size: fontSize,
+                        font: helveticaBold, color: rgb(0.08, 0.72, 0.65)
+                    });
+                    this.y -= fontSize + 10;
+                }
+                
+                drawHeading(text, fontSize = 12) {
+                    this.checkNewPage(30);
+                    this.y -= 8;
+                    this.page.drawText(text, {
+                        x: this.marginLeft, y: this.y, size: fontSize,
+                        font: helveticaBold, color: rgb(0.1, 0.1, 0.1)
+                    });
+                    this.y -= fontSize + 6;
+                }
+                
+                drawSubheading(text) {
+                    this.checkNewPage(25);
+                    this.y -= 4;
+                    this.page.drawText(text, {
+                        x: this.marginLeft, y: this.y, size: 11,
+                        font: helveticaBold, color: rgb(0.2, 0.2, 0.2)
+                    });
+                    this.y -= 16;
+                }
+                
+                drawParagraph(text, fontSize = 10) {
+                    const lines = this.wrapText(text, helvetica, fontSize);
+                    for (const line of lines) {
+                        this.checkNewPage();
+                        this.page.drawText(line, {
+                            x: this.marginLeft, y: this.y, size: fontSize,
+                            font: helvetica, color: rgb(0.15, 0.15, 0.15)
+                        });
+                        this.y -= this.lineHeight;
+                    }
+                    this.y -= 6;
+                }
+                
+                drawBullet(text, fontSize = 10) {
+                    const textX = this.marginLeft + 25;
+                    const maxWidth = this.pageWidth - textX - this.marginRight;
+                    const words = text.split(' ');
+                    const lines = [];
+                    let currentLine = '';
+                    for (const word of words) {
+                        const testLine = currentLine ? `${currentLine} ${word}` : word;
+                        const testWidth = helvetica.widthOfTextAtSize(testLine, fontSize);
+                        if (testWidth > maxWidth && currentLine) {
+                            lines.push(currentLine);
+                            currentLine = word;
+                        } else {
+                            currentLine = testLine;
+                        }
+                    }
+                    if (currentLine) lines.push(currentLine);
+                    
+                    this.checkNewPage();
+                    this.page.drawText('•', {
+                        x: this.marginLeft + 10, y: this.y, size: fontSize,
+                        font: helvetica, color: rgb(0.08, 0.72, 0.65)
+                    });
+                    for (const line of lines) {
+                        this.checkNewPage();
+                        this.page.drawText(line, {
+                            x: textX, y: this.y, size: fontSize,
+                            font: helvetica, color: rgb(0.15, 0.15, 0.15)
+                        });
+                        this.y -= this.lineHeight;
+                    }
+                    this.y -= 2;
+                }
+                
+                drawBoldBullet(text, fontSize = 10) {
+                    const textX = this.marginLeft + 25;
+                    const maxWidth = this.pageWidth - textX - this.marginRight;
+                    const words = text.split(' ');
+                    const lines = [];
+                    let currentLine = '';
+                    for (const word of words) {
+                        const testLine = currentLine ? `${currentLine} ${word}` : word;
+                        const testWidth = helveticaBold.widthOfTextAtSize(testLine, fontSize);
+                        if (testWidth > maxWidth && currentLine) {
+                            lines.push(currentLine);
+                            currentLine = word;
+                        } else {
+                            currentLine = testLine;
+                        }
+                    }
+                    if (currentLine) lines.push(currentLine);
+                    
+                    this.checkNewPage();
+                    this.page.drawText('•', {
+                        x: this.marginLeft + 10, y: this.y, size: fontSize,
+                        font: helvetica, color: rgb(0.08, 0.72, 0.65)
+                    });
+                    for (const line of lines) {
+                        this.checkNewPage();
+                        this.page.drawText(line, {
+                            x: textX, y: this.y, size: fontSize,
+                            font: helveticaBold, color: rgb(0.15, 0.15, 0.15)
+                        });
+                        this.y -= this.lineHeight;
+                    }
+                    this.y -= 2;
+                }
+                
+                drawText(text, options = {}) {
+                    const fontSize = options.size || 10;
+                    const font = options.bold ? helveticaBold : helvetica;
+                    const color = options.color || [0.15, 0.15, 0.15];
+                    this.checkNewPage();
+                    this.page.drawText(text, {
+                        x: this.marginLeft, y: this.y, size: fontSize,
+                        font: font, color: rgb(color[0], color[1], color[2])
+                    });
+                    this.y -= this.lineHeight;
+                }
+                
+                drawLine() {
+                    this.checkNewPage();
+                    this.y -= 5;
+                    this.page.drawLine({
+                        start: { x: this.marginLeft, y: this.y },
+                        end: { x: this.pageWidth - this.marginRight, y: this.y },
+                        thickness: 0.5, color: rgb(0.8, 0.8, 0.8)
+                    });
+                    this.y -= 10;
+                }
+                
+                addSpace(space = 10) { this.y -= space; }
             }
             
-            const streetPortion = streetParts.length > 0 ? streetParts.join('-') : 'UNKNOWN';
+            const w = new PDFWriter();
             
-            // Date portion YYYYMMDD
-            const year = today.getFullYear();
-            const month = String(today.getMonth() + 1).padStart(2, '0');
-            const day = String(today.getDate()).padStart(2, '0');
-            const datePart = `${year}${month}${day}`;
+            // Header
+            w.drawTitle('LETTER OF INTENT', 20);
+            w.drawText(`Tracking #: ${trackingNum}`, { size: 9, color: [0.5, 0.5, 0.5] });
+            w.drawText(dateStr, { size: 10 });
+            w.addSpace(5);
+            w.drawText(propertyAddress, { bold: true, size: 11 });
+            w.addSpace(10);
             
-            // Sequence number (default 01)
-            const seq = '01';
+            w.drawText('Re: Letter of Intent to Purchase Property', { bold: true, size: 11 });
+            w.addSpace(10);
+            w.drawText(`Dear ${sellerName},`, { size: 10 });
+            w.addSpace(8);
             
-            const trackingNum = `${streetNum}-${streetPortion}-${datePart}${seq}`;
-
-            // Format currency for display
-            const priceFormatted = formatCurrency(purchasePrice);
-
-            // Populate all LOI fields
-            document.getElementById('loi-date').textContent = dateStr;
-            document.getElementById('loi-property-address').textContent = propertyAddress;
-            document.getElementById('loi-tracking').textContent = trackingNum;
+            // Opening
+            w.drawParagraph(`On behalf of Instant Hotels, Inc., we are pleased to present this Letter of Intent expressing our intention to purchase the property located at ${propertyAddress} for the proposed purchase price of ${formatCurrency(purchasePrice)}. This Letter of Intent outlines the key terms and conditions of our offer, subject to further negotiations and the execution of a formal purchase contract.`);
+            w.addSpace(5);
             
-            // Property link
-            const loiPropertyLink = document.getElementById('loi-property-link-container');
-            if (propertyLink) {
-                loiPropertyLink.innerHTML = `🔗 <a href="${propertyLink}" target="_blank">${propertyLink}</a>`;
-                loiPropertyLink.style.display = 'block';
-            } else {
-                loiPropertyLink.style.display = 'none';
-            }
+            // Purchase Details
+            w.drawHeading('Purchase Details:');
+            w.drawParagraph(`Property: ${propertyAddress}`);
+            w.drawParagraph(`Proposed Terms Purchase Price: ${formatCurrency(purchasePrice)}`);
+            w.drawParagraph('Property Condition: Property to be acquired strictly in its present "As-Is, Where-Is" condition, with no representations or warranties from the Seller.');
+            w.addSpace(3);
             
-            document.getElementById('loi-seller-name').textContent = sellerName;
-            document.getElementById('loi-address-inline').textContent = propertyAddress;
-            document.getElementById('loi-price-inline').textContent = priceFormatted;
-            document.getElementById('loi-property-full').textContent = propertyAddress;
-            document.getElementById('loi-purchase-price').textContent = priceFormatted;
-            document.getElementById('loi-cash-at-closing').textContent = cashAtClosing;
-            document.getElementById('loi-seller-equity').textContent = sellerEquity;
-            document.getElementById('loi-amort-years').textContent = sellerCarryAmort;
-            document.getElementById('loi-monthly-payment').textContent = monthlyPayment;
-            document.getElementById('loi-balloon-years').textContent = yearsToBalloon;
-
-            // Steps section
-            document.getElementById('loi-step1-price').textContent = priceFormatted;
-            document.getElementById('loi-step2-cash').textContent = priceFormatted;
-            document.getElementById('loi-step2-payout').textContent = cashAtClosing;
-            document.getElementById('loi-step3-remaining').textContent = sellerEquity;
-            document.getElementById('loi-step4-payment').textContent = monthlyPayment;
-            document.getElementById('loi-step4-balloon').textContent = yearsToBalloon;
-            document.getElementById('loi-step5-cash').textContent = cashAtClosing;
-            document.getElementById('loi-step5-payment').textContent = monthlyPayment;
-
-            // Expiry and signature
-            document.getElementById('loi-expiry-date').textContent = expiryStr;
-            document.getElementById('loi-sig-name').textContent = preparerName;
-            document.getElementById('loi-sig-email').textContent = preparerEmail;
-            document.getElementById('loi-sig-phone').textContent = preparerPhone;
-            document.getElementById('loi-accept-date').textContent = dateStr;
+            w.drawBullet(`Cash at Closing: ${formatCurrency(cashToSeller)} (Buyer has established lender financing relationships and can deliver without delay).`);
+            w.drawBullet(`Seller-Equity Agreement (Finance Agreement): ${formatCurrency(sellerCarryAmount)}. Amortization: ${sellerCarryAmort} years, Monthly Payments: ${formatCurrency(monthlyPayment)} consisting of principal only with a ${yearsToBalloon}-year balloon.`);
+            w.addSpace(5);
             
-            // Seller signature section
-            document.getElementById('loi-seller-sig-name').textContent = sellerName;
-            document.getElementById('loi-seller-sig-email').textContent = sellerEmail;
-            document.getElementById('loi-seller-sig-phone').textContent = sellerPhone;
-
-            // Hide other elements and show LOI
-            const loiDoc = document.getElementById('loi-document');
-            loiDoc.style.display = 'block';
-            loiDoc.classList.add('printing');
+            w.drawParagraph('Seller-Equity Agreement: Simultaneously, the Buyer\'s LLC operating agreement is executed to reflect the Seller\'s minority equity interest. Escrow returns this portion to the Buyer post-closing, while the Seller retains a secured interest in the LLC for that amount, with rights to assume full ownership of the LLC in the event of default.');
             
-            window.print();
-
-            // Hide after print
-            setTimeout(() => {
-                loiDoc.style.display = 'none';
-                loiDoc.classList.remove('printing');
-            }, 1000);
+            w.drawParagraph('The closing will be facilitated by a licensed title company, escrow agent, or closing attorney (hereby "the Closing Agent"), and all funds will be disbursed at the close of escrow in accordance with mutually agreed-upon instructions contained in a definitive state-approved Purchase and Sale Agreement ("PSA"). The transaction will occur in two distinct stages:');
+            
+            // First Stage
+            w.drawHeading('First Stage (All Cash Closing)');
+            w.drawParagraph('At the initial all-cash closing, the Buyer will bring the full purchase price in cash. The Buyer intends to obtain a Commercial loan at 70-80% loan-to-value (LTV) to reimburse a portion of the funds following this close. The Purchase and Sale Agreement and its incorporated escrow instructions shall direct the Closing Agent to hold funds in escrow until the second leg of the transaction is completed. The close will be contingent on the Property appraising at or above the agreed-upon purchase price. The Buyer will close escrow, and the title insurer will issue a title policy insuring the Buyer\'s interest in the Property after this first leg, with all associated title insurance premiums and related closing costs borne by the Buyer.');
+            
+            // Second Stage
+            w.drawHeading('Second Stage (Seller-Financing/Installment Sale)');
+            w.drawParagraph('Following the close of escrow and completion of the first leg, the immediate second leg of the transaction is opened pursuant to detailed escrow instructions in the Purchase and Sale Agreement. The Closing Agent shall disburse the Seller\'s agreed-upon down payment, and instead of recording a Deed of Trust/Mortgage and Promissory Note, the Seller\'s remaining equity will be secured through the Buyer\'s LLC operating agreement, naming the Seller as a minority equity partner. In the event of a default, this structure entitles the Seller to obtain 100% ownership of the LLC, thereby regaining full control of the Property without the need for foreclosure. The Seller-financed portion shall still be structured as an installment sale, providing ongoing, tax-advantaged income while simultaneously reducing the Seller\'s immediate tax burden.');
+            
+            w.drawParagraph('This creative structure enables the Buyer to acquire the Property at a comparatively low capitalization rate at retail pricing, while remitting a substantial portion of the Purchase Price to the Seller as an immediate down payment. Concurrently, by structuring the balance as an installment sale with seller financing, the Seller can defer and potentially minimize immediate tax liabilities. The Seller, thus, secures an aggressive purchase price, a significant down payment, and the potential for a reduced overall tax burden.');
+            
+            // Steps
+            w.addSpace(5);
+            w.drawSubheading('Step 1 - Seller Agrees to Sell Property');
+            w.drawBullet(`Property Price: ${formatCurrency(purchasePrice)}`);
+            w.drawBullet('Seller hands over the property in as-is condition.');
+            
+            w.drawSubheading('Step 2 - Stage 1: Cash Closing');
+            w.drawBullet(`Buyer brings ${formatCurrency(purchasePrice)} cash to closing.`);
+            w.drawBullet('Escrow holds funds temporarily.');
+            w.drawBullet('Title transfers - Buyer\'s LLC now owns the property.');
+            w.drawBullet(`Seller gets their immediate cash payout: ${formatCurrency(cashToSeller)}.`);
+            
+            w.drawSubheading('Step 3 - Stage 2: Equity Carry Agreement');
+            w.drawBullet(`The remaining ${formatCurrency(sellerCarryAmount)} is not paid out in cash.`);
+            w.drawBullet('Instead, it becomes the Seller\'s Equity Carry (preferred equity) inside Buyer\'s LLC.');
+            
+            w.drawSubheading('Step 4 - Seller\'s Equity Terms');
+            w.drawBullet('Treated like a secured loan inside the new LLC.');
+            w.drawBullet(`Monthly payment: ${formatCurrency(monthlyPayment)} (principal only).`);
+            w.drawBullet(`Balloon: ${yearsToBalloon} years.`);
+            w.drawBullet('If Buyer defaults - Seller can take back 100% of the LLC (full ownership of property) without foreclosure.');
+            
+            w.drawSubheading('Step 5 - Seller\'s Benefits');
+            w.drawBullet(`Immediate cash at close (${formatCurrency(cashToSeller)})`);
+            w.drawBullet(`Ongoing monthly payments (${formatCurrency(monthlyPayment)})`);
+            w.drawBullet('Secured "back door" ownership protection');
+            w.drawBullet('Tax-advantaged structure (installment sale)');
+            w.addSpace(8);
+            
+            // IRS paragraph
+            w.drawParagraph('In accordance with guidance set forth by the Internal Revenue Service (IRS) for installment sales (see, e.g., IRS Publication 537), "income received over time through an installment sale may, under certain circumstances, be treated as ordinary income." This approach allows for the recognition of gains and the associated tax obligations to be spread over multiple tax years, rather than realized in a single lump sum, potentially resulting in a more favorable tax outcome.');
+            
+            w.drawParagraph('Additionally, the buyer will cover all title insurance premiums, all customary closing costs, fees, and related expenses. This allocation ensures the Seller realizes the full benefit of the agreed-upon financial terms without incurring out-of-pocket transactional costs.');
+            
+            w.drawParagraph('This LOI is provided solely as an outline and for the purpose of facilitating further discussion. Except as may be otherwise agreed in writing (such as confidentiality or exclusivity provisions), this LOI is non-binding. Neither Party shall be legally obligated to proceed unless and until both Parties execute a definitive State-approved PSA and related ancillary documents that fully memorialize the terms and conditions of the transaction.');
+            
+            // Seller Protection Clause
+            w.drawHeading('Seller Protection Clause');
+            w.drawText('Operating Agreement with Default Control Provisions', { bold: true, size: 10 });
+            w.addSpace(5);
+            w.drawBoldBullet('Instead of holding a second-position lien, the Seller and Buyer will enter into an LLC operating agreement (or land trust with an assignment of beneficial interest) where the Seller maintains certain minority equity interest.');
+            w.drawBoldBullet('The LLC or trust holds title to the property, and the Buyer operates as the primary manager/member.');
+            w.drawBoldBullet('The agreement includes a clause that allows the Seller to regain full control of the LLC or trust (and thus the property) if the Buyer defaults on their financial obligations (missed payments, failure to insure, etc.).');
+            w.addSpace(5);
+            
+            // Additional terms
+            w.drawParagraph('Commissions: 2.5% to Buyer\'s Agent, Steven Glaude, LPT Realty, Lic #01257750.');
+            w.drawParagraph('Deposit: EMD is 1% of purchase price, deposited after inspection period.');
+            w.drawParagraph('Inspection Period: Buyer shall have a maximum of thirty (30) business days following execution of the PSA to complete all due diligence, including inspections, title review, and feasibility studies. The inspection period only begins after the buyer receives all financials relevant to the business operation. The buyer is prepared to accelerate this if feasible. The Earnest Money Deposit goes hard at 1% after the inspection contingency period.');
+            
+            // Documentation
+            w.drawParagraph('Provision of Financial and Operational Documentation: The Seller agrees to furnish the Buyer, within a specified due diligence period, with complete and accurate financial and operational records relating to the Property. Such records shall include, but are not limited to:');
+            w.drawBullet('Trailing Twelve (T12) Months Operating Statements: Detailed income and expense reports for the previous twelve (12) months.');
+            w.drawBullet('Rent Roll and Leases: Current rent roll listing all tenants, rental amounts, security deposits, lease start and end dates, and any tenant concessions.');
+            w.drawBullet('Service and Vendor Contracts: Copies of all service agreements, property management contracts, warranties, guaranties, or other third-party obligations.');
+            w.drawBullet('Utility and Maintenance Records: Historical utility bills, maintenance logs, capital expenditure records, and warranty information for major systems.');
+            w.drawBullet('Insurance and Claims History: Certificates of insurance, loss runs, and any claims history.');
+            w.drawBullet('Tax and Assessment Information: Most recent property tax statements, assessments, and notices of any special assessments.');
+            w.drawBullet('Permits and Licenses: Copies of all governmental permits, licenses, or approvals necessary for the current operation of the Property.');
+            w.addSpace(5);
+            
+            w.drawParagraph('Closing Date: Closing to occur within forty-five (45) to sixty (60) days or sooner following full execution of the Agreement. The buyer is positioned to close earlier if conditions permit. A one-time extension of 15 days may be granted upon mutual agreement.');
+            
+            w.drawParagraph('Closing Costs: Buyer will assume all standard closing costs, including escrow fees, title insurance premiums, recording fees, transfer taxes, and other customary expenses, thereby ensuring a streamlined closing process for Seller.');
+            
+            // Contingencies
+            w.drawHeading('Contingencies to Closing:');
+            w.drawParagraph('a. Property Inspections: Buyer shall inspect all buildings, grounds, utilities and clean environmental.');
+            w.drawParagraph('b. Lending, Appraisal, and Financing.');
+            w.drawParagraph('c. Review documentation and verify title, check for delinquent utilities, and review current payment statements.');
+            
+            // Conditions
+            w.drawHeading('Conditions:');
+            w.drawParagraph('The execution of an Agreement of Sale shall be conditioned on the satisfaction of the above terms and contingencies. Both Purchaser and Seller acknowledge that this Letter of Intent is not a purchase contract but serves as the foundation for drafting a formal purchase contract between the parties. No legal obligations or liabilities shall arise from this Letter of Intent.');
+            
+            w.drawParagraph('Instant Hotels, Inc., makes no warranty or representation to Seller or Purchaser that the acceptance of this Letter of Intent guarantees the execution of a purchase contract.');
+            
+            w.drawParagraph(`This Letter of Intent is valid until 5:00 PM on ${expiryStr}. If an executed copy of this letter is not received by that date, this Letter of Intent will be considered withdrawn.`);
+            
+            w.drawParagraph('We look forward to further discussions and negotiations to reach a mutually beneficial agreement. Please do not hesitate to contact us to initiate the next steps in this process.');
+            
+            w.addSpace(10);
+            w.drawText('Sincerely,', { size: 10 });
+            w.addSpace(15);
+            
+            // Buyer signature block
+            w.drawText(preparerName, { bold: true, size: 11 });
+            w.drawText('Acquisitions Manager', { size: 10 });
+            w.drawText('Instant Hotels, Inc.', { size: 10 });
+            if (preparerEmail) w.drawText(preparerEmail, { size: 10 });
+            if (preparerPhone) w.drawText(preparerPhone, { size: 10 });
+            w.addSpace(10);
+            
+            w.drawText('Steven P. Glaude', { bold: true, size: 11 });
+            w.drawText('President', { size: 10 });
+            w.drawText('Realtor - Investor', { size: 10 });
+            w.drawText('CalBRE #01257750', { size: 10 });
+            w.drawText('Tel. No. (916) 316-4472', { size: 10 });
+            w.drawText('steven@stevenglaude.com', { size: 10 });
+            w.addSpace(5);
+            w.drawLine();
+            
+            // Acceptance section
+            w.addSpace(10);
+            w.drawText(`Date: ${dateStr}`, { size: 10 });
+            w.addSpace(5);
+            w.drawText('By: _Steven Glaude_', { bold: true, size: 11 });
+            w.addSpace(3);
+            w.drawText('Buyer: Instant Hotels, Inc.', { size: 10 });
+            w.addSpace(15);
+            
+            w.drawHeading('ACCEPTANCE THIS DATE:');
+            w.addSpace(10);
+            w.drawText('Date: _____________________', { size: 10 });
+            w.addSpace(5);
+            w.drawText('By: _________________________________', { size: 10 });
+            w.addSpace(3);
+            w.drawText(`Seller: ${sellerName}`, { bold: true, size: 10 });
+            if (sellerEmail) w.drawText(sellerEmail, { size: 9, color: [0.5, 0.5, 0.5] });
+            if (sellerPhone) w.drawText(sellerPhone, { size: 9, color: [0.5, 0.5, 0.5] });
+            
+            // Save and download
+            const pdfBytes = await pdfDoc.save();
+            const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `LOI-${propertyAddress.replace(/[^a-zA-Z0-9]/g, '-')}.pdf`;
+            link.click();
+            URL.revokeObjectURL(url);
         }
     </script>
 
