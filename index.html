@@ -47,10 +47,183 @@
         }
 
         header {
-            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 3rem;
             padding: 2rem 0;
             border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-content {
+            text-align: center;
+            flex: 1;
+        }
+
+        .help-btn {
+            background: rgba(100, 116, 139, 0.2);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: all 0.2s;
+            position: absolute;
+            left: 2rem;
+            top: 2rem;
+        }
+
+        .help-btn span {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            background: var(--accent-teal);
+            color: white;
+            border-radius: 50%;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .help-btn:hover {
+            background: rgba(20, 184, 166, 0.2);
+            border-color: var(--accent-teal);
+            color: var(--text-primary);
+        }
+
+        /* Help Modal Styles */
+        .help-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            align-items: flex-start;
+            justify-content: center;
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .help-modal-overlay.show {
+            display: flex;
+        }
+
+        .help-modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 900px;
+            max-height: none;
+            margin: 2rem auto;
+        }
+
+        .help-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            background: var(--bg-card);
+            border-radius: 16px 16px 0 0;
+            z-index: 1;
+        }
+
+        .help-modal-header h2 {
+            margin: 0;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+        }
+
+        .help-modal-close {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+
+        .help-modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .help-modal-body {
+            padding: 1.5rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .help-modal-body h3 {
+            color: var(--accent-teal);
+            margin: 1.5rem 0 1rem 0;
+            font-size: 1.2rem;
+        }
+
+        .help-modal-body h3:first-child {
+            margin-top: 0;
+        }
+
+        .help-modal-body p {
+            margin: 0.75rem 0;
+        }
+
+        .help-modal-body ul {
+            margin: 0.75rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .help-modal-body li {
+            margin: 0.5rem 0;
+        }
+
+        .help-modal-body strong {
+            color: var(--text-primary);
+        }
+
+        .help-modal-body code {
+            background: rgba(20, 184, 166, 0.1);
+            color: var(--accent-teal);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        .help-section {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .help-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .help-tip {
+            background: rgba(20, 184, 166, 0.1);
+            border-left: 3px solid var(--accent-teal);
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1rem 0;
+        }
+
+        .help-tip strong {
+            color: var(--accent-teal);
         }
 
         h1 {
@@ -2851,6 +3024,137 @@
         </div>
     </div>
 
+    <!-- Help Modal -->
+    <div class="help-modal-overlay" id="helpModal">
+        <div class="help-modal">
+            <div class="help-modal-header">
+                <h2>📖 User Guide</h2>
+                <button class="help-modal-close" onclick="closeHelpModal()">&times;</button>
+            </div>
+            <div class="help-modal-body">
+                <div class="help-section">
+                    <h3>🎯 What This Tool Does</h3>
+                    <p>The <strong>Equity Carry Calculator</strong> helps real estate investors quickly analyze and structure creative financing deals using seller carry-back arrangements. It calculates cash flows, cap rates, balloon projections, and generates professional LOIs (Letters of Intent) ready to send to sellers.</p>
+                    <div class="help-tip">
+                        <strong>💡 Pro Tip:</strong> The tool auto-saves your work every 30 seconds. If your browser crashes, you'll be prompted to restore your unsaved deal when you return.
+                    </div>
+                </div>
+
+                <div class="help-section">
+                    <h3>🚀 Quick Start</h3>
+                    <ol>
+                        <li><strong>Enter the property address</strong> and purchase price</li>
+                        <li><strong>Set the rental revenue</strong> (annual)</li>
+                        <li><strong>Adjust financing terms</strong> - First Loan LTV % and Seller Carry %</li>
+                        <li><strong>Review the metrics</strong> - Cap Rate, Cash Flow, and Spread</li>
+                        <li><strong>Save to Library</strong> when you're happy with the analysis</li>
+                        <li><strong>Generate LOI</strong> or <strong>Email Offer</strong> to send to seller</li>
+                    </ol>
+                </div>
+
+                <div class="help-section">
+                    <h3>📊 Key Metrics Explained</h3>
+                    <ul>
+                        <li><strong>Cap Rate</strong> — NOI ÷ Purchase Price. Measures property yield independent of financing. Higher = better deal.</li>
+                        <li><strong>Blended Rate</strong> — Weighted average interest rate across all loans. Lower = better cash flow.</li>
+                        <li><strong>Spread</strong> — Cap Rate minus Blended Rate. <em>Positive spread means the deal works.</em> This is the arbitrage.</li>
+                        <li><strong>NOI</strong> — Net Operating Income. Annual revenue minus operating expenses (before debt service).</li>
+                        <li><strong>Cash-on-Cash Return</strong> — Annual cash flow ÷ total cash invested. Shows return on your actual out-of-pocket.</li>
+                    </ul>
+                </div>
+
+                <div class="help-section">
+                    <h3>💰 Understanding the Financing Structure</h3>
+                    <p>This tool models a <strong>two-stage transaction</strong>:</p>
+                    <ul>
+                        <li><strong>First Position Loan</strong> — Traditional financing (bank/DSCR lender) secured by the property</li>
+                        <li><strong>Seller Carry</strong> — The seller finances a portion of the purchase price, taking "equity carry" (preferred equity) in your LLC instead of cash</li>
+                    </ul>
+                    <p>The <strong>Cash to Seller</strong> at closing = Purchase Price - Seller Carry Amount. The seller receives this in cash, while the rest becomes their equity position with monthly payments.</p>
+                    <div class="help-tip">
+                        <strong>💡 Why Sellers Accept This:</strong> Tax advantages (installment sale treatment), ongoing income stream, and "back door" protection — if buyer defaults, seller can reclaim 100% of the LLC.
+                    </div>
+                </div>
+
+                <div class="help-section">
+                    <h3>🎈 Balloon & Equity Projections</h3>
+                    <p>The <strong>Years to Balloon</strong> determines when the seller carry note matures. At that point:</p>
+                    <ul>
+                        <li>The remaining balance on the seller note is due in full</li>
+                        <li>You'll typically refinance or sell to pay this off</li>
+                        <li>The tool projects property value and equity at balloon based on your appreciation rate</li>
+                    </ul>
+                </div>
+
+                <div class="help-section">
+                    <h3>📚 Deal Library</h3>
+                    <p>Save deals to your library to track your pipeline:</p>
+                    <ul>
+                        <li><strong>Save</strong> — Stores the deal with all inputs and calculated metrics</li>
+                        <li><strong>Load</strong> — Click any deal address to load it back into the calculator</li>
+                        <li><strong>Duplicate</strong> — Create a copy to test different scenarios (📋 button)</li>
+                        <li><strong>Share</strong> — Generate a link to share the deal with partners (🔗 button)</li>
+                        <li><strong>Email Offer</strong> — Send LOI and Deal Summary directly to seller (📧 button)</li>
+                    </ul>
+                    <div class="help-tip">
+                        <strong>💡 Cloud Sync:</strong> Log in to sync your deals across devices. Your library is stored securely and accessible anywhere.
+                    </div>
+                </div>
+
+                <div class="help-section">
+                    <h3>🎯 Goal Finder</h3>
+                    <p>Reverse-engineer deal terms! Set your targets:</p>
+                    <ul>
+                        <li>Minimum Cap Rate</li>
+                        <li>Minimum Monthly Cash Flow</li>
+                        <li>Target Cash to Seller</li>
+                    </ul>
+                    <p>Click <strong>Find Solution</strong> and the tool will calculate what combination of LTV, Seller Carry %, and Purchase Price achieves your goals.</p>
+                </div>
+
+                <div class="help-section">
+                    <h3>📧 Email Offers</h3>
+                    <p>Send professional offers directly from the tool:</p>
+                    <ol>
+                        <li>Complete the deal analysis</li>
+                        <li>Fill in seller contact info</li>
+                        <li>Click the <strong>📧 Email</strong> button in the library</li>
+                        <li>A professional email with attached LOI and Deal Summary PDFs is sent to the seller</li>
+                    </ol>
+                    <p>The email comes from <code><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="bad5dcdcdfc8c9fadfcbcfd3cec3d9dbc8c8c3d9dbd6d9cfd6dbced5c894d9d5d7">[email&#160;protected]</a></code> with your email as the reply-to address.</p>
+                </div>
+
+                <div class="help-section">
+                    <h3>🔌 Chrome Extension</h3>
+                    <p>If you have the Chrome extension installed, you can:</p>
+                    <ul>
+                        <li>View any property on Zillow</li>
+                        <li>Click the extension icon</li>
+                        <li>Property data auto-populates into the calculator</li>
+                    </ul>
+                    <p>This eliminates manual data entry and speeds up your analysis workflow.</p>
+                </div>
+
+                <div class="help-section">
+                    <h3>⌨️ Tips & Shortcuts</h3>
+                    <ul>
+                        <li>Hover over any <strong>?</strong> icon for field explanations</li>
+                        <li>Use <strong>New Deal</strong> button to clear the form and start fresh</li>
+                        <li>The sticky dashboard at top always shows key metrics as you scroll</li>
+                        <li>Click column headers in the library to sort deals</li>
+                    </ul>
+                </div>
+
+                <div class="help-section" style="text-align: center; padding-top: 1rem;">
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                        Built by <strong>markarian.ai</strong><br>
+                        Questions or feedback? Contact your administrator.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Save Choice Modal -->
     <div class="save-choice-modal-overlay" id="saveChoiceModal">
         <div class="save-choice-modal">
@@ -2992,8 +3296,13 @@
         </div>
 
         <header>
-            <h1>Real Estate Underwriting Calculator</h1>
-            <p class="subtitle">Comprehensive deal analysis with seller financing & equity carry</p>
+            <div class="header-content">
+                <h1>Real Estate Underwriting Calculator</h1>
+                <p class="subtitle">Comprehensive deal analysis with seller financing & equity carry</p>
+            </div>
+            <button class="help-btn" onclick="openHelpModal()" title="Help & User Guide">
+                <span>?</span> Help
+            </button>
         </header>
 
         <!-- Property & Preparer Info -->
@@ -3733,7 +4042,7 @@
         </footer>
     </div>
 
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         // =============================================
         // SUPABASE CONFIGURATION
         // =============================================
@@ -4982,6 +5291,30 @@
         function closeShareModal() {
             document.getElementById('shareModal').classList.remove('show');
         }
+        
+        function openHelpModal() {
+            document.getElementById('helpModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeHelpModal() {
+            document.getElementById('helpModal').classList.remove('show');
+            document.body.style.overflow = '';
+        }
+        
+        // Close help modal on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && document.getElementById('helpModal').classList.contains('show')) {
+                closeHelpModal();
+            }
+        });
+        
+        // Close help modal when clicking outside
+        document.getElementById('helpModal')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeHelpModal();
+            }
+        });
         
         async function revokeShare() {
             if (!confirm('Revoke access? Anyone with the link will no longer be able to view or edit this deal.')) {
@@ -7849,9 +8182,4 @@ Please be direct and specific with your analysis.`;
                     </div>
                     <div class="loi-sig-content">
                         <p class="loi-sig-by">By: _________________________________</p>
-                        <p class="loi-sig-label"><strong>Seller:</strong> <span id="loi-seller-sig-name"></span></p>
-                        <p class="loi-sig-detail" id="loi-seller-sig-email"></p>
-                        <p class="loi-sig-detail" id="loi-seller-sig-phone"></p>
-                    </div>
-                </div>
-            </div>
+                        <p class="loi-sig-label"><strong>Seller:</strong> <span id="loi-seller-sig-name"
