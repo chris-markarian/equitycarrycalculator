@@ -2940,6 +2940,12 @@
                     </div>
                 </div>
             </div>
+            <div class="info-row-full">
+                <div class="info-section">
+                    <div class="info-section-title">📝 Notes <span style="font-weight: normal; font-size: 0.8em; color: #64748b;">(internal use only - not included in LOI or summaries)</span></div>
+                    <textarea id="dealNotes" placeholder="Add notes about this deal - phone call details, agent feedback, property conditions, etc." class="info-input" style="width: 100%; min-height: 80px; resize: vertical; font-family: inherit; box-sizing: border-box;"></textarea>
+                </div>
+            </div>
         </div>
 
         <!-- Sticky Dashboard Bar -->
@@ -6419,6 +6425,8 @@ Please be direct and specific with your analysis.`;
                     appraisalCost: document.getElementById('appraisalCost').value,
                     closingCostPct: document.getElementById('closingCostPct').value,
                 },
+                // Internal notes - not included in LOI or summaries
+                notes: document.getElementById('dealNotes').value,
                 // Store computed metrics for email/PDF generation
                 metrics: {
                     noi: parseDisplayValue('noiValue'),
@@ -6522,6 +6530,9 @@ Please be direct and specific with your analysis.`;
                 document.getElementById('appraisalCost').value = data.cashToBuyer.appraisalCost || '';
                 document.getElementById('closingCostPct').value = data.cashToBuyer.closingCostPct || '';
             }
+            
+            // Notes
+            document.getElementById('dealNotes').value = data.notes || '';
             
             // Mark all tracked fields as touched since we loaded a deal
             const trackedFields = ['purchasePrice', 'askingPrice', 'rentalRevenue', 'existingDebt', 'propertyTax', 'insurance', 'hoa', 'otherExpenses', 'agentFee', 'rehabCost', 'appraisalCost'];
