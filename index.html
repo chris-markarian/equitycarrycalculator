@@ -1427,7 +1427,7 @@
             flex-wrap: wrap;
         }
 
-        /* Goal Finder Styles */
+        /* Deal Optimizer Styles */
         .goal-finder {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -3102,7 +3102,7 @@
                 </div>
 
                 <div class="help-section">
-                    <h3>🎯 Goal Finder</h3>
+                    <h3>🎯 Deal Optimizer</h3>
                     <p>Reverse-engineer deal terms! Set your targets:</p>
                     <ul>
                         <li>Minimum Cap Rate</li>
@@ -3883,12 +3883,12 @@
             </div>
         </div>
 
-        <!-- Goal Finder -->
+        <!-- Deal Optimizer -->
         <div class="goal-finder">
             <div class="goal-finder-header">
                 <div class="goal-finder-header-left">
                     <div class="card-icon icon-amber">🎯</div>
-                    <h2>Goal Finder</h2>
+                    <h2>Deal Optimizer</h2>
                 </div>
                 <span style="color: var(--text-muted); font-size: 0.85rem;">Reverse-engineer deal terms from your desired outcomes</span>
             </div>
@@ -3920,23 +3920,23 @@
                         <label for="goalAdjustSellerCarry">Seller Carry %</label>
                     </div>
                     <div class="goal-variable-item">
-                        <input type="checkbox" id="goalAdjustSellerAmort">
+                        <input type="checkbox" id="goalAdjustSellerAmort" checked>
                         <label for="goalAdjustSellerAmort">Seller Amortization</label>
                     </div>
                     <div class="goal-variable-item">
-                        <input type="checkbox" id="goalAdjustPrice">
+                        <input type="checkbox" id="goalAdjustPrice" checked>
                         <label for="goalAdjustPrice">Purchase Price</label>
                     </div>
                 </div>
                 <div class="goal-variable-options">
-                    <div class="goal-option" id="goalPriceRange" style="display: none;">
+                    <div class="goal-option" id="goalPriceRange">
                         <label>Min Price</label>
                         <div class="goal-option-input">
                             <span>$</span>
                             <input type="number" id="goalMinPrice" value="0" step="10000">
                         </div>
                     </div>
-                    <div class="goal-option" id="goalAmortRange" style="display: none;">
+                    <div class="goal-option" id="goalAmortRange">
                         <label>Max Amortization</label>
                         <div class="goal-option-input">
                             <input type="number" id="goalMaxAmort" value="99" step="1" min="30" max="99">
