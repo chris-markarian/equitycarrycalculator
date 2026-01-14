@@ -4339,7 +4339,7 @@
                 asking_price: parseFloat(deal.dealTerms?.askingPrice) || 0,
                 rental_revenue: parseFloat(deal.dealTerms?.rentalRevenue) || 0,
                 appreciation_rate: parseFloat(deal.dealTerms?.appreciationRate) || 2,
-                existing_debt: parseFloat(deal.dealTerms?.existingDebt) || 0,
+                // Note: existing_debt is stored in full_data, not as a separate column
                 agent_fee: parseFloat(deal.cashToBuyer?.agentFee) || 0,
                 rehab_cost: parseFloat(deal.cashToBuyer?.rehabCost) || 0,
                 assignment_fee_pct: parseFloat(deal.cashToBuyer?.assignmentFeePct) || 5,
@@ -4397,7 +4397,7 @@
                     category: cloudDeal.category || base.dealTerms?.category || 'DSCR Residential',
                     purchasePrice: cloudDeal.purchase_price || base.dealTerms?.purchasePrice || 0,
                     askingPrice: cloudDeal.asking_price || base.dealTerms?.askingPrice || 0,
-                    existingDebt: cloudDeal.existing_debt || base.dealTerms?.existingDebt || 0,
+                    existingDebt: base.dealTerms?.existingDebt || 0,
                     rentalRevenue: cloudDeal.rental_revenue || base.dealTerms?.rentalRevenue || 0,
                     appreciationRate: cloudDeal.appreciation_rate || base.dealTerms?.appreciationRate || 2,
                 },
