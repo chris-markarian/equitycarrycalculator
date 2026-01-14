@@ -41,9 +41,9 @@
         }
 
         .container {
-            max-width: 1600px;
+            max-width: 1800px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 1.5rem;
         }
 
         header {
@@ -321,10 +321,10 @@
         .main-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
+            gap: 1.25rem;
         }
 
-        @media (max-width: 1400px) {
+        @media (max-width: 1200px) {
             .main-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -339,7 +339,7 @@
         .card {
             background: var(--bg-card);
             border-radius: 16px;
-            padding: 1.5rem;
+            padding: 1.25rem;
             border: 1px solid var(--border-color);
             transition: transform 0.2s, box-shadow 0.2s;
         }
@@ -415,6 +415,73 @@
         input.input-highlight {
             border-color: var(--accent-teal);
             background: rgba(20, 184, 166, 0.05);
+        }
+
+        /* Tooltip Styles */
+        .tooltip-trigger {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+            background: rgba(100, 116, 139, 0.3);
+            color: #94a3b8;
+            border-radius: 50%;
+            font-size: 10px;
+            font-weight: bold;
+            cursor: help;
+            margin-left: 6px;
+            position: relative;
+            vertical-align: middle;
+            transition: background 0.2s, color 0.2s;
+        }
+        
+        .tooltip-trigger:hover {
+            background: var(--accent-teal);
+            color: white;
+        }
+        
+        .tooltip-trigger .tooltip-text {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: normal;
+            line-height: 1.5;
+            width: 220px;
+            text-align: left;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            transition: opacity 0.2s, visibility 0.2s;
+            pointer-events: none;
+        }
+        
+        .tooltip-trigger .tooltip-text::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 6px;
+            border-style: solid;
+            border-color: #1e293b transparent transparent transparent;
+        }
+        
+        .tooltip-trigger:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .label-with-tooltip {
+            display: flex;
+            align-items: center;
         }
 
         input.input-target {
@@ -1045,6 +1112,21 @@
         }
 
         .library-item-rename:hover {
+            opacity: 1;
+        }
+
+        .library-item-duplicate {
+            background: transparent;
+            color: var(--accent-teal);
+            border: none;
+            padding: 0.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        .library-item-duplicate:hover {
             opacity: 1;
         }
 
@@ -3023,12 +3105,12 @@
 
                 <div class="input-row">
                     <div class="form-group">
-                        <label>First Loan % / LTV</label>
+                        <label class="label-with-tooltip">First Loan % / LTV<span class="tooltip-trigger">?<span class="tooltip-text">Loan-to-Value ratio for the first position loan (typically bank/DSCR financing). This is the percentage of purchase price covered by the first lender.</span></span></label>
                         <input type="number" id="firstLoanLTV" value="40" step="1" min="0" max="75" class="input-highlight" onchange="calculate()">
                         <span class="helper-text">% of purchase price (max 75%)</span>
                     </div>
                     <div class="form-group">
-                        <label>Seller Carry %</label>
+                        <label class="label-with-tooltip">Seller Carry %<span class="tooltip-trigger">?<span class="tooltip-text">Percentage of purchase price the seller finances. This becomes the "Equity Carry" - seller holds preferred equity in the buyer's LLC instead of receiving cash.</span></span></label>
                         <input type="number" id="sellerCarryPct" value="75" step="1" min="0" max="100" class="input-highlight" onchange="calculate()">
                         <span class="helper-text">% of purchase price</span>
                     </div>
@@ -3041,14 +3123,14 @@
 
                 <div class="input-row">
                     <div class="form-group">
-                        <label>Interest Only? (First Loan)</label>
+                        <label class="label-with-tooltip">Interest Only? (First Loan)<span class="tooltip-trigger">?<span class="tooltip-text">If Yes, first position loan payments are interest-only (no principal reduction). Common with bridge loans or short-term DSCR products.</span></span></label>
                         <select id="interestOnly" class="input-highlight" onchange="calculate()">
                             <option value="No">No</option>
                             <option value="Yes">Yes</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Interest @ Balloon?</label>
+                        <label class="label-with-tooltip">Interest @ Balloon?<span class="tooltip-trigger">?<span class="tooltip-text">Add accrued interest to balloon balance? If Yes, any unpaid interest on the seller carry note is added to the final balloon payment.</span></span></label>
                         <select id="interestAtBalloon" class="input-highlight" onchange="calculate()">
                             <option value="No">No</option>
                             <option value="Yes">Yes</option>
@@ -3058,7 +3140,7 @@
 
                 <div class="input-row">
                     <div class="form-group">
-                        <label>Months to Stabilize</label>
+                        <label class="label-with-tooltip">Months to Stabilize<span class="tooltip-trigger">?<span class="tooltip-text">Expected time before property reaches full rental income. During stabilization, revenue is reduced based on the % below. Use for value-add or vacant properties.</span></span></label>
                         <input type="number" id="monthsToStabilize" value="0" step="1" min="0" class="input-highlight" onchange="calculate()">
                     </div>
                     <div class="form-group">
@@ -3068,7 +3150,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Years to Balloon</label>
+                    <label class="label-with-tooltip">Years to Balloon<span class="tooltip-trigger">?<span class="tooltip-text">When the seller carry note matures and full remaining balance is due. Typically 5-10 years. Buyer refinances or sells to pay off balloon.</span></span></label>
                     <input type="number" id="yearsToBalloon" value="8" step="1" min="1" class="input-highlight" onchange="calculate()">
                 </div>
             </div>
@@ -3161,7 +3243,7 @@
 
                 <div class="input-row">
                     <div class="form-group">
-                        <label>Assignment Fee (%)</label>
+                        <label class="label-with-tooltip">Assignment Fee (%)<span class="tooltip-trigger">?<span class="tooltip-text">Fee paid to the deal finder/wholesaler, calculated as % of purchase price. This comes out of the buyer's equity at closing.</span></span></label>
                         <input type="number" id="assignmentFeePct" value="5" step="0.5" min="0" class="input-highlight" onchange="calculate()">
                     </div>
                     <div class="form-group">
@@ -3171,7 +3253,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Closing & Bridge Loan Cost (%)</label>
+                    <label class="label-with-tooltip">Closing & Bridge Loan Cost (%)<span class="tooltip-trigger">?<span class="tooltip-text">Combined closing costs and any short-term bridge financing fees. Typically 3-6% of purchase price.</span></span></label>
                     <input type="number" id="closingCostPct" value="5" step="0.5" min="0" class="input-highlight" onchange="calculate()">
                 </div>
 
@@ -3366,7 +3448,7 @@
                         <div class="result-value positive" id="monthlyCashFlow">$0</div>
                     </div>
                     <div class="result-item">
-                        <div class="result-label">Cash-on-Cash Return</div>
+                        <div class="result-label label-with-tooltip">Cash-on-Cash Return<span class="tooltip-trigger">?<span class="tooltip-text">Annual cash flow divided by total cash invested. Shows the % return on your actual out-of-pocket investment. Higher is better.</span></span></div>
                         <div class="result-value highlight" id="cocReturn">0%</div>
                     </div>
                     <div class="result-item">
@@ -3385,19 +3467,19 @@
 
                 <div class="result-grid">
                     <div class="result-item">
-                        <div class="result-label">Net Operating Income (NOI)</div>
+                        <div class="result-label label-with-tooltip">Net Operating Income (NOI)<span class="tooltip-trigger">?<span class="tooltip-text">Annual revenue minus operating expenses (before debt service). This is the property's income regardless of how it's financed.</span></span></div>
                         <div class="result-value positive" id="noiValue">$0</div>
                     </div>
                     <div class="result-item">
-                        <div class="result-label">Cap Rate</div>
+                        <div class="result-label label-with-tooltip">Cap Rate<span class="tooltip-trigger">?<span class="tooltip-text">NOI ÷ Purchase Price. Measures property yield independent of financing. Higher cap rate = better deal (typically 5-10% for residential).</span></span></div>
                         <div class="result-value highlight" id="capRate">0%</div>
                     </div>
                     <div class="result-item">
-                        <div class="result-label">Blended Interest Rate</div>
+                        <div class="result-label label-with-tooltip">Blended Interest Rate<span class="tooltip-trigger">?<span class="tooltip-text">Weighted average interest rate across all loans (first position + seller carry). Lower is better for cash flow.</span></span></div>
                         <div class="result-value" id="blendedRate">0%</div>
                     </div>
                     <div class="result-item">
-                        <div class="result-label">Spread (Cap - Blended)</div>
+                        <div class="result-label label-with-tooltip">Spread (Cap - Blended)<span class="tooltip-trigger">?<span class="tooltip-text">Cap Rate minus Blended Rate. Positive spread means the property yields more than your cost of capital. This is the "arbitrage" that makes the deal work.</span></span></div>
                         <div class="result-value" id="capBlendedSpread">0%</div>
                     </div>
                 </div>
@@ -4611,6 +4693,9 @@
             // Capture URL params immediately before anything else
             capturePendingParams();
             
+            // Check for auto-saved draft (before anything populates the form)
+            checkForDraft();
+            
             // Add touch listeners to tracked fields
             const trackedFields = ['purchasePrice', 'askingPrice', 'rentalRevenue', 'existingDebt', 'propertyTax', 'insurance', 'hoa', 'otherExpenses', 'agentFee', 'rehabCost', 'appraisalCost'];
             trackedFields.forEach(fieldId => {
@@ -4631,6 +4716,9 @@
             renderLibrary();
             initAuth(); // Initialize authentication - will call applyPendingParams after auth
             checkForSharedDeal(); // Check if opening a shared deal link
+            
+            // Start auto-save interval (every 30 seconds)
+            setInterval(autoSaveDraft, 30000);
             
             // Toggle price range visibility based on checkbox
             document.getElementById('goalAdjustPrice').addEventListener('change', function() {
@@ -5681,6 +5769,9 @@ Please be direct and specific with your analysis.`;
             currentLoadedDealId = null;
             sessionStorage.removeItem('currentLoadedDealId');
             
+            // Clear any auto-saved draft
+            clearDraft();
+            
             // Reset touched fields
             touchedFields.clear();
             
@@ -5870,6 +5961,9 @@ Please be direct and specific with your analysis.`;
                     btn.innerHTML = saveAsCopy ? '<span>✓</span> Copy Saved!' : '<span>✓</span> Saved!';
                 }
                 
+                // Clear auto-save draft since we just saved
+                clearDraft();
+                
                 btn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
                 btn.disabled = false;
                 setTimeout(() => {
@@ -6000,6 +6094,59 @@ Please be direct and specific with your analysis.`;
             deals = deals.filter(d => String(d.id) !== String(dealId));
             saveLibrary(deals);
             renderLibrary();
+        }
+
+        async function duplicateDeal(dealId) {
+            let deals = getLibrary();
+            const originalDeal = deals.find(d => String(d.id) === String(dealId));
+            
+            if (!originalDeal) {
+                alert('Deal not found');
+                return;
+            }
+            
+            // Deep clone the deal
+            const newDeal = JSON.parse(JSON.stringify(originalDeal));
+            
+            // Generate new ID and timestamps
+            newDeal.id = Date.now();
+            newDeal.savedAt = new Date().toISOString();
+            newDeal.updatedAt = new Date().toISOString();
+            
+            // Clear cloud sync data (will sync as new deal)
+            delete newDeal.cloud_id;
+            delete newDeal.share_token;
+            
+            // Mark as a copy
+            const baseAddress = originalDeal.originalAddress || getAddressFromParts(originalDeal.propertyInfo);
+            newDeal.originalAddress = baseAddress;
+            
+            // Generate copy name
+            const copyNumber = getNextCopyNumber(deals, baseAddress);
+            newDeal.copyNumber = copyNumber;
+            
+            // Save to cloud if logged in
+            if (currentUser) {
+                try {
+                    const cloudResult = await Promise.race([
+                        saveToCloud(newDeal),
+                        new Promise((_, reject) => setTimeout(() => reject(new Error('Cloud sync timeout')), 10000))
+                    ]);
+                    if (cloudResult) {
+                        newDeal.cloud_id = cloudResult.id;
+                    }
+                } catch (cloudError) {
+                    console.warn('Cloud save failed for duplicate:', cloudError);
+                }
+            }
+            
+            // Add to library
+            deals.unshift(newDeal);
+            saveLibrary(deals);
+            renderLibrary();
+            
+            // Load the duplicated deal
+            loadFromLibrary(newDeal.id);
         }
 
         let currentEmailDealId = null;
@@ -6411,6 +6558,9 @@ Please be direct and specific with your analysis.`;
                             <button class="library-item-rename" onclick="renameDeal('${deal.id}')" title="Rename deal">
                                 <span>✏️</span>
                             </button>
+                            <button class="library-item-duplicate" onclick="duplicateDeal('${deal.id}')" title="Duplicate deal">
+                                <span>📋</span>
+                            </button>
                             <button class="library-item-email" onclick="emailOffer('${deal.id}')" title="Email offer">
                                 <span>📧</span> Email
                             </button>
@@ -6490,6 +6640,150 @@ Please be direct and specific with your analysis.`;
                         return 0;
                 }
             });
+        }
+
+        // =============================================
+        // AUTO-SAVE DRAFT FUNCTIONALITY
+        // =============================================
+        
+        const DRAFT_KEY = 'ecc_draft';
+        const DRAFT_TIMESTAMP_KEY = 'ecc_draft_timestamp';
+        
+        function autoSaveDraft() {
+            // Don't save if form is essentially empty
+            const hasData = document.getElementById('streetAddress').value || 
+                           document.getElementById('purchasePrice').value ||
+                           document.getElementById('rentalRevenue').value;
+            
+            if (!hasData) return;
+            
+            // Build a lightweight draft object (just form values, not computed)
+            const draft = {
+                propertyInfo: {
+                    streetAddress: document.getElementById('streetAddress').value,
+                    city: document.getElementById('city').value,
+                    state: document.getElementById('state').value,
+                    zip: document.getElementById('zip').value,
+                    link: document.getElementById('propertyLink').value,
+                },
+                preparer: {
+                    name: document.getElementById('preparerName').value,
+                    email: document.getElementById('preparerEmail').value,
+                    phone: document.getElementById('preparerPhone').value,
+                },
+                seller: {
+                    name: document.getElementById('sellerName').value,
+                    email: document.getElementById('sellerEmail').value,
+                    phone: document.getElementById('sellerPhone').value,
+                },
+                dealTerms: {
+                    category: document.getElementById('category').value,
+                    purchasePrice: document.getElementById('purchasePrice').value,
+                    askingPrice: document.getElementById('askingPrice').value,
+                    existingDebt: document.getElementById('existingDebt').value,
+                    rentalRevenue: document.getElementById('rentalRevenue').value,
+                    appreciationRate: document.getElementById('appreciationRate').value,
+                },
+                financing: {
+                    firstLoanLTV: document.getElementById('firstLoanLTV').value,
+                    interestOnly: document.getElementById('interestOnly').value,
+                    sellerCarryPct: document.getElementById('sellerCarryPct').value,
+                    sellerCarryRate: document.getElementById('sellerCarryRate').value,
+                    sellerCarryAmort: document.getElementById('sellerCarryAmort').value,
+                    interestAtBalloon: document.getElementById('interestAtBalloon').value,
+                    yearsToBalloon: document.getElementById('yearsToBalloon').value,
+                },
+                stabilization: {
+                    monthsToStabilize: document.getElementById('monthsToStabilize').value,
+                    revenueDuringStab: document.getElementById('revenueDuringStab').value,
+                },
+                expenses: {
+                    propertyTax: document.getElementById('propertyTax').value,
+                    insurance: document.getElementById('insurance').value,
+                    hoa: document.getElementById('hoa').value,
+                    otherExpenses: document.getElementById('otherExpenses').value,
+                    capexPct: document.getElementById('capexPct').value,
+                    managementPct: document.getElementById('managementPct').value,
+                    vacancyPct: document.getElementById('vacancyPct').value,
+                },
+                cashToBuyer: {
+                    agentFee: document.getElementById('agentFee').value,
+                    rehabCost: document.getElementById('rehabCost').value,
+                    assignmentFeePct: document.getElementById('assignmentFeePct').value,
+                    appraisalCost: document.getElementById('appraisalCost').value,
+                    closingCostPct: document.getElementById('closingCostPct').value,
+                },
+                notes: document.getElementById('dealNotes').value,
+                currentLoadedDealId: currentLoadedDealId,
+            };
+            
+            localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+            localStorage.setItem(DRAFT_TIMESTAMP_KEY, Date.now().toString());
+        }
+        
+        function checkForDraft() {
+            const draftJson = localStorage.getItem(DRAFT_KEY);
+            const draftTimestamp = localStorage.getItem(DRAFT_TIMESTAMP_KEY);
+            
+            if (!draftJson || !draftTimestamp) return;
+            
+            // Check if draft is less than 24 hours old
+            const ageHours = (Date.now() - parseInt(draftTimestamp)) / (1000 * 60 * 60);
+            if (ageHours > 24) {
+                clearDraft();
+                return;
+            }
+            
+            try {
+                const draft = JSON.parse(draftJson);
+                
+                // Check if draft has meaningful data
+                const hasData = draft.propertyInfo?.streetAddress || 
+                               draft.dealTerms?.purchasePrice ||
+                               draft.dealTerms?.rentalRevenue;
+                
+                if (!hasData) {
+                    clearDraft();
+                    return;
+                }
+                
+                // Build a description of what's in the draft
+                const address = draft.propertyInfo?.streetAddress || 'Untitled deal';
+                const timeAgo = getTimeAgo(parseInt(draftTimestamp));
+                
+                // Ask user if they want to restore
+                if (confirm(`Restore unsaved work?\n\n"${address}"\nLast edited ${timeAgo}\n\nClick OK to restore, or Cancel to start fresh.`)) {
+                    restoreDraft(draft);
+                } else {
+                    clearDraft();
+                }
+            } catch (e) {
+                console.error('Error parsing draft:', e);
+                clearDraft();
+            }
+        }
+        
+        function restoreDraft(draft) {
+            populateFormFromDeal(draft);
+            if (draft.currentLoadedDealId) {
+                currentLoadedDealId = draft.currentLoadedDealId;
+                sessionStorage.setItem('currentLoadedDealId', String(draft.currentLoadedDealId));
+            }
+            calculate();
+        }
+        
+        function clearDraft() {
+            localStorage.removeItem(DRAFT_KEY);
+            localStorage.removeItem(DRAFT_TIMESTAMP_KEY);
+        }
+        
+        function getTimeAgo(timestamp) {
+            const seconds = Math.floor((Date.now() - timestamp) / 1000);
+            
+            if (seconds < 60) return 'just now';
+            if (seconds < 3600) return Math.floor(seconds / 60) + ' minutes ago';
+            if (seconds < 86400) return Math.floor(seconds / 3600) + ' hours ago';
+            return Math.floor(seconds / 86400) + ' days ago';
         }
 
         function buildDealObject() {
