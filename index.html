@@ -5605,7 +5605,8 @@ Please be direct and specific with your analysis.`;
         }
 
         // Track currently loaded deal for update vs create
-        let currentLoadedDealId = null;
+        // Track currently loaded deal - restore from sessionStorage if available
+        let currentLoadedDealId = sessionStorage.getItem('currentLoadedDealId') || null;
 
         function startNewDeal() {
             // Confirm if there are unsaved changes
@@ -5678,6 +5679,7 @@ Please be direct and specific with your analysis.`;
             
             // Reset tracking
             currentLoadedDealId = null;
+            sessionStorage.removeItem('currentLoadedDealId');
             
             // Reset touched fields
             touchedFields.clear();
@@ -5693,6 +5695,13 @@ Please be direct and specific with your analysis.`;
             const btn = document.querySelector('.library-btn');
             const originalText = btn.innerHTML;
             
+            // Always ensure button gets reset
+            const resetButton = () => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                btn.style.background = '';
+            };
+            
             try {
                 // Show saving state
                 btn.innerHTML = '<span>⏳</span> Saving...';
@@ -5706,8 +5715,7 @@ Please be direct and specific with your analysis.`;
                 
                 if (!hasAddress && !hasPrice) {
                     alert('Please enter at least an address or purchase price before saving.');
-                    btn.innerHTML = originalText;
-                    btn.disabled = false;
+                    resetButton();
                     return;
                 }
                 
@@ -5734,18 +5742,35 @@ Please be direct and specific with your analysis.`;
                             existingDeal = null;
                             currentLoadedDealId = null;
                         }
+                    } else {
+                        // Deal not found in library - reset tracking
+                        currentLoadedDealId = null;
                     }
                 }
                 
                 // Only show overwrite/copy dialog if address hasn't changed
                 if (existingDeal) {
                     // Ask user: update or copy?
-                    btn.innerHTML = originalText;
-                    btn.disabled = false;
+                    resetButton();
                     
                     // Get the base address for the copy name preview
                     const baseAddress = existingDeal.originalAddress || getAddressFromParts(existingDeal.propertyInfo);
-                    const result = await showSaveChoiceDialog(baseAddress);
+                    
+                    // Add timeout to dialog in case something goes wrong
+                    let result;
+                    try {
+                        result = await Promise.race([
+                            showSaveChoiceDialog(baseAddress),
+                            new Promise((_, reject) => setTimeout(() => reject(new Error('Dialog timeout')), 60000))
+                        ]);
+                    } catch (dialogError) {
+                        console.error('Dialog error:', dialogError);
+                        // Close any open modals
+                        document.getElementById('saveChoiceModal').classList.remove('show');
+                        document.getElementById('copyNameModal').classList.remove('show');
+                        resetButton();
+                        return;
+                    }
                     
                     if (result.choice === 'cancel') {
                         return;
@@ -5820,6 +5845,7 @@ Please be direct and specific with your analysis.`;
                     }
                     
                     currentLoadedDealId = deal.id; // Track as current deal
+                    sessionStorage.setItem('currentLoadedDealId', String(deal.id));
                     
                     // Save to cloud (with timeout)
                     if (currentUser) {
@@ -5854,8 +5880,7 @@ Please be direct and specific with your analysis.`;
             } catch (error) {
                 console.error('Error saving deal:', error);
                 alert('Error saving deal: ' + error.message);
-                btn.innerHTML = originalText;
-                btn.disabled = false;
+                resetButton();
             }
         }
         
@@ -5945,6 +5970,7 @@ Please be direct and specific with your analysis.`;
         
         function clearCurrentDeal() {
             currentLoadedDealId = null;
+            sessionStorage.removeItem('currentLoadedDealId');
         }
 
         function loadFromLibrary(dealId) {
@@ -5952,6 +5978,8 @@ Please be direct and specific with your analysis.`;
             const deal = deals.find(d => String(d.id) === String(dealId));
             if (deal) {
                 currentLoadedDealId = deal.id; // Track which deal is loaded
+                // Persist to sessionStorage so it survives page refresh
+                sessionStorage.setItem('currentLoadedDealId', String(deal.id));
                 populateFormFromDeal(deal);
                 // Scroll to top to see the form
                 window.scrollTo({ top: 0, behavior: 'smooth' });
