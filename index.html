@@ -4327,29 +4327,30 @@
                 seller_name: deal.seller?.name || '',
                 seller_email: deal.seller?.email || '',
                 seller_phone: deal.seller?.phone || '',
-                category: deal.loanConfig?.category || 'DSCR Residential',
-                first_loan_ltv: parseFloat(deal.loanConfig?.firstLoanLTV) || 26,
-                seller_carry_pct: parseFloat(deal.loanConfig?.sellerCarryPct) || 80,
-                interest_only: deal.loanConfig?.interestOnly || 'No',
-                interest_at_balloon: deal.loanConfig?.interestAtBalloon || 'No',
-                months_to_stabilize: parseInt(deal.loanConfig?.monthsToStabilize) || 0,
-                revenue_during_stab: parseFloat(deal.loanConfig?.revenueDuringStab) || 100,
-                years_to_balloon: parseInt(deal.loanConfig?.yearsToBalloon) || 8,
+                category: deal.dealTerms?.category || deal.loanConfig?.category || 'DSCR Residential',
+                first_loan_ltv: parseFloat(deal.financing?.firstLoanLTV || deal.loanConfig?.firstLoanLTV) || 26,
+                seller_carry_pct: parseFloat(deal.financing?.sellerCarryPct || deal.loanConfig?.sellerCarryPct) || 80,
+                interest_only: deal.financing?.interestOnly || deal.loanConfig?.interestOnly || 'No',
+                interest_at_balloon: deal.financing?.interestAtBalloon || deal.loanConfig?.interestAtBalloon || 'No',
+                months_to_stabilize: parseInt(deal.stabilization?.monthsToStabilize || deal.loanConfig?.monthsToStabilize) || 0,
+                revenue_during_stab: parseFloat(deal.stabilization?.revenueDuringStab || deal.loanConfig?.revenueDuringStab) || 100,
+                years_to_balloon: parseInt(deal.financing?.yearsToBalloon || deal.loanConfig?.yearsToBalloon) || 8,
                 purchase_price: parseFloat(deal.dealTerms?.purchasePrice) || 0,
                 asking_price: parseFloat(deal.dealTerms?.askingPrice) || 0,
                 rental_revenue: parseFloat(deal.dealTerms?.rentalRevenue) || 0,
                 appreciation_rate: parseFloat(deal.dealTerms?.appreciationRate) || 2,
+                existing_debt: parseFloat(deal.dealTerms?.existingDebt) || 0,
                 agent_fee: parseFloat(deal.cashToBuyer?.agentFee) || 0,
                 rehab_cost: parseFloat(deal.cashToBuyer?.rehabCost) || 0,
                 assignment_fee_pct: parseFloat(deal.cashToBuyer?.assignmentFeePct) || 5,
                 appraisal_cost: parseFloat(deal.cashToBuyer?.appraisalCost) || 0,
                 closing_cost_pct: parseFloat(deal.cashToBuyer?.closingCostPct) || 5,
-                seller_carry_rate: parseFloat(deal.sellerFinancing?.rate) || 0,
-                seller_carry_amort: parseInt(deal.sellerFinancing?.amortization) || 30,
+                seller_carry_rate: parseFloat(deal.financing?.sellerCarryRate || deal.sellerFinancing?.rate) || 0,
+                seller_carry_amort: parseInt(deal.financing?.sellerCarryAmort || deal.sellerFinancing?.amortization) || 30,
                 property_tax: parseFloat(deal.expenses?.propertyTax) || 0,
                 insurance: parseFloat(deal.expenses?.insurance) || 0,
                 hoa: parseFloat(deal.expenses?.hoa) || 0,
-                other_expenses: parseFloat(deal.expenses?.other) || 0,
+                other_expenses: parseFloat(deal.expenses?.otherExpenses || deal.expenses?.other) || 0,
                 capex_pct: parseFloat(deal.expenses?.capexPct) || 5,
                 management_pct: parseFloat(deal.expenses?.managementPct) || 8,
                 vacancy_pct: parseFloat(deal.expenses?.vacancyPct) || 5,
@@ -4360,7 +4361,7 @@
 
         // Convert cloud deal format to local format
         function cloudDealToLocal(cloudDeal) {
-            // If we have full_data stored, use that as the base
+            // If we have full_data stored, prefer that as it has the complete structure
             const base = cloudDeal.full_data || {};
             
             return {
@@ -4369,10 +4370,11 @@
                 version: '1.0',
                 savedAt: cloudDeal.created_at,
                 updatedAt: cloudDeal.updated_at || base.updatedAt,
-                copyNumber: base.copyNumber || null, // Preserve copy number
-                copyName: base.copyName || null, // Preserve custom copy name
-                originalAddress: base.originalAddress || null, // Preserve original address
-                status: base.status || 'working', // Preserve status
+                copyNumber: base.copyNumber || null,
+                copyName: base.copyName || null,
+                originalAddress: base.originalAddress || null,
+                status: base.status || 'working',
+                notes: base.notes || '',
                 propertyInfo: {
                     streetAddress: cloudDeal.street_address || base.propertyInfo?.streetAddress || '',
                     city: cloudDeal.city || base.propertyInfo?.city || '',
@@ -4391,21 +4393,35 @@
                     email: cloudDeal.seller_email || base.seller?.email || '',
                     phone: cloudDeal.seller_phone || base.seller?.phone || '',
                 },
-                loanConfig: {
-                    category: cloudDeal.category || base.loanConfig?.category || 'DSCR Residential',
-                    firstLoanLTV: cloudDeal.first_loan_ltv || base.loanConfig?.firstLoanLTV || 26,
-                    sellerCarryPct: cloudDeal.seller_carry_pct || base.loanConfig?.sellerCarryPct || 80,
-                    interestOnly: cloudDeal.interest_only || base.loanConfig?.interestOnly || 'No',
-                    interestAtBalloon: cloudDeal.interest_at_balloon || base.loanConfig?.interestAtBalloon || 'No',
-                    monthsToStabilize: cloudDeal.months_to_stabilize || base.loanConfig?.monthsToStabilize || 0,
-                    revenueDuringStab: cloudDeal.revenue_during_stab || base.loanConfig?.revenueDuringStab || 100,
-                    yearsToBalloon: cloudDeal.years_to_balloon || base.loanConfig?.yearsToBalloon || 8,
-                },
                 dealTerms: {
+                    category: cloudDeal.category || base.dealTerms?.category || 'DSCR Residential',
                     purchasePrice: cloudDeal.purchase_price || base.dealTerms?.purchasePrice || 0,
                     askingPrice: cloudDeal.asking_price || base.dealTerms?.askingPrice || 0,
+                    existingDebt: cloudDeal.existing_debt || base.dealTerms?.existingDebt || 0,
                     rentalRevenue: cloudDeal.rental_revenue || base.dealTerms?.rentalRevenue || 0,
                     appreciationRate: cloudDeal.appreciation_rate || base.dealTerms?.appreciationRate || 2,
+                },
+                financing: {
+                    firstLoanLTV: cloudDeal.first_loan_ltv || base.financing?.firstLoanLTV || 26,
+                    sellerCarryPct: cloudDeal.seller_carry_pct || base.financing?.sellerCarryPct || 80,
+                    sellerCarryRate: cloudDeal.seller_carry_rate || base.financing?.sellerCarryRate || 0,
+                    sellerCarryAmort: cloudDeal.seller_carry_amort || base.financing?.sellerCarryAmort || 30,
+                    interestOnly: cloudDeal.interest_only || base.financing?.interestOnly || 'No',
+                    interestAtBalloon: cloudDeal.interest_at_balloon || base.financing?.interestAtBalloon || 'No',
+                    yearsToBalloon: cloudDeal.years_to_balloon || base.financing?.yearsToBalloon || 8,
+                },
+                stabilization: {
+                    monthsToStabilize: cloudDeal.months_to_stabilize || base.stabilization?.monthsToStabilize || 0,
+                    revenueDuringStab: cloudDeal.revenue_during_stab || base.stabilization?.revenueDuringStab || 100,
+                },
+                expenses: {
+                    propertyTax: cloudDeal.property_tax || base.expenses?.propertyTax || 0,
+                    insurance: cloudDeal.insurance || base.expenses?.insurance || 0,
+                    hoa: cloudDeal.hoa || base.expenses?.hoa || 0,
+                    otherExpenses: cloudDeal.other_expenses || base.expenses?.otherExpenses || 0,
+                    capexPct: cloudDeal.capex_pct || base.expenses?.capexPct || 5,
+                    managementPct: cloudDeal.management_pct || base.expenses?.managementPct || 8,
+                    vacancyPct: cloudDeal.vacancy_pct || base.expenses?.vacancyPct || 5,
                 },
                 cashToBuyer: {
                     agentFee: cloudDeal.agent_fee || base.cashToBuyer?.agentFee || 0,
@@ -4414,19 +4430,8 @@
                     appraisalCost: cloudDeal.appraisal_cost || base.cashToBuyer?.appraisalCost || 0,
                     closingCostPct: cloudDeal.closing_cost_pct || base.cashToBuyer?.closingCostPct || 5,
                 },
-                sellerFinancing: {
-                    rate: cloudDeal.seller_carry_rate || base.sellerFinancing?.rate || 0,
-                    amortization: cloudDeal.seller_carry_amort || base.sellerFinancing?.amortization || 30,
-                },
-                expenses: {
-                    propertyTax: cloudDeal.property_tax || base.expenses?.propertyTax || 0,
-                    insurance: cloudDeal.insurance || base.expenses?.insurance || 0,
-                    hoa: cloudDeal.hoa || base.expenses?.hoa || 0,
-                    other: cloudDeal.other_expenses || base.expenses?.other || 0,
-                    capexPct: cloudDeal.capex_pct || base.expenses?.capexPct || 5,
-                    managementPct: cloudDeal.management_pct || base.expenses?.managementPct || 8,
-                    vacancyPct: cloudDeal.vacancy_pct || base.expenses?.vacancyPct || 5,
-                }
+                metrics: base.metrics || {},
+                firstPosition: base.firstPosition || {},
             };
         }
 
