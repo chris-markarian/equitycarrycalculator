@@ -785,6 +785,28 @@
             box-shadow: 0 6px 25px rgba(245, 158, 11, 0.5);
         }
 
+        .new-deal-btn {
+            background: linear-gradient(135deg, #64748b, #475569);
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 20px rgba(100, 116, 139, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+        }
+
+        .new-deal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(100, 116, 139, 0.5);
+        }
+
         .library-btn {
             background: linear-gradient(135deg, #22c55e, #16a34a);
             color: white;
@@ -3002,12 +3024,12 @@
                 <div class="input-row">
                     <div class="form-group">
                         <label>First Loan % / LTV</label>
-                        <input type="number" id="firstLoanLTV" value="26" step="1" min="0" max="75" class="input-highlight" onchange="calculate()">
+                        <input type="number" id="firstLoanLTV" value="40" step="1" min="0" max="75" class="input-highlight" onchange="calculate()">
                         <span class="helper-text">% of purchase price (max 75%)</span>
                     </div>
                     <div class="form-group">
                         <label>Seller Carry %</label>
-                        <input type="number" id="sellerCarryPct" value="80" step="1" min="0" max="100" class="input-highlight" onchange="calculate()">
+                        <input type="number" id="sellerCarryPct" value="75" step="1" min="0" max="100" class="input-highlight" onchange="calculate()">
                         <span class="helper-text">% of purchase price</span>
                     </div>
                 </div>
@@ -3577,6 +3599,9 @@
 
         <!-- Export Buttons -->
         <div class="export-buttons">
+            <button class="new-deal-btn" onclick="startNewDeal()">
+                <span>✨</span> New Deal
+            </button>
             <button class="library-btn" onclick="saveToLibrary()">
                 <span>💾</span> Save Deal to Library
             </button>
@@ -5043,8 +5068,8 @@
             
             // Current values as defaults
             const currentPrice = parseFloat(document.getElementById('purchasePrice').value) || maxPrice;
-            const currentSellerCarry = parseFloat(document.getElementById('sellerCarryPct').value) || 70;
-            const currentLTV = parseFloat(document.getElementById('firstLoanLTV').value) || 26;
+            const currentSellerCarry = parseFloat(document.getElementById('sellerCarryPct').value) || 75;
+            const currentLTV = parseFloat(document.getElementById('firstLoanLTV').value) || 40;
             
             // GRANULAR Variable ranges (1% increments for LTV and Seller Carry)
             const ltvValues = [];
@@ -5582,6 +5607,88 @@ Please be direct and specific with your analysis.`;
         // Track currently loaded deal for update vs create
         let currentLoadedDealId = null;
 
+        function startNewDeal() {
+            // Confirm if there are unsaved changes
+            const hasData = document.getElementById('streetAddress').value || 
+                           document.getElementById('purchasePrice').value;
+            
+            if (hasData) {
+                if (!confirm('Start a new deal? Any unsaved changes will be lost.')) {
+                    return;
+                }
+            }
+            
+            // Clear all form fields
+            // Property info
+            document.getElementById('streetAddress').value = '';
+            document.getElementById('city').value = '';
+            document.getElementById('state').value = '';
+            document.getElementById('zip').value = '';
+            document.getElementById('propertyLink').value = '';
+            
+            // Preparer info - keep these as they're usually the same user
+            // document.getElementById('preparerName').value = '';
+            // document.getElementById('preparerEmail').value = '';
+            // document.getElementById('preparerPhone').value = '';
+            
+            // Seller info
+            document.getElementById('sellerName').value = '';
+            document.getElementById('sellerEmail').value = '';
+            document.getElementById('sellerPhone').value = '';
+            
+            // Deal terms
+            document.getElementById('category').value = 'dscr-residential';
+            document.getElementById('purchasePrice').value = '';
+            document.getElementById('askingPrice').value = '';
+            document.getElementById('existingDebt').value = '';
+            document.getElementById('rentalRevenue').value = '';
+            document.getElementById('appreciationRate').value = '3';
+            
+            // Financing - reset to defaults
+            document.getElementById('firstLoanLTV').value = '40';
+            document.getElementById('interestOnly').value = '8';
+            document.getElementById('sellerCarryPct').value = '75';
+            document.getElementById('sellerCarryRate').value = '0';
+            document.getElementById('sellerCarryAmort').value = '30';
+            document.getElementById('interestAtBalloon').value = '6.5';
+            document.getElementById('yearsToBalloon').value = '8';
+            
+            // Stabilization
+            document.getElementById('monthsToStabilize').value = '3';
+            document.getElementById('revenueDuringStab').value = '50';
+            
+            // Expenses - reset to defaults
+            document.getElementById('propertyTax').value = '';
+            document.getElementById('insurance').value = '';
+            document.getElementById('hoa').value = '';
+            document.getElementById('otherExpenses').value = '';
+            document.getElementById('capexPct').value = '5';
+            document.getElementById('managementPct').value = '8';
+            document.getElementById('vacancyPct').value = '5';
+            
+            // Cash to buyer - reset to defaults
+            document.getElementById('agentFee').value = '';
+            document.getElementById('rehabCost').value = '';
+            document.getElementById('assignmentFeePct').value = '5';
+            document.getElementById('appraisalCost').value = '';
+            document.getElementById('closingCostPct').value = '5';
+            
+            // Notes
+            document.getElementById('dealNotes').value = '';
+            
+            // Reset tracking
+            currentLoadedDealId = null;
+            
+            // Reset touched fields
+            touchedFields.clear();
+            
+            // Recalculate to show zeroed state
+            calculate();
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
         async function saveToLibrary() {
             const btn = document.querySelector('.library-btn');
             const originalText = btn.innerHTML;
@@ -5945,12 +6052,12 @@ Please be direct and specific with your analysis.`;
             try {
                 // Build the data payload
                 const purchasePrice = parseFloat(deal.dealTerms?.purchasePrice) || 0;
-                const sellerCarryPct = parseFloat(deal.loanConfig?.sellerCarryPct) || 0;
+                const sellerCarryPct = parseFloat(deal.financing?.sellerCarryPct) || 0;
                 const sellerCarryAmount = purchasePrice * (sellerCarryPct / 100);
                 const cashToSeller = purchasePrice - sellerCarryAmount;
-                const sellerCarryRate = parseFloat(deal.sellerFinancing?.rate) || 0;
-                const sellerCarryAmort = parseInt(deal.sellerFinancing?.amortization) || 30;
-                const yearsToBalloon = parseInt(deal.loanConfig?.yearsToBalloon) || 8;
+                const sellerCarryRate = parseFloat(deal.financing?.sellerCarryRate) || 0;
+                const sellerCarryAmort = parseInt(deal.financing?.sellerCarryAmort) || 30;
+                const yearsToBalloon = parseInt(deal.financing?.yearsToBalloon) || 8;
                 
                 // Calculate monthly payment
                 let monthlyPayment = 0;
@@ -6587,6 +6694,12 @@ Please be direct and specific with your analysis.`;
             document.getElementById('pdf-purchase-price').textContent = document.getElementById('loiPurchasePrice').textContent;
             document.getElementById('pdf-property-type').textContent = category;
             document.getElementById('pdf-asking-price').textContent = formatCurrency(parseFloat(document.getElementById('askingPrice').value) || 0);
+            
+            // Calculate Cash to Seller (Purchase Price - Seller Carry)
+            const sellerCarryAmount = parseCurrency(document.getElementById('sellerCarryAmount').textContent);
+            const cashToSeller = purchasePrice - sellerCarryAmount;
+            document.getElementById('pdf-cash-to-seller').textContent = formatCurrency(cashToSeller);
+            
             document.getElementById('pdf-over-under').textContent = document.getElementById('overUnderAsking').textContent;
             
             // Key metrics
@@ -6668,8 +6781,8 @@ Please be direct and specific with your analysis.`;
             const yearsToBalloon = parseInt(document.getElementById('yearsToBalloon').value) || 8;
             
             // Get calculated values (parse from displayed text)
-            const cashToSeller = parseCurrency(document.getElementById('firstPositionLoan').textContent);
             const sellerCarryAmount = parseCurrency(document.getElementById('sellerCarryAmount').textContent);
+            const cashToSeller = purchasePrice - sellerCarryAmount; // Cash to seller = Purchase Price - Seller Carry
             const monthlyPayment = parseCurrency(document.getElementById('sellerCarryPayment').textContent);
             
             // Dates
@@ -6916,7 +7029,7 @@ Please be direct and specific with your analysis.`;
             w.drawBullet('Seller hands over the property in as-is condition.');
             
             w.drawSubheading('Step 2 - Stage 1: Cash Closing');
-            w.drawBullet(`Buyer brings ${formatCurrency(purchasePrice)} cash to closing.`);
+            w.drawBullet(`Buyer brings ${formatCurrency(cashToSeller)} cash to closing.`);
             w.drawBullet('Escrow holds funds temporarily.');
             w.drawBullet('Title transfers - Buyer\'s LLC now owns the property.');
             w.drawBullet(`Seller gets their immediate cash payout: ${formatCurrency(cashToSeller)}.`);
@@ -7099,6 +7212,10 @@ Please be direct and specific with your analysis.`;
                         <span class="pdf-value" id="pdf-asking-price">$0</span>
                     </div>
                     <div class="pdf-row">
+                        <span class="pdf-label">Cash to Seller</span>
+                        <span class="pdf-value highlight" id="pdf-cash-to-seller">$0</span>
+                    </div>
+                    <div class="pdf-row">
                         <span class="pdf-label">Over/Under Asking</span>
                         <span class="pdf-value" id="pdf-over-under">0%</span>
                     </div>
@@ -7147,7 +7264,7 @@ Please be direct and specific with your analysis.`;
                         <span class="pdf-value" id="pdf-seller-payment">$0</span>
                     </div>
                     <div class="pdf-row">
-                        <span class="pdf-label">Down Payment</span>
+                        <span class="pdf-label">Residual (Equity Gain)</span>
                         <span class="pdf-value" id="pdf-down-payment">$0</span>
                     </div>
                     <div class="pdf-row">
