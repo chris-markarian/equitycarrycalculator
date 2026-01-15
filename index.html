@@ -4277,7 +4277,7 @@
         }
 
         async function updateInCloud(deal) {
-            if (!currentUser || !deal.cloud_id) return;
+            if (!currentUser || !deal.cloud_id) return false;
             
             setSyncStatus('syncing', 'Saving...');
             
@@ -4292,9 +4292,11 @@
                 if (error) throw error;
                 
                 setSyncStatus('synced', 'Saved');
+                return true;
             } catch (error) {
                 console.error('Error updating deal:', error);
                 setSyncStatus('error', 'Save failed');
+                return false;
             }
         }
 
@@ -6224,14 +6226,21 @@ Please be direct and specific with your analysis.`;
                     deal.share_token = existingDeal.share_token;
                     
                     // Update in cloud
+                    let cloudSaveSucceeded = false;
                     if (currentUser && deal.cloud_id) {
                         try {
-                            await Promise.race([
+                            const updateResult = await Promise.race([
                                 updateInCloud(deal),
                                 new Promise((_, reject) => setTimeout(() => reject(new Error('Cloud sync timeout')), 10000))
                             ]);
+                            cloudSaveSucceeded = (updateResult === true);
                         } catch (cloudError) {
-                            console.warn('Cloud update failed, saved locally:', cloudError);
+                            console.warn('Cloud update failed:', cloudError);
+                        }
+                        
+                        if (!cloudSaveSucceeded) {
+                            setSyncStatus('error', 'Cloud save failed');
+                            alert('Warning: Could not save to cloud. Your changes are saved locally but may be lost if you clear browser data.');
                         }
                     } else if (currentUser && !deal.cloud_id) {
                         try {
@@ -6241,9 +6250,15 @@ Please be direct and specific with your analysis.`;
                             ]);
                             if (cloudResult) {
                                 deal.cloud_id = cloudResult.id;
+                                cloudSaveSucceeded = true;
                             }
                         } catch (cloudError) {
-                            console.warn('Cloud save failed, saved locally:', cloudError);
+                            console.warn('Cloud save failed:', cloudError);
+                        }
+                        
+                        if (!cloudSaveSucceeded) {
+                            setSyncStatus('error', 'Cloud save failed');
+                            alert('Warning: Could not save to cloud. Your changes are saved locally but may be lost if you clear browser data.');
                         }
                     }
                     
@@ -6277,6 +6292,7 @@ Please be direct and specific with your analysis.`;
                     sessionStorage.setItem('currentLoadedDealId', String(deal.id));
                     
                     // Save to cloud (with timeout)
+                    let cloudSaveSucceeded = false;
                     if (currentUser) {
                         try {
                             const cloudResult = await Promise.race([
@@ -6285,9 +6301,19 @@ Please be direct and specific with your analysis.`;
                             ]);
                             if (cloudResult) {
                                 deal.cloud_id = cloudResult.id;
+                                cloudSaveSucceeded = true;
+                            } else {
+                                // saveToCloud returned null (failed silently)
+                                console.warn('Cloud save returned null - save failed');
                             }
                         } catch (cloudError) {
-                            console.warn('Cloud save failed, saved locally:', cloudError);
+                            console.warn('Cloud save failed:', cloudError);
+                        }
+                        
+                        if (!cloudSaveSucceeded) {
+                            // Warn user that data won't persist
+                            setSyncStatus('error', 'Cloud save failed');
+                            alert('Warning: Could not save to cloud. Your deal is saved locally but may be lost if you clear browser data or log in from another device.');
                         }
                     }
                     
@@ -6301,6 +6327,13 @@ Please be direct and specific with your analysis.`;
                 
                 // Clear auto-save draft since we just saved
                 clearDraft();
+                
+                // Only show Synced if we actually synced to cloud (or no user logged in)
+                if (currentUser) {
+                    // Status already set by saveToCloud or error handling above
+                } else {
+                    setSyncStatus('synced', 'Local only');
+                }
                 
                 btn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
                 btn.disabled = false;
@@ -6475,6 +6508,7 @@ Please be direct and specific with your analysis.`;
                     }
                 } catch (cloudError) {
                     console.warn('Cloud save failed for duplicate:', cloudError);
+                    setSyncStatus('synced', 'Local only');
                 }
             }
             
@@ -6788,6 +6822,7 @@ Please be direct and specific with your analysis.`;
                     ]);
                 } catch (cloudError) {
                     console.warn('Cloud update failed:', cloudError);
+                    setSyncStatus('synced', 'Local only');
                 }
             }
             
