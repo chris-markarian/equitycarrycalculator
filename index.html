@@ -41,189 +41,16 @@
         }
 
         .container {
-            max-width: 1800px;
+            max-width: 1600px;
             margin: 0 auto;
-            padding: 1.5rem;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 3rem;
-            padding: 2rem 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .header-content {
-            text-align: center;
-            flex: 1;
-        }
-
-        .help-btn {
-            background: rgba(100, 116, 139, 0.2);
-            color: var(--text-secondary);
-            border: 1px solid var(--border-color);
-            padding: 0.6rem 1rem;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            transition: all 0.2s;
-            position: absolute;
-            left: 2rem;
-            top: 2rem;
-        }
-
-        .help-btn span {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 18px;
-            height: 18px;
-            background: var(--accent-teal);
-            color: white;
-            border-radius: 50%;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .help-btn:hover {
-            background: rgba(20, 184, 166, 0.2);
-            border-color: var(--accent-teal);
-            color: var(--text-primary);
-        }
-
-        /* Help Modal Styles */
-        .help-modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.85);
-            display: none;
-            align-items: flex-start;
-            justify-content: center;
-            z-index: 2000;
-            overflow-y: auto;
             padding: 2rem;
         }
 
-        .help-modal-overlay.show {
-            display: flex;
-        }
-
-        .help-modal {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            width: 100%;
-            max-width: 900px;
-            max-height: none;
-            margin: 2rem auto;
-        }
-
-        .help-modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem;
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
             border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            background: var(--bg-card);
-            border-radius: 16px 16px 0 0;
-            z-index: 1;
-        }
-
-        .help-modal-header h2 {
-            margin: 0;
-            color: var(--text-primary);
-            font-size: 1.5rem;
-        }
-
-        .help-modal-close {
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 0.5rem;
-            line-height: 1;
-            transition: color 0.2s;
-        }
-
-        .help-modal-close:hover {
-            color: var(--text-primary);
-        }
-
-        .help-modal-body {
-            padding: 1.5rem;
-            color: var(--text-secondary);
-            line-height: 1.7;
-        }
-
-        .help-modal-body h3 {
-            color: var(--accent-teal);
-            margin: 1.5rem 0 1rem 0;
-            font-size: 1.2rem;
-        }
-
-        .help-modal-body h3:first-child {
-            margin-top: 0;
-        }
-
-        .help-modal-body p {
-            margin: 0.75rem 0;
-        }
-
-        .help-modal-body ul {
-            margin: 0.75rem 0;
-            padding-left: 1.5rem;
-        }
-
-        .help-modal-body li {
-            margin: 0.5rem 0;
-        }
-
-        .help-modal-body strong {
-            color: var(--text-primary);
-        }
-
-        .help-modal-body code {
-            background: rgba(20, 184, 166, 0.1);
-            color: var(--accent-teal);
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.9em;
-        }
-
-        .help-section {
-            margin-bottom: 2rem;
-            padding-bottom: 2rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .help-section:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-
-        .help-tip {
-            background: rgba(20, 184, 166, 0.1);
-            border-left: 3px solid var(--accent-teal);
-            padding: 1rem;
-            border-radius: 0 8px 8px 0;
-            margin: 1rem 0;
-        }
-
-        .help-tip strong {
-            color: var(--accent-teal);
         }
 
         h1 {
@@ -494,10 +321,10 @@
         .main-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 1.25rem;
+            gap: 1.5rem;
         }
 
-        @media (max-width: 1200px) {
+        @media (max-width: 1400px) {
             .main-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -512,7 +339,7 @@
         .card {
             background: var(--bg-card);
             border-radius: 16px;
-            padding: 1.25rem;
+            padding: 1.5rem;
             border: 1px solid var(--border-color);
             transition: transform 0.2s, box-shadow 0.2s;
         }
@@ -588,73 +415,6 @@
         input.input-highlight {
             border-color: var(--accent-teal);
             background: rgba(20, 184, 166, 0.05);
-        }
-
-        /* Tooltip Styles */
-        .tooltip-trigger {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 16px;
-            height: 16px;
-            background: rgba(100, 116, 139, 0.3);
-            color: #94a3b8;
-            border-radius: 50%;
-            font-size: 10px;
-            font-weight: bold;
-            cursor: help;
-            margin-left: 6px;
-            position: relative;
-            vertical-align: middle;
-            transition: background 0.2s, color 0.2s;
-        }
-        
-        .tooltip-trigger:hover {
-            background: var(--accent-teal);
-            color: white;
-        }
-        
-        .tooltip-trigger .tooltip-text {
-            visibility: hidden;
-            opacity: 0;
-            position: absolute;
-            bottom: calc(100% + 8px);
-            left: 50%;
-            transform: translateX(-50%);
-            background: #1e293b;
-            color: #e2e8f0;
-            padding: 10px 14px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: normal;
-            line-height: 1.5;
-            width: 220px;
-            text-align: left;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-            z-index: 1000;
-            transition: opacity 0.2s, visibility 0.2s;
-            pointer-events: none;
-        }
-        
-        .tooltip-trigger .tooltip-text::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border-width: 6px;
-            border-style: solid;
-            border-color: #1e293b transparent transparent transparent;
-        }
-        
-        .tooltip-trigger:hover .tooltip-text {
-            visibility: visible;
-            opacity: 1;
-        }
-        
-        .label-with-tooltip {
-            display: flex;
-            align-items: center;
         }
 
         input.input-target {
@@ -1025,28 +785,6 @@
             box-shadow: 0 6px 25px rgba(245, 158, 11, 0.5);
         }
 
-        .new-deal-btn {
-            background: linear-gradient(135deg, #64748b, #475569);
-            color: white;
-            border: none;
-            padding: 1rem 1.5rem;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            box-shadow: 0 4px 20px rgba(100, 116, 139, 0.4);
-            transition: transform 0.2s, box-shadow 0.2s;
-            text-decoration: none;
-        }
-
-        .new-deal-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(100, 116, 139, 0.5);
-        }
-
         .library-btn {
             background: linear-gradient(135deg, #22c55e, #16a34a);
             color: white;
@@ -1288,21 +1026,6 @@
             opacity: 1;
         }
 
-        .library-item-duplicate {
-            background: transparent;
-            color: var(--accent-teal);
-            border: none;
-            padding: 0.5rem;
-            cursor: pointer;
-            font-size: 1rem;
-            opacity: 0.6;
-            transition: opacity 0.2s;
-        }
-
-        .library-item-duplicate:hover {
-            opacity: 1;
-        }
-
         .library-item-delete {
             background: transparent;
             color: #f87171;
@@ -1427,7 +1150,7 @@
             flex-wrap: wrap;
         }
 
-        /* Deal Optimizer Styles */
+        /* Goal Finder Styles */
         .goal-finder {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -3024,137 +2747,6 @@
         </div>
     </div>
 
-    <!-- Help Modal -->
-    <div class="help-modal-overlay" id="helpModal">
-        <div class="help-modal">
-            <div class="help-modal-header">
-                <h2>📖 User Guide</h2>
-                <button class="help-modal-close" onclick="closeHelpModal()">&times;</button>
-            </div>
-            <div class="help-modal-body">
-                <div class="help-section">
-                    <h3>🎯 What This Tool Does</h3>
-                    <p>The <strong>Equity Carry Calculator</strong> helps real estate investors quickly analyze and structure creative financing deals using seller carry-back arrangements. It calculates cash flows, cap rates, balloon projections, and generates professional LOIs (Letters of Intent) ready to send to sellers.</p>
-                    <div class="help-tip">
-                        <strong>💡 Pro Tip:</strong> The tool auto-saves your work every 30 seconds. If your browser crashes, you'll be prompted to restore your unsaved deal when you return.
-                    </div>
-                </div>
-
-                <div class="help-section">
-                    <h3>🚀 Quick Start</h3>
-                    <ol>
-                        <li><strong>Enter the property address</strong> and purchase price</li>
-                        <li><strong>Set the rental revenue</strong> (annual)</li>
-                        <li><strong>Adjust financing terms</strong> - First Loan LTV % and Seller Carry %</li>
-                        <li><strong>Review the metrics</strong> - Cap Rate, Cash Flow, and Spread</li>
-                        <li><strong>Save to Library</strong> when you're happy with the analysis</li>
-                        <li><strong>Generate LOI</strong> or <strong>Email Offer</strong> to send to seller</li>
-                    </ol>
-                </div>
-
-                <div class="help-section">
-                    <h3>📊 Key Metrics Explained</h3>
-                    <ul>
-                        <li><strong>Cap Rate</strong> — NOI ÷ Purchase Price. Measures property yield independent of financing. Higher = better deal.</li>
-                        <li><strong>Blended Rate</strong> — Weighted average interest rate across all loans. Lower = better cash flow.</li>
-                        <li><strong>Spread</strong> — Cap Rate minus Blended Rate. <em>Positive spread means the deal works.</em> This is the arbitrage.</li>
-                        <li><strong>NOI</strong> — Net Operating Income. Annual revenue minus operating expenses (before debt service).</li>
-                        <li><strong>Cash-on-Cash Return</strong> — Annual cash flow ÷ total cash invested. Shows return on your actual out-of-pocket.</li>
-                    </ul>
-                </div>
-
-                <div class="help-section">
-                    <h3>💰 Understanding the Financing Structure</h3>
-                    <p>This tool models a <strong>two-stage transaction</strong>:</p>
-                    <ul>
-                        <li><strong>First Position Loan</strong> — Traditional financing (bank/DSCR lender) secured by the property</li>
-                        <li><strong>Seller Carry</strong> — The seller finances a portion of the purchase price, taking "equity carry" (preferred equity) in your LLC instead of cash</li>
-                    </ul>
-                    <p>The <strong>Cash to Seller</strong> at closing = Purchase Price - Seller Carry Amount. The seller receives this in cash, while the rest becomes their equity position with monthly payments.</p>
-                    <div class="help-tip">
-                        <strong>💡 Why Sellers Accept This:</strong> Tax advantages (installment sale treatment), ongoing income stream, and "back door" protection — if buyer defaults, seller can reclaim 100% of the LLC.
-                    </div>
-                </div>
-
-                <div class="help-section">
-                    <h3>🎈 Balloon & Equity Projections</h3>
-                    <p>The <strong>Years to Balloon</strong> determines when the seller carry note matures. At that point:</p>
-                    <ul>
-                        <li>The remaining balance on the seller note is due in full</li>
-                        <li>You'll typically refinance or sell to pay this off</li>
-                        <li>The tool projects property value and equity at balloon based on your appreciation rate</li>
-                    </ul>
-                </div>
-
-                <div class="help-section">
-                    <h3>📚 Deal Library</h3>
-                    <p>Save deals to your library to track your pipeline:</p>
-                    <ul>
-                        <li><strong>Save</strong> — Stores the deal with all inputs and calculated metrics</li>
-                        <li><strong>Load</strong> — Click any deal address to load it back into the calculator</li>
-                        <li><strong>Duplicate</strong> — Create a copy to test different scenarios (📋 button)</li>
-                        <li><strong>Share</strong> — Generate a link to share the deal with partners (🔗 button)</li>
-                        <li><strong>Email Offer</strong> — Send LOI and Deal Summary directly to seller (📧 button)</li>
-                    </ul>
-                    <div class="help-tip">
-                        <strong>💡 Cloud Sync:</strong> Log in to sync your deals across devices. Your library is stored securely and accessible anywhere.
-                    </div>
-                </div>
-
-                <div class="help-section">
-                    <h3>🎯 Deal Optimizer</h3>
-                    <p>Reverse-engineer deal terms! Set your targets:</p>
-                    <ul>
-                        <li>Minimum Cap Rate</li>
-                        <li>Minimum Monthly Cash Flow</li>
-                        <li>Target Cash to Seller</li>
-                    </ul>
-                    <p>Click <strong>Find Solution</strong> and the tool will calculate what combination of LTV, Seller Carry %, and Purchase Price achieves your goals.</p>
-                </div>
-
-                <div class="help-section">
-                    <h3>📧 Email Offers</h3>
-                    <p>Send professional offers directly from the tool:</p>
-                    <ol>
-                        <li>Complete the deal analysis</li>
-                        <li>Fill in seller contact info</li>
-                        <li>Click the <strong>📧 Email</strong> button in the library</li>
-                        <li>A professional email with attached LOI and Deal Summary PDFs is sent to the seller</li>
-                    </ol>
-                    <p>The email comes from <code><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="bad5dcdcdfc8c9fadfcbcfd3cec3d9dbc8c8c3d9dbd6d9cfd6dbced5c894d9d5d7">[email&#160;protected]</a></code> with your email as the reply-to address.</p>
-                </div>
-
-                <div class="help-section">
-                    <h3>🔌 Chrome Extension</h3>
-                    <p>If you have the Chrome extension installed, you can:</p>
-                    <ul>
-                        <li>View any property on Zillow</li>
-                        <li>Click the extension icon</li>
-                        <li>Property data auto-populates into the calculator</li>
-                    </ul>
-                    <p>This eliminates manual data entry and speeds up your analysis workflow.</p>
-                </div>
-
-                <div class="help-section">
-                    <h3>⌨️ Tips & Shortcuts</h3>
-                    <ul>
-                        <li>Hover over any <strong>?</strong> icon for field explanations</li>
-                        <li>Use <strong>New Deal</strong> button to clear the form and start fresh</li>
-                        <li>The sticky dashboard at top always shows key metrics as you scroll</li>
-                        <li>Click column headers in the library to sort deals</li>
-                    </ul>
-                </div>
-
-                <div class="help-section" style="text-align: center; padding-top: 1rem;">
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">
-                        Built by <strong>markarian.ai</strong><br>
-                        Questions or feedback? Contact your administrator.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Save Choice Modal -->
     <div class="save-choice-modal-overlay" id="saveChoiceModal">
         <div class="save-choice-modal">
@@ -3296,13 +2888,8 @@
         </div>
 
         <header>
-            <div class="header-content">
-                <h1>Real Estate Underwriting Calculator</h1>
-                <p class="subtitle">Comprehensive deal analysis with seller financing & equity carry</p>
-            </div>
-            <button class="help-btn" onclick="openHelpModal()" title="Help & User Guide">
-                <span>?</span> Help
-            </button>
+            <h1>Real Estate Underwriting Calculator</h1>
+            <p class="subtitle">Comprehensive deal analysis with seller financing & equity carry</p>
         </header>
 
         <!-- Property & Preparer Info -->
@@ -3414,13 +3001,13 @@
 
                 <div class="input-row">
                     <div class="form-group">
-                        <label class="label-with-tooltip">First Loan % / LTV<span class="tooltip-trigger">?<span class="tooltip-text">Loan-to-Value ratio for the first position loan (typically bank/DSCR financing). This is the percentage of purchase price covered by the first lender.</span></span></label>
-                        <input type="number" id="firstLoanLTV" value="40" step="1" min="0" max="75" class="input-highlight" onchange="calculate()">
+                        <label>First Loan % / LTV</label>
+                        <input type="number" id="firstLoanLTV" value="26" step="1" min="0" max="75" class="input-highlight" onchange="calculate()">
                         <span class="helper-text">% of purchase price (max 75%)</span>
                     </div>
                     <div class="form-group">
-                        <label class="label-with-tooltip">Seller Carry %<span class="tooltip-trigger">?<span class="tooltip-text">Percentage of purchase price the seller finances. This becomes the "Equity Carry" - seller holds preferred equity in the buyer's LLC instead of receiving cash.</span></span></label>
-                        <input type="number" id="sellerCarryPct" value="75" step="1" min="0" max="100" class="input-highlight" onchange="calculate()">
+                        <label>Seller Carry %</label>
+                        <input type="number" id="sellerCarryPct" value="80" step="1" min="0" max="100" class="input-highlight" onchange="calculate()">
                         <span class="helper-text">% of purchase price</span>
                     </div>
                 </div>
@@ -3432,14 +3019,14 @@
 
                 <div class="input-row">
                     <div class="form-group">
-                        <label class="label-with-tooltip">Interest Only? (First Loan)<span class="tooltip-trigger">?<span class="tooltip-text">If Yes, first position loan payments are interest-only (no principal reduction). Common with bridge loans or short-term DSCR products.</span></span></label>
+                        <label>Interest Only? (First Loan)</label>
                         <select id="interestOnly" class="input-highlight" onchange="calculate()">
                             <option value="No">No</option>
                             <option value="Yes">Yes</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="label-with-tooltip">Interest @ Balloon?<span class="tooltip-trigger">?<span class="tooltip-text">Add accrued interest to balloon balance? If Yes, any unpaid interest on the seller carry note is added to the final balloon payment.</span></span></label>
+                        <label>Interest @ Balloon?</label>
                         <select id="interestAtBalloon" class="input-highlight" onchange="calculate()">
                             <option value="No">No</option>
                             <option value="Yes">Yes</option>
@@ -3449,7 +3036,7 @@
 
                 <div class="input-row">
                     <div class="form-group">
-                        <label class="label-with-tooltip">Months to Stabilize<span class="tooltip-trigger">?<span class="tooltip-text">Expected time before property reaches full rental income. During stabilization, revenue is reduced based on the % below. Use for value-add or vacant properties.</span></span></label>
+                        <label>Months to Stabilize</label>
                         <input type="number" id="monthsToStabilize" value="0" step="1" min="0" class="input-highlight" onchange="calculate()">
                     </div>
                     <div class="form-group">
@@ -3459,7 +3046,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="label-with-tooltip">Years to Balloon<span class="tooltip-trigger">?<span class="tooltip-text">When the seller carry note matures and full remaining balance is due. Typically 5-10 years. Buyer refinances or sells to pay off balloon.</span></span></label>
+                    <label>Years to Balloon</label>
                     <input type="number" id="yearsToBalloon" value="8" step="1" min="1" class="input-highlight" onchange="calculate()">
                 </div>
             </div>
@@ -3552,7 +3139,7 @@
 
                 <div class="input-row">
                     <div class="form-group">
-                        <label class="label-with-tooltip">Assignment Fee (%)<span class="tooltip-trigger">?<span class="tooltip-text">Fee paid to the deal finder/wholesaler, calculated as % of purchase price. This comes out of the buyer's equity at closing.</span></span></label>
+                        <label>Assignment Fee (%)</label>
                         <input type="number" id="assignmentFeePct" value="5" step="0.5" min="0" class="input-highlight" onchange="calculate()">
                     </div>
                     <div class="form-group">
@@ -3562,7 +3149,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="label-with-tooltip">Closing & Bridge Loan Cost (%)<span class="tooltip-trigger">?<span class="tooltip-text">Combined closing costs and any short-term bridge financing fees. Typically 3-6% of purchase price.</span></span></label>
+                    <label>Closing & Bridge Loan Cost (%)</label>
                     <input type="number" id="closingCostPct" value="5" step="0.5" min="0" class="input-highlight" onchange="calculate()">
                 </div>
 
@@ -3757,7 +3344,7 @@
                         <div class="result-value positive" id="monthlyCashFlow">$0</div>
                     </div>
                     <div class="result-item">
-                        <div class="result-label label-with-tooltip">Cash-on-Cash Return<span class="tooltip-trigger">?<span class="tooltip-text">Annual cash flow divided by total cash invested. Shows the % return on your actual out-of-pocket investment. Higher is better.</span></span></div>
+                        <div class="result-label">Cash-on-Cash Return</div>
                         <div class="result-value highlight" id="cocReturn">0%</div>
                     </div>
                     <div class="result-item">
@@ -3776,19 +3363,19 @@
 
                 <div class="result-grid">
                     <div class="result-item">
-                        <div class="result-label label-with-tooltip">Net Operating Income (NOI)<span class="tooltip-trigger">?<span class="tooltip-text">Annual revenue minus operating expenses (before debt service). This is the property's income regardless of how it's financed.</span></span></div>
+                        <div class="result-label">Net Operating Income (NOI)</div>
                         <div class="result-value positive" id="noiValue">$0</div>
                     </div>
                     <div class="result-item">
-                        <div class="result-label label-with-tooltip">Cap Rate<span class="tooltip-trigger">?<span class="tooltip-text">NOI ÷ Purchase Price. Measures property yield independent of financing. Higher cap rate = better deal (typically 5-10% for residential).</span></span></div>
+                        <div class="result-label">Cap Rate</div>
                         <div class="result-value highlight" id="capRate">0%</div>
                     </div>
                     <div class="result-item">
-                        <div class="result-label label-with-tooltip">Blended Interest Rate<span class="tooltip-trigger">?<span class="tooltip-text">Weighted average interest rate across all loans (first position + seller carry). Lower is better for cash flow.</span></span></div>
+                        <div class="result-label">Blended Interest Rate</div>
                         <div class="result-value" id="blendedRate">0%</div>
                     </div>
                     <div class="result-item">
-                        <div class="result-label label-with-tooltip">Spread (Cap - Blended)<span class="tooltip-trigger">?<span class="tooltip-text">Cap Rate minus Blended Rate. Positive spread means the property yields more than your cost of capital. This is the "arbitrage" that makes the deal work.</span></span></div>
+                        <div class="result-label">Spread (Cap - Blended)</div>
                         <div class="result-value" id="capBlendedSpread">0%</div>
                     </div>
                 </div>
@@ -3883,12 +3470,12 @@
             </div>
         </div>
 
-        <!-- Deal Optimizer -->
+        <!-- Goal Finder -->
         <div class="goal-finder">
             <div class="goal-finder-header">
                 <div class="goal-finder-header-left">
                     <div class="card-icon icon-amber">🎯</div>
-                    <h2>Deal Optimizer</h2>
+                    <h2>Goal Finder</h2>
                 </div>
                 <span style="color: var(--text-muted); font-size: 0.85rem;">Reverse-engineer deal terms from your desired outcomes</span>
             </div>
@@ -3920,23 +3507,23 @@
                         <label for="goalAdjustSellerCarry">Seller Carry %</label>
                     </div>
                     <div class="goal-variable-item">
-                        <input type="checkbox" id="goalAdjustSellerAmort" checked>
+                        <input type="checkbox" id="goalAdjustSellerAmort">
                         <label for="goalAdjustSellerAmort">Seller Amortization</label>
                     </div>
                     <div class="goal-variable-item">
-                        <input type="checkbox" id="goalAdjustPrice" checked>
+                        <input type="checkbox" id="goalAdjustPrice">
                         <label for="goalAdjustPrice">Purchase Price</label>
                     </div>
                 </div>
                 <div class="goal-variable-options">
-                    <div class="goal-option" id="goalPriceRange">
+                    <div class="goal-option" id="goalPriceRange" style="display: none;">
                         <label>Min Price</label>
                         <div class="goal-option-input">
                             <span>$</span>
                             <input type="number" id="goalMinPrice" value="0" step="10000">
                         </div>
                     </div>
-                    <div class="goal-option" id="goalAmortRange">
+                    <div class="goal-option" id="goalAmortRange" style="display: none;">
                         <label>Max Amortization</label>
                         <div class="goal-option-input">
                             <input type="number" id="goalMaxAmort" value="99" step="1" min="30" max="99">
@@ -3990,9 +3577,6 @@
 
         <!-- Export Buttons -->
         <div class="export-buttons">
-            <button class="new-deal-btn" onclick="startNewDeal()">
-                <span>✨</span> New Deal
-            </button>
             <button class="library-btn" onclick="saveToLibrary()">
                 <span>💾</span> Save Deal to Library
             </button>
@@ -4042,7 +3626,7 @@
         </footer>
     </div>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    <script>
         // =============================================
         // SUPABASE CONFIGURATION
         // =============================================
@@ -4277,7 +3861,7 @@
         }
 
         async function updateInCloud(deal) {
-            if (!currentUser || !deal.cloud_id) return false;
+            if (!currentUser || !deal.cloud_id) return;
             
             setSyncStatus('syncing', 'Saving...');
             
@@ -4292,11 +3876,9 @@
                 if (error) throw error;
                 
                 setSyncStatus('synced', 'Saved');
-                return true;
             } catch (error) {
                 console.error('Error updating deal:', error);
                 setSyncStatus('error', 'Save failed');
-                return false;
             }
         }
 
@@ -4317,54 +3899,90 @@
 
         // Convert local deal format to cloud format
         function localDealToCloud(deal) {
-            return {
-                street_address: deal.propertyInfo?.streetAddress || '',
-                city: deal.propertyInfo?.city || '',
-                state: deal.propertyInfo?.state || '',
-                zip: deal.propertyInfo?.zip || '',
-                property_link: deal.propertyInfo?.link || '',
-                preparer_name: deal.preparer?.name || '',
-                preparer_email: deal.preparer?.email || '',
-                preparer_phone: deal.preparer?.phone || '',
-                seller_name: deal.seller?.name || '',
-                seller_email: deal.seller?.email || '',
-                seller_phone: deal.seller?.phone || '',
-                category: deal.dealTerms?.category || deal.loanConfig?.category || 'DSCR Residential',
-                first_loan_ltv: parseFloat(deal.financing?.firstLoanLTV || deal.loanConfig?.firstLoanLTV) || 26,
-                seller_carry_pct: parseFloat(deal.financing?.sellerCarryPct || deal.loanConfig?.sellerCarryPct) || 80,
-                interest_only: deal.financing?.interestOnly || deal.loanConfig?.interestOnly || 'No',
-                interest_at_balloon: deal.financing?.interestAtBalloon || deal.loanConfig?.interestAtBalloon || 'No',
-                months_to_stabilize: parseInt(deal.stabilization?.monthsToStabilize || deal.loanConfig?.monthsToStabilize) || 0,
-                revenue_during_stab: parseFloat(deal.stabilization?.revenueDuringStab || deal.loanConfig?.revenueDuringStab) || 100,
-                years_to_balloon: parseInt(deal.financing?.yearsToBalloon || deal.loanConfig?.yearsToBalloon) || 8,
-                purchase_price: parseFloat(deal.dealTerms?.purchasePrice) || 0,
-                asking_price: parseFloat(deal.dealTerms?.askingPrice) || 0,
-                rental_revenue: parseFloat(deal.dealTerms?.rentalRevenue) || 0,
-                appreciation_rate: parseFloat(deal.dealTerms?.appreciationRate) || 2,
-                // Note: existing_debt is stored in full_data, not as a separate column
-                agent_fee: parseFloat(deal.cashToBuyer?.agentFee) || 0,
-                rehab_cost: parseFloat(deal.cashToBuyer?.rehabCost) || 0,
-                assignment_fee_pct: parseFloat(deal.cashToBuyer?.assignmentFeePct) || 5,
-                appraisal_cost: parseFloat(deal.cashToBuyer?.appraisalCost) || 0,
-                closing_cost_pct: parseFloat(deal.cashToBuyer?.closingCostPct) || 5,
-                seller_carry_rate: parseFloat(deal.financing?.sellerCarryRate || deal.sellerFinancing?.rate) || 0,
-                seller_carry_amort: parseInt(deal.financing?.sellerCarryAmort || deal.sellerFinancing?.amortization) || 30,
-                property_tax: parseFloat(deal.expenses?.propertyTax) || 0,
-                insurance: parseFloat(deal.expenses?.insurance) || 0,
-                hoa: parseFloat(deal.expenses?.hoa) || 0,
-                other_expenses: parseFloat(deal.expenses?.otherExpenses || deal.expenses?.other) || 0,
-                capex_pct: parseFloat(deal.expenses?.capexPct) || 5,
-                management_pct: parseFloat(deal.expenses?.managementPct) || 8,
-                vacancy_pct: parseFloat(deal.expenses?.vacancyPct) || 5,
-                full_data: deal,
-                updated_at: new Date().toISOString()
-            };
-        }
+    // Helper to safely get numeric value, preserving 0
+    const safeNum = (val, defaultVal) => {
+        const parsed = parseFloat(val);
+        return isNaN(parsed) ? defaultVal : parsed;
+    };
+    
+    return {
+        // Property info - check both possible paths
+        street_address: deal.propertyInfo?.streetAddress || '',
+        city: deal.propertyInfo?.city || '',
+        state: deal.propertyInfo?.state || '',
+        zip: deal.propertyInfo?.zip || '',
+        property_link: deal.propertyInfo?.link || '',
+        
+        // Preparer
+        preparer_name: deal.preparer?.name || '',
+        preparer_email: deal.preparer?.email || '',
+        preparer_phone: deal.preparer?.phone || '',
+        
+        // Seller
+        seller_name: deal.seller?.name || '',
+        seller_email: deal.seller?.email || '',
+        seller_phone: deal.seller?.phone || '',
+        
+        // FIXED: Category - check both dealTerms.category AND loanConfig.category
+        category: deal.dealTerms?.category || deal.loanConfig?.category || 'DSCR Residential',
+        
+        // FIXED: Loan config - check both financing.* AND loanConfig.* paths
+        // Use safeNum to preserve 0 values
+        first_loan_ltv: safeNum(deal.financing?.firstLoanLTV ?? deal.loanConfig?.firstLoanLTV, 26),
+        seller_carry_pct: safeNum(deal.financing?.sellerCarryPct ?? deal.loanConfig?.sellerCarryPct, 80),
+        interest_only: deal.financing?.interestOnly || deal.loanConfig?.interestOnly || 'No',
+        interest_at_balloon: deal.financing?.interestAtBalloon || deal.loanConfig?.interestAtBalloon || 'No',
+        months_to_stabilize: parseInt(deal.stabilization?.monthsToStabilize ?? deal.loanConfig?.monthsToStabilize ?? 0),
+        revenue_during_stab: safeNum(deal.stabilization?.revenueDuringStab ?? deal.loanConfig?.revenueDuringStab, 100),
+        years_to_balloon: parseInt(deal.financing?.yearsToBalloon ?? deal.loanConfig?.yearsToBalloon ?? 8),
+        
+        // FIXED: Deal terms - check both dealTerms.* AND existing paths
+        purchase_price: safeNum(deal.dealTerms?.purchasePrice, 0),
+        asking_price: safeNum(deal.dealTerms?.askingPrice, 0),
+        rental_revenue: safeNum(deal.dealTerms?.rentalRevenue, 0),
+        appreciation_rate: safeNum(deal.dealTerms?.appreciationRate, 2),
+        
+        // Cash to buyer
+        agent_fee: safeNum(deal.cashToBuyer?.agentFee, 0),
+        rehab_cost: safeNum(deal.cashToBuyer?.rehabCost, 0),
+        assignment_fee_pct: safeNum(deal.cashToBuyer?.assignmentFeePct, 5),
+        appraisal_cost: safeNum(deal.cashToBuyer?.appraisalCost, 0),
+        closing_cost_pct: safeNum(deal.cashToBuyer?.closingCostPct, 5),
+        
+        // Seller financing - check both financing.* AND sellerFinancing.* paths
+        seller_carry_rate: safeNum(deal.financing?.sellerCarryRate ?? deal.sellerFinancing?.rate, 0),
+        seller_carry_amort: parseInt(deal.financing?.sellerCarryAmort ?? deal.sellerFinancing?.amortization ?? 30),
+        
+        // FIXED: Expenses - preserve 0 values, check both otherExpenses and other
+        property_tax: safeNum(deal.expenses?.propertyTax, 0),
+        insurance: safeNum(deal.expenses?.insurance, 0),
+        hoa: safeNum(deal.expenses?.hoa, 0),
+        other_expenses: safeNum(deal.expenses?.otherExpenses ?? deal.expenses?.other, 0),
+        capex_pct: safeNum(deal.expenses?.capexPct, 5),
+        management_pct: safeNum(deal.expenses?.managementPct, 8),
+        vacancy_pct: safeNum(deal.expenses?.vacancyPct, 5),
+        
+        // Full data backup
+        full_data: deal,
+        updated_at: new Date().toISOString()
+    };
+}
 
         // Convert cloud deal format to local format
-function cloudDealToLocal(cloudDeal) {
+        function cloudDealToLocal(cloudDeal) {
     // If we have full_data stored, use that as the base
     const base = cloudDeal.full_data || {};
+    
+    // Helper to safely get numeric value, preserving 0
+    const safeNum = (cloudVal, baseVal, defaultVal) => {
+        if (cloudVal !== null && cloudVal !== undefined && !isNaN(parseFloat(cloudVal))) {
+            return cloudVal;
+        }
+        if (baseVal !== null && baseVal !== undefined && !isNaN(parseFloat(baseVal))) {
+            return baseVal;
+        }
+        return defaultVal;
+    };
     
     return {
         id: cloudDeal.id.substring(0, 13) + Date.now(), // Create local ID
@@ -4376,63 +3994,99 @@ function cloudDealToLocal(cloudDeal) {
         copyName: base.copyName || null,
         originalAddress: base.originalAddress || null,
         status: base.status || 'working',
+        
+        // Property Info
         propertyInfo: {
             streetAddress: cloudDeal.street_address || base.propertyInfo?.streetAddress || '',
             city: cloudDeal.city || base.propertyInfo?.city || '',
             state: cloudDeal.state || base.propertyInfo?.state || '',
             zip: cloudDeal.zip || base.propertyInfo?.zip || '',
-            address: `${cloudDeal.street_address}, ${cloudDeal.city}, ${cloudDeal.state} ${cloudDeal.zip}`.trim(),
+            address: `${cloudDeal.street_address || ''}, ${cloudDeal.city || ''}, ${cloudDeal.state || ''} ${cloudDeal.zip || ''}`.trim().replace(/^,\s*/, ''),
             link: cloudDeal.property_link || base.propertyInfo?.link || '',
         },
+        
+        // Preparer
         preparer: {
             name: cloudDeal.preparer_name || base.preparer?.name || '',
             email: cloudDeal.preparer_email || base.preparer?.email || '',
             phone: cloudDeal.preparer_phone || base.preparer?.phone || '',
         },
+        
+        // Seller
         seller: {
             name: cloudDeal.seller_name || base.seller?.name || '',
             email: cloudDeal.seller_email || base.seller?.email || '',
             phone: cloudDeal.seller_phone || base.seller?.phone || '',
         },
-        loanConfig: {
-            category: cloudDeal.category || base.loanConfig?.category || 'DSCR Residential',
-            firstLoanLTV: cloudDeal.first_loan_ltv ?? base.loanConfig?.firstLoanLTV ?? 26,
-            sellerCarryPct: cloudDeal.seller_carry_pct ?? base.loanConfig?.sellerCarryPct ?? 80,
-            interestOnly: cloudDeal.interest_only || base.loanConfig?.interestOnly || 'No',
-            interestAtBalloon: cloudDeal.interest_at_balloon || base.loanConfig?.interestAtBalloon || 'No',
-            monthsToStabilize: cloudDeal.months_to_stabilize ?? base.loanConfig?.monthsToStabilize ?? 0,
-            revenueDuringStab: cloudDeal.revenue_during_stab ?? base.loanConfig?.revenueDuringStab ?? 100,
-            yearsToBalloon: cloudDeal.years_to_balloon ?? base.loanConfig?.yearsToBalloon ?? 8,
-        },
+        
+        // FIXED: dealTerms structure - this is what populateFormFromDeal() expects
         dealTerms: {
-            purchasePrice: cloudDeal.purchase_price ?? base.dealTerms?.purchasePrice ?? 0,
-            askingPrice: cloudDeal.asking_price ?? base.dealTerms?.askingPrice ?? 0,
-            rentalRevenue: cloudDeal.rental_revenue ?? base.dealTerms?.rentalRevenue ?? 0,
-            appreciationRate: cloudDeal.appreciation_rate ?? base.dealTerms?.appreciationRate ?? 2,
+            category: cloudDeal.category || base.dealTerms?.category || base.loanConfig?.category || 'DSCR Residential',
+            purchasePrice: safeNum(cloudDeal.purchase_price, base.dealTerms?.purchasePrice, 0),
+            askingPrice: safeNum(cloudDeal.asking_price, base.dealTerms?.askingPrice, 0),
+            existingDebt: safeNum(null, base.dealTerms?.existingDebt, 0),
+            rentalRevenue: safeNum(cloudDeal.rental_revenue, base.dealTerms?.rentalRevenue, 0),
+            appreciationRate: safeNum(cloudDeal.appreciation_rate, base.dealTerms?.appreciationRate, 2),
         },
+        
+        // FIXED: financing structure - this is what populateFormFromDeal() expects
+        financing: {
+            firstLoanLTV: safeNum(cloudDeal.first_loan_ltv, base.financing?.firstLoanLTV ?? base.loanConfig?.firstLoanLTV, 26),
+            interestOnly: cloudDeal.interest_only || base.financing?.interestOnly || base.loanConfig?.interestOnly || 'No',
+            sellerCarryPct: safeNum(cloudDeal.seller_carry_pct, base.financing?.sellerCarryPct ?? base.loanConfig?.sellerCarryPct, 80),
+            sellerCarryRate: safeNum(cloudDeal.seller_carry_rate, base.financing?.sellerCarryRate ?? base.sellerFinancing?.rate, 0),
+            sellerCarryAmort: safeNum(cloudDeal.seller_carry_amort, base.financing?.sellerCarryAmort ?? base.sellerFinancing?.amortization, 30),
+            interestAtBalloon: cloudDeal.interest_at_balloon || base.financing?.interestAtBalloon || base.loanConfig?.interestAtBalloon || 'No',
+            yearsToBalloon: safeNum(cloudDeal.years_to_balloon, base.financing?.yearsToBalloon ?? base.loanConfig?.yearsToBalloon, 8),
+        },
+        
+        // FIXED: stabilization structure - this is what populateFormFromDeal() expects
+        stabilization: {
+            monthsToStabilize: safeNum(cloudDeal.months_to_stabilize, base.stabilization?.monthsToStabilize ?? base.loanConfig?.monthsToStabilize, 0),
+            revenueDuringStab: safeNum(cloudDeal.revenue_during_stab, base.stabilization?.revenueDuringStab ?? base.loanConfig?.revenueDuringStab, 100),
+        },
+        
+        // FIXED: expenses structure - use otherExpenses (not other) to match populateFormFromDeal()
+        // CRITICAL: Preserve 0 values for capexPct, managementPct, vacancyPct
+        expenses: {
+            propertyTax: safeNum(cloudDeal.property_tax, base.expenses?.propertyTax, 0),
+            insurance: safeNum(cloudDeal.insurance, base.expenses?.insurance, 0),
+            hoa: safeNum(cloudDeal.hoa, base.expenses?.hoa, 0),
+            otherExpenses: safeNum(cloudDeal.other_expenses, base.expenses?.otherExpenses ?? base.expenses?.other, 0),
+            capexPct: safeNum(cloudDeal.capex_pct, base.expenses?.capexPct, 5),
+            managementPct: safeNum(cloudDeal.management_pct, base.expenses?.managementPct, 8),
+            vacancyPct: safeNum(cloudDeal.vacancy_pct, base.expenses?.vacancyPct, 5),
+        },
+        
+        // Cash to buyer
         cashToBuyer: {
-            agentFee: cloudDeal.agent_fee ?? base.cashToBuyer?.agentFee ?? 0,
-            rehabCost: cloudDeal.rehab_cost ?? base.cashToBuyer?.rehabCost ?? 0,
-            assignmentFeePct: cloudDeal.assignment_fee_pct ?? base.cashToBuyer?.assignmentFeePct ?? 5,
-            appraisalCost: cloudDeal.appraisal_cost ?? base.cashToBuyer?.appraisalCost ?? 0,
-            closingCostPct: cloudDeal.closing_cost_pct ?? base.cashToBuyer?.closingCostPct ?? 5,
+            agentFee: safeNum(cloudDeal.agent_fee, base.cashToBuyer?.agentFee, 0),
+            rehabCost: safeNum(cloudDeal.rehab_cost, base.cashToBuyer?.rehabCost, 0),
+            assignmentFeePct: safeNum(cloudDeal.assignment_fee_pct, base.cashToBuyer?.assignmentFeePct, 5),
+            appraisalCost: safeNum(cloudDeal.appraisal_cost, base.cashToBuyer?.appraisalCost, 0),
+            closingCostPct: safeNum(cloudDeal.closing_cost_pct, base.cashToBuyer?.closingCostPct, 5),
+        },
+        
+        // Notes
+        notes: base.notes || '',
+        
+        // Legacy support - keep loanConfig and sellerFinancing for backwards compatibility
+        loanConfig: {
+            category: cloudDeal.category || base.dealTerms?.category || base.loanConfig?.category || 'DSCR Residential',
+            firstLoanLTV: safeNum(cloudDeal.first_loan_ltv, base.financing?.firstLoanLTV ?? base.loanConfig?.firstLoanLTV, 26),
+            sellerCarryPct: safeNum(cloudDeal.seller_carry_pct, base.financing?.sellerCarryPct ?? base.loanConfig?.sellerCarryPct, 80),
+            interestOnly: cloudDeal.interest_only || base.financing?.interestOnly || base.loanConfig?.interestOnly || 'No',
+            interestAtBalloon: cloudDeal.interest_at_balloon || base.financing?.interestAtBalloon || base.loanConfig?.interestAtBalloon || 'No',
+            monthsToStabilize: safeNum(cloudDeal.months_to_stabilize, base.stabilization?.monthsToStabilize ?? base.loanConfig?.monthsToStabilize, 0),
+            revenueDuringStab: safeNum(cloudDeal.revenue_during_stab, base.stabilization?.revenueDuringStab ?? base.loanConfig?.revenueDuringStab, 100),
+            yearsToBalloon: safeNum(cloudDeal.years_to_balloon, base.financing?.yearsToBalloon ?? base.loanConfig?.yearsToBalloon, 8),
         },
         sellerFinancing: {
-            rate: cloudDeal.seller_carry_rate ?? base.sellerFinancing?.rate ?? 0,
-            amortization: cloudDeal.seller_carry_amort ?? base.sellerFinancing?.amortization ?? 30,
+            rate: safeNum(cloudDeal.seller_carry_rate, base.financing?.sellerCarryRate ?? base.sellerFinancing?.rate, 0),
+            amortization: safeNum(cloudDeal.seller_carry_amort, base.financing?.sellerCarryAmort ?? base.sellerFinancing?.amortization, 30),
         },
-        expenses: {
-            propertyTax: cloudDeal.property_tax ?? base.expenses?.propertyTax ?? 0,
-            insurance: cloudDeal.insurance ?? base.expenses?.insurance ?? 0,
-            hoa: cloudDeal.hoa ?? base.expenses?.hoa ?? 0,
-            other: cloudDeal.other_expenses ?? base.expenses?.other ?? 0,
-            capexPct: cloudDeal.capex_pct ?? base.expenses?.capexPct ?? 5,
-            managementPct: cloudDeal.management_pct ?? base.expenses?.managementPct ?? 8,
-            vacancyPct: cloudDeal.vacancy_pct ?? base.expenses?.vacancyPct ?? 5,
-        }
     };
 }
-
         // =============================================
         // ADDRESS COLLISION DETECTION
         // =============================================
@@ -5005,9 +4659,6 @@ function cloudDealToLocal(cloudDeal) {
             // Capture URL params immediately before anything else
             capturePendingParams();
             
-            // Check for auto-saved draft (before anything populates the form)
-            checkForDraft();
-            
             // Add touch listeners to tracked fields
             const trackedFields = ['purchasePrice', 'askingPrice', 'rentalRevenue', 'existingDebt', 'propertyTax', 'insurance', 'hoa', 'otherExpenses', 'agentFee', 'rehabCost', 'appraisalCost'];
             trackedFields.forEach(fieldId => {
@@ -5028,9 +4679,6 @@ function cloudDealToLocal(cloudDeal) {
             renderLibrary();
             initAuth(); // Initialize authentication - will call applyPendingParams after auth
             checkForSharedDeal(); // Check if opening a shared deal link
-            
-            // Start auto-save interval (every 30 seconds)
-            setInterval(autoSaveDraft, 30000);
             
             // Toggle price range visibility based on checkbox
             document.getElementById('goalAdjustPrice').addEventListener('change', function() {
@@ -5295,30 +4943,6 @@ function cloudDealToLocal(cloudDeal) {
             document.getElementById('shareModal').classList.remove('show');
         }
         
-        function openHelpModal() {
-            document.getElementById('helpModal').classList.add('show');
-            document.body.style.overflow = 'hidden';
-        }
-        
-        function closeHelpModal() {
-            document.getElementById('helpModal').classList.remove('show');
-            document.body.style.overflow = '';
-        }
-        
-        // Close help modal on escape key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && document.getElementById('helpModal').classList.contains('show')) {
-                closeHelpModal();
-            }
-        });
-        
-        // Close help modal when clicking outside
-        document.getElementById('helpModal')?.addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeHelpModal();
-            }
-        });
-        
         async function revokeShare() {
             if (!confirm('Revoke access? Anyone with the link will no longer be able to view or edit this deal.')) {
                 return;
@@ -5492,8 +5116,8 @@ function cloudDealToLocal(cloudDeal) {
             
             // Current values as defaults
             const currentPrice = parseFloat(document.getElementById('purchasePrice').value) || maxPrice;
-            const currentSellerCarry = parseFloat(document.getElementById('sellerCarryPct').value) || 75;
-            const currentLTV = parseFloat(document.getElementById('firstLoanLTV').value) || 40;
+            const currentSellerCarry = parseFloat(document.getElementById('sellerCarryPct').value) || 70;
+            const currentLTV = parseFloat(document.getElementById('firstLoanLTV').value) || 26;
             
             // GRANULAR Variable ranges (1% increments for LTV and Seller Carry)
             const ltvValues = [];
@@ -6029,105 +5653,11 @@ Please be direct and specific with your analysis.`;
         }
 
         // Track currently loaded deal for update vs create
-        // Track currently loaded deal - restore from sessionStorage if available
-        let currentLoadedDealId = sessionStorage.getItem('currentLoadedDealId') || null;
-
-        function startNewDeal() {
-            // Confirm if there are unsaved changes
-            const hasData = document.getElementById('streetAddress').value || 
-                           document.getElementById('purchasePrice').value;
-            
-            if (hasData) {
-                if (!confirm('Start a new deal? Any unsaved changes will be lost.')) {
-                    return;
-                }
-            }
-            
-            // Clear all form fields
-            // Property info
-            document.getElementById('streetAddress').value = '';
-            document.getElementById('city').value = '';
-            document.getElementById('state').value = '';
-            document.getElementById('zip').value = '';
-            document.getElementById('propertyLink').value = '';
-            
-            // Preparer info - keep these as they're usually the same user
-            // document.getElementById('preparerName').value = '';
-            // document.getElementById('preparerEmail').value = '';
-            // document.getElementById('preparerPhone').value = '';
-            
-            // Seller info
-            document.getElementById('sellerName').value = '';
-            document.getElementById('sellerEmail').value = '';
-            document.getElementById('sellerPhone').value = '';
-            
-            // Deal terms
-            document.getElementById('category').value = 'dscr-residential';
-            document.getElementById('purchasePrice').value = '';
-            document.getElementById('askingPrice').value = '';
-            document.getElementById('existingDebt').value = '';
-            document.getElementById('rentalRevenue').value = '';
-            document.getElementById('appreciationRate').value = '3';
-            
-            // Financing - reset to defaults
-            document.getElementById('firstLoanLTV').value = '40';
-            document.getElementById('interestOnly').value = '8';
-            document.getElementById('sellerCarryPct').value = '75';
-            document.getElementById('sellerCarryRate').value = '0';
-            document.getElementById('sellerCarryAmort').value = '30';
-            document.getElementById('interestAtBalloon').value = '6.5';
-            document.getElementById('yearsToBalloon').value = '8';
-            
-            // Stabilization
-            document.getElementById('monthsToStabilize').value = '3';
-            document.getElementById('revenueDuringStab').value = '50';
-            
-            // Expenses - reset to defaults
-            document.getElementById('propertyTax').value = '';
-            document.getElementById('insurance').value = '';
-            document.getElementById('hoa').value = '';
-            document.getElementById('otherExpenses').value = '';
-            document.getElementById('capexPct').value = '5';
-            document.getElementById('managementPct').value = '8';
-            document.getElementById('vacancyPct').value = '5';
-            
-            // Cash to buyer - reset to defaults
-            document.getElementById('agentFee').value = '';
-            document.getElementById('rehabCost').value = '';
-            document.getElementById('assignmentFeePct').value = '5';
-            document.getElementById('appraisalCost').value = '';
-            document.getElementById('closingCostPct').value = '5';
-            
-            // Notes
-            document.getElementById('dealNotes').value = '';
-            
-            // Reset tracking
-            currentLoadedDealId = null;
-            sessionStorage.removeItem('currentLoadedDealId');
-            
-            // Clear any auto-saved draft
-            clearDraft();
-            
-            // Reset touched fields
-            touchedFields.clear();
-            
-            // Recalculate to show zeroed state
-            calculate();
-            
-            // Scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+        let currentLoadedDealId = null;
 
         async function saveToLibrary() {
             const btn = document.querySelector('.library-btn');
             const originalText = btn.innerHTML;
-            
-            // Always ensure button gets reset
-            const resetButton = () => {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-                btn.style.background = '';
-            };
             
             try {
                 // Show saving state
@@ -6142,7 +5672,8 @@ Please be direct and specific with your analysis.`;
                 
                 if (!hasAddress && !hasPrice) {
                     alert('Please enter at least an address or purchase price before saving.');
-                    resetButton();
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
                     return;
                 }
                 
@@ -6169,35 +5700,18 @@ Please be direct and specific with your analysis.`;
                             existingDeal = null;
                             currentLoadedDealId = null;
                         }
-                    } else {
-                        // Deal not found in library - reset tracking
-                        currentLoadedDealId = null;
                     }
                 }
                 
                 // Only show overwrite/copy dialog if address hasn't changed
                 if (existingDeal) {
                     // Ask user: update or copy?
-                    resetButton();
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
                     
                     // Get the base address for the copy name preview
                     const baseAddress = existingDeal.originalAddress || getAddressFromParts(existingDeal.propertyInfo);
-                    
-                    // Add timeout to dialog in case something goes wrong
-                    let result;
-                    try {
-                        result = await Promise.race([
-                            showSaveChoiceDialog(baseAddress),
-                            new Promise((_, reject) => setTimeout(() => reject(new Error('Dialog timeout')), 60000))
-                        ]);
-                    } catch (dialogError) {
-                        console.error('Dialog error:', dialogError);
-                        // Close any open modals
-                        document.getElementById('saveChoiceModal').classList.remove('show');
-                        document.getElementById('copyNameModal').classList.remove('show');
-                        resetButton();
-                        return;
-                    }
+                    const result = await showSaveChoiceDialog(baseAddress);
                     
                     if (result.choice === 'cancel') {
                         return;
@@ -6222,21 +5736,14 @@ Please be direct and specific with your analysis.`;
                     deal.share_token = existingDeal.share_token;
                     
                     // Update in cloud
-                    let cloudSaveSucceeded = false;
                     if (currentUser && deal.cloud_id) {
                         try {
-                            const updateResult = await Promise.race([
+                            await Promise.race([
                                 updateInCloud(deal),
                                 new Promise((_, reject) => setTimeout(() => reject(new Error('Cloud sync timeout')), 10000))
                             ]);
-                            cloudSaveSucceeded = (updateResult === true);
                         } catch (cloudError) {
-                            console.warn('Cloud update failed:', cloudError);
-                        }
-                        
-                        if (!cloudSaveSucceeded) {
-                            setSyncStatus('error', 'Cloud save failed');
-                            alert('Warning: Could not save to cloud. Your changes are saved locally but may be lost if you clear browser data.');
+                            console.warn('Cloud update failed, saved locally:', cloudError);
                         }
                     } else if (currentUser && !deal.cloud_id) {
                         try {
@@ -6246,15 +5753,9 @@ Please be direct and specific with your analysis.`;
                             ]);
                             if (cloudResult) {
                                 deal.cloud_id = cloudResult.id;
-                                cloudSaveSucceeded = true;
                             }
                         } catch (cloudError) {
-                            console.warn('Cloud save failed:', cloudError);
-                        }
-                        
-                        if (!cloudSaveSucceeded) {
-                            setSyncStatus('error', 'Cloud save failed');
-                            alert('Warning: Could not save to cloud. Your changes are saved locally but may be lost if you clear browser data.');
+                            console.warn('Cloud save failed, saved locally:', cloudError);
                         }
                     }
                     
@@ -6285,10 +5786,8 @@ Please be direct and specific with your analysis.`;
                     }
                     
                     currentLoadedDealId = deal.id; // Track as current deal
-                    sessionStorage.setItem('currentLoadedDealId', String(deal.id));
                     
                     // Save to cloud (with timeout)
-                    let cloudSaveSucceeded = false;
                     if (currentUser) {
                         try {
                             const cloudResult = await Promise.race([
@@ -6297,19 +5796,9 @@ Please be direct and specific with your analysis.`;
                             ]);
                             if (cloudResult) {
                                 deal.cloud_id = cloudResult.id;
-                                cloudSaveSucceeded = true;
-                            } else {
-                                // saveToCloud returned null (failed silently)
-                                console.warn('Cloud save returned null - save failed');
                             }
                         } catch (cloudError) {
-                            console.warn('Cloud save failed:', cloudError);
-                        }
-                        
-                        if (!cloudSaveSucceeded) {
-                            // Warn user that data won't persist
-                            setSyncStatus('error', 'Cloud save failed');
-                            alert('Warning: Could not save to cloud. Your deal is saved locally but may be lost if you clear browser data or log in from another device.');
+                            console.warn('Cloud save failed, saved locally:', cloudError);
                         }
                     }
                     
@@ -6319,16 +5808,6 @@ Please be direct and specific with your analysis.`;
                     renderLibrary();
                     
                     btn.innerHTML = saveAsCopy ? '<span>✓</span> Copy Saved!' : '<span>✓</span> Saved!';
-                }
-                
-                // Clear auto-save draft since we just saved
-                clearDraft();
-                
-                // Only show Synced if we actually synced to cloud (or no user logged in)
-                if (currentUser) {
-                    // Status already set by saveToCloud or error handling above
-                } else {
-                    setSyncStatus('synced', 'Local only');
                 }
                 
                 btn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
@@ -6341,7 +5820,8 @@ Please be direct and specific with your analysis.`;
             } catch (error) {
                 console.error('Error saving deal:', error);
                 alert('Error saving deal: ' + error.message);
-                resetButton();
+                btn.innerHTML = originalText;
+                btn.disabled = false;
             }
         }
         
@@ -6431,7 +5911,6 @@ Please be direct and specific with your analysis.`;
         
         function clearCurrentDeal() {
             currentLoadedDealId = null;
-            sessionStorage.removeItem('currentLoadedDealId');
         }
 
         function loadFromLibrary(dealId) {
@@ -6439,8 +5918,6 @@ Please be direct and specific with your analysis.`;
             const deal = deals.find(d => String(d.id) === String(dealId));
             if (deal) {
                 currentLoadedDealId = deal.id; // Track which deal is loaded
-                // Persist to sessionStorage so it survives page refresh
-                sessionStorage.setItem('currentLoadedDealId', String(deal.id));
                 populateFormFromDeal(deal);
                 // Scroll to top to see the form
                 window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -6461,60 +5938,6 @@ Please be direct and specific with your analysis.`;
             deals = deals.filter(d => String(d.id) !== String(dealId));
             saveLibrary(deals);
             renderLibrary();
-        }
-
-        async function duplicateDeal(dealId) {
-            let deals = getLibrary();
-            const originalDeal = deals.find(d => String(d.id) === String(dealId));
-            
-            if (!originalDeal) {
-                alert('Deal not found');
-                return;
-            }
-            
-            // Deep clone the deal
-            const newDeal = JSON.parse(JSON.stringify(originalDeal));
-            
-            // Generate new ID and timestamps
-            newDeal.id = Date.now();
-            newDeal.savedAt = new Date().toISOString();
-            newDeal.updatedAt = new Date().toISOString();
-            
-            // Clear cloud sync data (will sync as new deal)
-            delete newDeal.cloud_id;
-            delete newDeal.share_token;
-            
-            // Mark as a copy
-            const baseAddress = originalDeal.originalAddress || getAddressFromParts(originalDeal.propertyInfo);
-            newDeal.originalAddress = baseAddress;
-            
-            // Generate copy name
-            const copyNumber = getNextCopyNumber(deals, baseAddress);
-            newDeal.copyNumber = copyNumber;
-            
-            // Save to cloud if logged in
-            if (currentUser) {
-                try {
-                    const cloudResult = await Promise.race([
-                        saveToCloud(newDeal),
-                        new Promise((_, reject) => setTimeout(() => reject(new Error('Cloud sync timeout')), 10000))
-                    ]);
-                    if (cloudResult) {
-                        newDeal.cloud_id = cloudResult.id;
-                    }
-                } catch (cloudError) {
-                    console.warn('Cloud save failed for duplicate:', cloudError);
-                    setSyncStatus('synced', 'Local only');
-                }
-            }
-            
-            // Add to library
-            deals.unshift(newDeal);
-            saveLibrary(deals);
-            renderLibrary();
-            
-            // Load the duplicated deal
-            loadFromLibrary(newDeal.id);
         }
 
         let currentEmailDealId = null;
@@ -6595,12 +6018,12 @@ Please be direct and specific with your analysis.`;
             try {
                 // Build the data payload
                 const purchasePrice = parseFloat(deal.dealTerms?.purchasePrice) || 0;
-                const sellerCarryPct = parseFloat(deal.financing?.sellerCarryPct) || 0;
+                const sellerCarryPct = parseFloat(deal.loanConfig?.sellerCarryPct) || 0;
                 const sellerCarryAmount = purchasePrice * (sellerCarryPct / 100);
                 const cashToSeller = purchasePrice - sellerCarryAmount;
-                const sellerCarryRate = parseFloat(deal.financing?.sellerCarryRate) || 0;
-                const sellerCarryAmort = parseInt(deal.financing?.sellerCarryAmort) || 30;
-                const yearsToBalloon = parseInt(deal.financing?.yearsToBalloon) || 8;
+                const sellerCarryRate = parseFloat(deal.sellerFinancing?.rate) || 0;
+                const sellerCarryAmort = parseInt(deal.sellerFinancing?.amortization) || 30;
+                const yearsToBalloon = parseInt(deal.loanConfig?.yearsToBalloon) || 8;
                 
                 // Calculate monthly payment
                 let monthlyPayment = 0;
@@ -6818,7 +6241,6 @@ Please be direct and specific with your analysis.`;
                     ]);
                 } catch (cloudError) {
                     console.warn('Cloud update failed:', cloudError);
-                    setSyncStatus('synced', 'Local only');
                 }
             }
             
@@ -6927,9 +6349,6 @@ Please be direct and specific with your analysis.`;
                             <button class="library-item-rename" onclick="renameDeal('${deal.id}')" title="Rename deal">
                                 <span>✏️</span>
                             </button>
-                            <button class="library-item-duplicate" onclick="duplicateDeal('${deal.id}')" title="Duplicate deal">
-                                <span>📋</span>
-                            </button>
                             <button class="library-item-email" onclick="emailOffer('${deal.id}')" title="Email offer">
                                 <span>📧</span> Email
                             </button>
@@ -7009,150 +6428,6 @@ Please be direct and specific with your analysis.`;
                         return 0;
                 }
             });
-        }
-
-        // =============================================
-        // AUTO-SAVE DRAFT FUNCTIONALITY
-        // =============================================
-        
-        const DRAFT_KEY = 'ecc_draft';
-        const DRAFT_TIMESTAMP_KEY = 'ecc_draft_timestamp';
-        
-        function autoSaveDraft() {
-            // Don't save if form is essentially empty
-            const hasData = document.getElementById('streetAddress').value || 
-                           document.getElementById('purchasePrice').value ||
-                           document.getElementById('rentalRevenue').value;
-            
-            if (!hasData) return;
-            
-            // Build a lightweight draft object (just form values, not computed)
-            const draft = {
-                propertyInfo: {
-                    streetAddress: document.getElementById('streetAddress').value,
-                    city: document.getElementById('city').value,
-                    state: document.getElementById('state').value,
-                    zip: document.getElementById('zip').value,
-                    link: document.getElementById('propertyLink').value,
-                },
-                preparer: {
-                    name: document.getElementById('preparerName').value,
-                    email: document.getElementById('preparerEmail').value,
-                    phone: document.getElementById('preparerPhone').value,
-                },
-                seller: {
-                    name: document.getElementById('sellerName').value,
-                    email: document.getElementById('sellerEmail').value,
-                    phone: document.getElementById('sellerPhone').value,
-                },
-                dealTerms: {
-                    category: document.getElementById('category').value,
-                    purchasePrice: document.getElementById('purchasePrice').value,
-                    askingPrice: document.getElementById('askingPrice').value,
-                    existingDebt: document.getElementById('existingDebt').value,
-                    rentalRevenue: document.getElementById('rentalRevenue').value,
-                    appreciationRate: document.getElementById('appreciationRate').value,
-                },
-                financing: {
-                    firstLoanLTV: document.getElementById('firstLoanLTV').value,
-                    interestOnly: document.getElementById('interestOnly').value,
-                    sellerCarryPct: document.getElementById('sellerCarryPct').value,
-                    sellerCarryRate: document.getElementById('sellerCarryRate').value,
-                    sellerCarryAmort: document.getElementById('sellerCarryAmort').value,
-                    interestAtBalloon: document.getElementById('interestAtBalloon').value,
-                    yearsToBalloon: document.getElementById('yearsToBalloon').value,
-                },
-                stabilization: {
-                    monthsToStabilize: document.getElementById('monthsToStabilize').value,
-                    revenueDuringStab: document.getElementById('revenueDuringStab').value,
-                },
-                expenses: {
-                    propertyTax: document.getElementById('propertyTax').value,
-                    insurance: document.getElementById('insurance').value,
-                    hoa: document.getElementById('hoa').value,
-                    otherExpenses: document.getElementById('otherExpenses').value,
-                    capexPct: document.getElementById('capexPct').value,
-                    managementPct: document.getElementById('managementPct').value,
-                    vacancyPct: document.getElementById('vacancyPct').value,
-                },
-                cashToBuyer: {
-                    agentFee: document.getElementById('agentFee').value,
-                    rehabCost: document.getElementById('rehabCost').value,
-                    assignmentFeePct: document.getElementById('assignmentFeePct').value,
-                    appraisalCost: document.getElementById('appraisalCost').value,
-                    closingCostPct: document.getElementById('closingCostPct').value,
-                },
-                notes: document.getElementById('dealNotes').value,
-                currentLoadedDealId: currentLoadedDealId,
-            };
-            
-            localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
-            localStorage.setItem(DRAFT_TIMESTAMP_KEY, Date.now().toString());
-        }
-        
-        function checkForDraft() {
-            const draftJson = localStorage.getItem(DRAFT_KEY);
-            const draftTimestamp = localStorage.getItem(DRAFT_TIMESTAMP_KEY);
-            
-            if (!draftJson || !draftTimestamp) return;
-            
-            // Check if draft is less than 24 hours old
-            const ageHours = (Date.now() - parseInt(draftTimestamp)) / (1000 * 60 * 60);
-            if (ageHours > 24) {
-                clearDraft();
-                return;
-            }
-            
-            try {
-                const draft = JSON.parse(draftJson);
-                
-                // Check if draft has meaningful data
-                const hasData = draft.propertyInfo?.streetAddress || 
-                               draft.dealTerms?.purchasePrice ||
-                               draft.dealTerms?.rentalRevenue;
-                
-                if (!hasData) {
-                    clearDraft();
-                    return;
-                }
-                
-                // Build a description of what's in the draft
-                const address = draft.propertyInfo?.streetAddress || 'Untitled deal';
-                const timeAgo = getTimeAgo(parseInt(draftTimestamp));
-                
-                // Ask user if they want to restore
-                if (confirm(`Restore unsaved work?\n\n"${address}"\nLast edited ${timeAgo}\n\nClick OK to restore, or Cancel to start fresh.`)) {
-                    restoreDraft(draft);
-                } else {
-                    clearDraft();
-                }
-            } catch (e) {
-                console.error('Error parsing draft:', e);
-                clearDraft();
-            }
-        }
-        
-        function restoreDraft(draft) {
-            populateFormFromDeal(draft);
-            if (draft.currentLoadedDealId) {
-                currentLoadedDealId = draft.currentLoadedDealId;
-                sessionStorage.setItem('currentLoadedDealId', String(draft.currentLoadedDealId));
-            }
-            calculate();
-        }
-        
-        function clearDraft() {
-            localStorage.removeItem(DRAFT_KEY);
-            localStorage.removeItem(DRAFT_TIMESTAMP_KEY);
-        }
-        
-        function getTimeAgo(timestamp) {
-            const seconds = Math.floor((Date.now() - timestamp) / 1000);
-            
-            if (seconds < 60) return 'just now';
-            if (seconds < 3600) return Math.floor(seconds / 60) + ' minutes ago';
-            if (seconds < 86400) return Math.floor(seconds / 3600) + ' hours ago';
-            return Math.floor(seconds / 86400) + ' days ago';
         }
 
         function buildDealObject() {
@@ -7249,94 +6524,96 @@ Please be direct and specific with your analysis.`;
         }
 
         function populateFormFromDeal(data) {
-    // Property info - handle both new and old format
-    if (data.propertyInfo) {
-        if (data.propertyInfo.streetAddress !== undefined) {
-            document.getElementById('streetAddress').value = data.propertyInfo.streetAddress || '';
-            document.getElementById('city').value = data.propertyInfo.city || '';
-            document.getElementById('state').value = data.propertyInfo.state || '';
-            document.getElementById('zip').value = data.propertyInfo.zip || '';
-        } else if (data.propertyInfo.address) {
-            const parsed = parseOldAddress(data.propertyInfo.address);
-            document.getElementById('streetAddress').value = parsed.street;
-            document.getElementById('city').value = parsed.city;
-            document.getElementById('state').value = parsed.state;
-            document.getElementById('zip').value = parsed.zip;
+            // Property info - handle both new and old format
+            if (data.propertyInfo) {
+                if (data.propertyInfo.streetAddress !== undefined) {
+                    // New format with separate fields
+                    document.getElementById('streetAddress').value = data.propertyInfo.streetAddress || '';
+                    document.getElementById('city').value = data.propertyInfo.city || '';
+                    document.getElementById('state').value = data.propertyInfo.state || '';
+                    document.getElementById('zip').value = data.propertyInfo.zip || '';
+                } else if (data.propertyInfo.address) {
+                    // Old format - try to parse it
+                    const parsed = parseOldAddress(data.propertyInfo.address);
+                    document.getElementById('streetAddress').value = parsed.street;
+                    document.getElementById('city').value = parsed.city;
+                    document.getElementById('state').value = parsed.state;
+                    document.getElementById('zip').value = parsed.zip;
+                }
+                document.getElementById('propertyLink').value = data.propertyInfo.link || '';
+            }
+            
+            // Preparer
+            if (data.preparer) {
+                document.getElementById('preparerName').value = data.preparer.name || '';
+                document.getElementById('preparerEmail').value = data.preparer.email || '';
+                document.getElementById('preparerPhone').value = data.preparer.phone || '';
+            }
+            
+            // Seller
+            if (data.seller) {
+                document.getElementById('sellerName').value = data.seller.name || '';
+                document.getElementById('sellerEmail').value = data.seller.email || '';
+                document.getElementById('sellerPhone').value = data.seller.phone || '';
+            }
+            
+            // Deal terms
+            if (data.dealTerms) {
+                document.getElementById('category').value = data.dealTerms.category || 'DSCR Residential';
+                document.getElementById('purchasePrice').value = data.dealTerms.purchasePrice || '';
+                document.getElementById('askingPrice').value = data.dealTerms.askingPrice || '';
+                document.getElementById('existingDebt').value = data.dealTerms.existingDebt || '0';
+                document.getElementById('rentalRevenue').value = data.dealTerms.rentalRevenue || '';
+                document.getElementById('appreciationRate').value = data.dealTerms.appreciationRate || '';
+            }
+            
+            // Financing
+            if (data.financing) {
+                document.getElementById('firstLoanLTV').value = data.financing.firstLoanLTV || '';
+                document.getElementById('interestOnly').value = data.financing.interestOnly || 'No';
+                document.getElementById('sellerCarryPct').value = data.financing.sellerCarryPct || '';
+                document.getElementById('sellerCarryRate').value = data.financing.sellerCarryRate || '';
+                document.getElementById('sellerCarryAmort').value = data.financing.sellerCarryAmort || '';
+                document.getElementById('interestAtBalloon').value = data.financing.interestAtBalloon || 'No';
+                document.getElementById('yearsToBalloon').value = data.financing.yearsToBalloon || '';
+            }
+            
+            // Stabilization
+            if (data.stabilization) {
+                document.getElementById('monthsToStabilize').value = data.stabilization.monthsToStabilize || '';
+                document.getElementById('revenueDuringStab').value = data.stabilization.revenueDuringStab || '';
+            }
+            
+            // Expenses
+            if (data.expenses) {
+                document.getElementById('propertyTax').value = data.expenses.propertyTax || '';
+                document.getElementById('insurance').value = data.expenses.insurance || '';
+                document.getElementById('hoa').value = data.expenses.hoa || '';
+                document.getElementById('otherExpenses').value = data.expenses.otherExpenses || '';
+                document.getElementById('capexPct').value = data.expenses.capexPct || '';
+                document.getElementById('managementPct').value = data.expenses.managementPct || '';
+                document.getElementById('vacancyPct').value = data.expenses.vacancyPct || '';
+            }
+            
+            // Cash to buyer
+            if (data.cashToBuyer) {
+                document.getElementById('agentFee').value = data.cashToBuyer.agentFee || '';
+                document.getElementById('rehabCost').value = data.cashToBuyer.rehabCost || '';
+                document.getElementById('assignmentFeePct').value = data.cashToBuyer.assignmentFeePct || '';
+                document.getElementById('appraisalCost').value = data.cashToBuyer.appraisalCost || '';
+                document.getElementById('closingCostPct').value = data.cashToBuyer.closingCostPct || '';
+            }
+            
+            // Notes
+            document.getElementById('dealNotes').value = data.notes || '';
+            
+            // Mark all tracked fields as touched since we loaded a deal
+            const trackedFields = ['purchasePrice', 'askingPrice', 'rentalRevenue', 'existingDebt', 'propertyTax', 'insurance', 'hoa', 'otherExpenses', 'agentFee', 'rehabCost', 'appraisalCost'];
+            trackedFields.forEach(fieldId => markFieldTouched(fieldId));
+            
+            // Recalculate
+            calculate();
         }
-        document.getElementById('propertyLink').value = data.propertyInfo.link || '';
-    }
-    
-    // Preparer
-    if (data.preparer) {
-        document.getElementById('preparerName').value = data.preparer.name || '';
-        document.getElementById('preparerEmail').value = data.preparer.email || '';
-        document.getElementById('preparerPhone').value = data.preparer.phone || '';
-    }
-    
-    // Seller
-    if (data.seller) {
-        document.getElementById('sellerName').value = data.seller.name || '';
-        document.getElementById('sellerEmail').value = data.seller.email || '';
-        document.getElementById('sellerPhone').value = data.seller.phone || '';
-    }
-    
-    // Deal terms
-    if (data.dealTerms) {
-        document.getElementById('category').value = data.dealTerms.category || 'DSCR Residential';
-        document.getElementById('purchasePrice').value = data.dealTerms.purchasePrice ?? '';
-        document.getElementById('askingPrice').value = data.dealTerms.askingPrice ?? '';
-        document.getElementById('existingDebt').value = data.dealTerms.existingDebt ?? '0';
-        document.getElementById('rentalRevenue').value = data.dealTerms.rentalRevenue ?? '';
-        document.getElementById('appreciationRate').value = data.dealTerms.appreciationRate ?? '';
-    }
-    
-    // Financing
-    if (data.financing) {
-        document.getElementById('firstLoanLTV').value = data.financing.firstLoanLTV ?? '';
-        document.getElementById('interestOnly').value = data.financing.interestOnly || 'No';
-        document.getElementById('sellerCarryPct').value = data.financing.sellerCarryPct ?? '';
-        document.getElementById('sellerCarryRate').value = data.financing.sellerCarryRate ?? '';
-        document.getElementById('sellerCarryAmort').value = data.financing.sellerCarryAmort ?? '';
-        document.getElementById('interestAtBalloon').value = data.financing.interestAtBalloon || 'No';
-        document.getElementById('yearsToBalloon').value = data.financing.yearsToBalloon ?? '';
-    }
-    
-    // Stabilization
-    if (data.stabilization) {
-        document.getElementById('monthsToStabilize').value = data.stabilization.monthsToStabilize ?? '';
-        document.getElementById('revenueDuringStab').value = data.stabilization.revenueDuringStab ?? '';
-    }
-    
-    // Expenses
-    if (data.expenses) {
-        document.getElementById('propertyTax').value = data.expenses.propertyTax ?? '';
-        document.getElementById('insurance').value = data.expenses.insurance ?? '';
-        document.getElementById('hoa').value = data.expenses.hoa ?? '';
-        document.getElementById('otherExpenses').value = data.expenses.otherExpenses ?? '';
-        document.getElementById('capexPct').value = data.expenses.capexPct ?? '';
-        document.getElementById('managementPct').value = data.expenses.managementPct ?? '';
-        document.getElementById('vacancyPct').value = data.expenses.vacancyPct ?? '';
-    }
-    
-    // Cash to buyer
-    if (data.cashToBuyer) {
-        document.getElementById('agentFee').value = data.cashToBuyer.agentFee ?? '';
-        document.getElementById('rehabCost').value = data.cashToBuyer.rehabCost ?? '';
-        document.getElementById('assignmentFeePct').value = data.cashToBuyer.assignmentFeePct ?? '';
-        document.getElementById('appraisalCost').value = data.cashToBuyer.appraisalCost ?? '';
-        document.getElementById('closingCostPct').value = data.cashToBuyer.closingCostPct ?? '';
-    }
-    
-    // Notes
-    document.getElementById('dealNotes').value = data.notes || '';
-    
-    // Mark all tracked fields as touched since we loaded a deal
-    const trackedFields = ['purchasePrice', 'askingPrice', 'rentalRevenue', 'existingDebt', 'propertyTax', 'insurance', 'hoa', 'otherExpenses', 'agentFee', 'rehabCost', 'appraisalCost'];
-    trackedFields.forEach(fieldId => markFieldTouched(fieldId));
-    
-    // Recalculate
-    calculate();
-}
 
         // PDF Print functionality
         function generatePDF() {
@@ -7383,12 +6660,6 @@ Please be direct and specific with your analysis.`;
             document.getElementById('pdf-purchase-price').textContent = document.getElementById('loiPurchasePrice').textContent;
             document.getElementById('pdf-property-type').textContent = category;
             document.getElementById('pdf-asking-price').textContent = formatCurrency(parseFloat(document.getElementById('askingPrice').value) || 0);
-            
-            // Calculate Cash to Seller (Purchase Price - Seller Carry)
-            const sellerCarryAmount = parseCurrency(document.getElementById('sellerCarryAmount').textContent);
-            const cashToSeller = purchasePrice - sellerCarryAmount;
-            document.getElementById('pdf-cash-to-seller').textContent = formatCurrency(cashToSeller);
-            
             document.getElementById('pdf-over-under').textContent = document.getElementById('overUnderAsking').textContent;
             
             // Key metrics
@@ -7470,8 +6741,8 @@ Please be direct and specific with your analysis.`;
             const yearsToBalloon = parseInt(document.getElementById('yearsToBalloon').value) || 8;
             
             // Get calculated values (parse from displayed text)
+            const cashToSeller = parseCurrency(document.getElementById('firstPositionLoan').textContent);
             const sellerCarryAmount = parseCurrency(document.getElementById('sellerCarryAmount').textContent);
-            const cashToSeller = purchasePrice - sellerCarryAmount; // Cash to seller = Purchase Price - Seller Carry
             const monthlyPayment = parseCurrency(document.getElementById('sellerCarryPayment').textContent);
             
             // Dates
@@ -7718,7 +6989,7 @@ Please be direct and specific with your analysis.`;
             w.drawBullet('Seller hands over the property in as-is condition.');
             
             w.drawSubheading('Step 2 - Stage 1: Cash Closing');
-            w.drawBullet(`Buyer brings ${formatCurrency(cashToSeller)} cash to closing.`);
+            w.drawBullet(`Buyer brings ${formatCurrency(purchasePrice)} cash to closing.`);
             w.drawBullet('Escrow holds funds temporarily.');
             w.drawBullet('Title transfers - Buyer\'s LLC now owns the property.');
             w.drawBullet(`Seller gets their immediate cash payout: ${formatCurrency(cashToSeller)}.`);
@@ -7901,10 +7172,6 @@ Please be direct and specific with your analysis.`;
                         <span class="pdf-value" id="pdf-asking-price">$0</span>
                     </div>
                     <div class="pdf-row">
-                        <span class="pdf-label">Cash to Seller</span>
-                        <span class="pdf-value highlight" id="pdf-cash-to-seller">$0</span>
-                    </div>
-                    <div class="pdf-row">
                         <span class="pdf-label">Over/Under Asking</span>
                         <span class="pdf-value" id="pdf-over-under">0%</span>
                     </div>
@@ -7953,7 +7220,7 @@ Please be direct and specific with your analysis.`;
                         <span class="pdf-value" id="pdf-seller-payment">$0</span>
                     </div>
                     <div class="pdf-row">
-                        <span class="pdf-label">Residual (Equity Gain)</span>
+                        <span class="pdf-label">Down Payment</span>
                         <span class="pdf-value" id="pdf-down-payment">$0</span>
                     </div>
                     <div class="pdf-row">
@@ -8216,4 +7483,9 @@ Please be direct and specific with your analysis.`;
                     </div>
                     <div class="loi-sig-content">
                         <p class="loi-sig-by">By: _________________________________</p>
-                        <p class="loi-sig-label"><strong>Seller:</strong> <span id="loi-seller-sig-name"
+                        <p class="loi-sig-label"><strong>Seller:</strong> <span id="loi-seller-sig-name"></span></p>
+                        <p class="loi-sig-detail" id="loi-seller-sig-email"></p>
+                        <p class="loi-sig-detail" id="loi-seller-sig-phone"></p>
+                    </div>
+                </div>
+            </div>
