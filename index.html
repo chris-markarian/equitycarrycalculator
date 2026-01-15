@@ -6327,7 +6327,7 @@ Please be direct and specific with your analysis.`;
                 const dateValue = isModifiedSort 
                     ? (deal.updatedAt || deal.savedAt) 
                     : deal.savedAt;
-                const date = dateValue ? new Date(dateValue).toLocaleDateString() : '—';
+                const date = dateValue ? new Date(dateValue).toLocaleString([], {dateStyle: 'short', timeStyle: 'short'}) : '—';
                 const seller = deal.seller?.name || '—';
                 
                 // Status with emoji and label
