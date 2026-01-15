@@ -4362,80 +4362,76 @@
         }
 
         // Convert cloud deal format to local format
-        function cloudDealToLocal(cloudDeal) {
-            // If we have full_data stored, prefer that as it has the complete structure
-            const base = cloudDeal.full_data || {};
-            
-            return {
-                id: cloudDeal.id.substring(0, 13) + Date.now(), // Create local ID
-                cloud_id: cloudDeal.id,
-                version: '1.0',
-                savedAt: cloudDeal.created_at,
-                updatedAt: cloudDeal.updated_at || base.updatedAt,
-                copyNumber: base.copyNumber || null,
-                copyName: base.copyName || null,
-                originalAddress: base.originalAddress || null,
-                status: base.status || 'working',
-                notes: base.notes || '',
-                propertyInfo: {
-                    streetAddress: cloudDeal.street_address || base.propertyInfo?.streetAddress || '',
-                    city: cloudDeal.city || base.propertyInfo?.city || '',
-                    state: cloudDeal.state || base.propertyInfo?.state || '',
-                    zip: cloudDeal.zip || base.propertyInfo?.zip || '',
-                    address: `${cloudDeal.street_address}, ${cloudDeal.city}, ${cloudDeal.state} ${cloudDeal.zip}`.trim(),
-                    link: cloudDeal.property_link || base.propertyInfo?.link || '',
-                },
-                preparer: {
-                    name: cloudDeal.preparer_name || base.preparer?.name || '',
-                    email: cloudDeal.preparer_email || base.preparer?.email || '',
-                    phone: cloudDeal.preparer_phone || base.preparer?.phone || '',
-                },
-                seller: {
-                    name: cloudDeal.seller_name || base.seller?.name || '',
-                    email: cloudDeal.seller_email || base.seller?.email || '',
-                    phone: cloudDeal.seller_phone || base.seller?.phone || '',
-                },
-                dealTerms: {
-                    category: cloudDeal.category || base.dealTerms?.category || 'DSCR Residential',
-                    purchasePrice: cloudDeal.purchase_price || base.dealTerms?.purchasePrice || 0,
-                    askingPrice: cloudDeal.asking_price || base.dealTerms?.askingPrice || 0,
-                    existingDebt: base.dealTerms?.existingDebt || 0,
-                    rentalRevenue: cloudDeal.rental_revenue || base.dealTerms?.rentalRevenue || 0,
-                    appreciationRate: cloudDeal.appreciation_rate || base.dealTerms?.appreciationRate || 2,
-                },
-                financing: {
-                    firstLoanLTV: cloudDeal.first_loan_ltv || base.financing?.firstLoanLTV || 26,
-                    sellerCarryPct: cloudDeal.seller_carry_pct || base.financing?.sellerCarryPct || 80,
-                    sellerCarryRate: cloudDeal.seller_carry_rate || base.financing?.sellerCarryRate || 0,
-                    sellerCarryAmort: cloudDeal.seller_carry_amort || base.financing?.sellerCarryAmort || 30,
-                    interestOnly: cloudDeal.interest_only || base.financing?.interestOnly || 'No',
-                    interestAtBalloon: cloudDeal.interest_at_balloon || base.financing?.interestAtBalloon || 'No',
-                    yearsToBalloon: cloudDeal.years_to_balloon || base.financing?.yearsToBalloon || 8,
-                },
-                stabilization: {
-                    monthsToStabilize: cloudDeal.months_to_stabilize || base.stabilization?.monthsToStabilize || 0,
-                    revenueDuringStab: cloudDeal.revenue_during_stab || base.stabilization?.revenueDuringStab || 100,
-                },
-                expenses: {
-                    propertyTax: cloudDeal.property_tax || base.expenses?.propertyTax || 0,
-                    insurance: cloudDeal.insurance || base.expenses?.insurance || 0,
-                    hoa: cloudDeal.hoa || base.expenses?.hoa || 0,
-                    otherExpenses: cloudDeal.other_expenses || base.expenses?.otherExpenses || 0,
-                    capexPct: cloudDeal.capex_pct || base.expenses?.capexPct || 5,
-                    managementPct: cloudDeal.management_pct || base.expenses?.managementPct || 8,
-                    vacancyPct: cloudDeal.vacancy_pct || base.expenses?.vacancyPct || 5,
-                },
-                cashToBuyer: {
-                    agentFee: cloudDeal.agent_fee || base.cashToBuyer?.agentFee || 0,
-                    rehabCost: cloudDeal.rehab_cost || base.cashToBuyer?.rehabCost || 0,
-                    assignmentFeePct: cloudDeal.assignment_fee_pct || base.cashToBuyer?.assignmentFeePct || 5,
-                    appraisalCost: cloudDeal.appraisal_cost || base.cashToBuyer?.appraisalCost || 0,
-                    closingCostPct: cloudDeal.closing_cost_pct || base.cashToBuyer?.closingCostPct || 5,
-                },
-                metrics: base.metrics || {},
-                firstPosition: base.firstPosition || {},
-            };
+function cloudDealToLocal(cloudDeal) {
+    // If we have full_data stored, use that as the base
+    const base = cloudDeal.full_data || {};
+    
+    return {
+        id: cloudDeal.id.substring(0, 13) + Date.now(), // Create local ID
+        cloud_id: cloudDeal.id,
+        version: '1.0',
+        savedAt: cloudDeal.created_at,
+        updatedAt: cloudDeal.updated_at || base.updatedAt,
+        copyNumber: base.copyNumber || null,
+        copyName: base.copyName || null,
+        originalAddress: base.originalAddress || null,
+        status: base.status || 'working',
+        propertyInfo: {
+            streetAddress: cloudDeal.street_address || base.propertyInfo?.streetAddress || '',
+            city: cloudDeal.city || base.propertyInfo?.city || '',
+            state: cloudDeal.state || base.propertyInfo?.state || '',
+            zip: cloudDeal.zip || base.propertyInfo?.zip || '',
+            address: `${cloudDeal.street_address}, ${cloudDeal.city}, ${cloudDeal.state} ${cloudDeal.zip}`.trim(),
+            link: cloudDeal.property_link || base.propertyInfo?.link || '',
+        },
+        preparer: {
+            name: cloudDeal.preparer_name || base.preparer?.name || '',
+            email: cloudDeal.preparer_email || base.preparer?.email || '',
+            phone: cloudDeal.preparer_phone || base.preparer?.phone || '',
+        },
+        seller: {
+            name: cloudDeal.seller_name || base.seller?.name || '',
+            email: cloudDeal.seller_email || base.seller?.email || '',
+            phone: cloudDeal.seller_phone || base.seller?.phone || '',
+        },
+        loanConfig: {
+            category: cloudDeal.category || base.loanConfig?.category || 'DSCR Residential',
+            firstLoanLTV: cloudDeal.first_loan_ltv ?? base.loanConfig?.firstLoanLTV ?? 26,
+            sellerCarryPct: cloudDeal.seller_carry_pct ?? base.loanConfig?.sellerCarryPct ?? 80,
+            interestOnly: cloudDeal.interest_only || base.loanConfig?.interestOnly || 'No',
+            interestAtBalloon: cloudDeal.interest_at_balloon || base.loanConfig?.interestAtBalloon || 'No',
+            monthsToStabilize: cloudDeal.months_to_stabilize ?? base.loanConfig?.monthsToStabilize ?? 0,
+            revenueDuringStab: cloudDeal.revenue_during_stab ?? base.loanConfig?.revenueDuringStab ?? 100,
+            yearsToBalloon: cloudDeal.years_to_balloon ?? base.loanConfig?.yearsToBalloon ?? 8,
+        },
+        dealTerms: {
+            purchasePrice: cloudDeal.purchase_price ?? base.dealTerms?.purchasePrice ?? 0,
+            askingPrice: cloudDeal.asking_price ?? base.dealTerms?.askingPrice ?? 0,
+            rentalRevenue: cloudDeal.rental_revenue ?? base.dealTerms?.rentalRevenue ?? 0,
+            appreciationRate: cloudDeal.appreciation_rate ?? base.dealTerms?.appreciationRate ?? 2,
+        },
+        cashToBuyer: {
+            agentFee: cloudDeal.agent_fee ?? base.cashToBuyer?.agentFee ?? 0,
+            rehabCost: cloudDeal.rehab_cost ?? base.cashToBuyer?.rehabCost ?? 0,
+            assignmentFeePct: cloudDeal.assignment_fee_pct ?? base.cashToBuyer?.assignmentFeePct ?? 5,
+            appraisalCost: cloudDeal.appraisal_cost ?? base.cashToBuyer?.appraisalCost ?? 0,
+            closingCostPct: cloudDeal.closing_cost_pct ?? base.cashToBuyer?.closingCostPct ?? 5,
+        },
+        sellerFinancing: {
+            rate: cloudDeal.seller_carry_rate ?? base.sellerFinancing?.rate ?? 0,
+            amortization: cloudDeal.seller_carry_amort ?? base.sellerFinancing?.amortization ?? 30,
+        },
+        expenses: {
+            propertyTax: cloudDeal.property_tax ?? base.expenses?.propertyTax ?? 0,
+            insurance: cloudDeal.insurance ?? base.expenses?.insurance ?? 0,
+            hoa: cloudDeal.hoa ?? base.expenses?.hoa ?? 0,
+            other: cloudDeal.other_expenses ?? base.expenses?.other ?? 0,
+            capexPct: cloudDeal.capex_pct ?? base.expenses?.capexPct ?? 5,
+            managementPct: cloudDeal.management_pct ?? base.expenses?.managementPct ?? 8,
+            vacancyPct: cloudDeal.vacancy_pct ?? base.expenses?.vacancyPct ?? 5,
         }
+    };
+}
 
         // =============================================
         // ADDRESS COLLISION DETECTION
@@ -7253,96 +7249,94 @@ Please be direct and specific with your analysis.`;
         }
 
         function populateFormFromDeal(data) {
-            // Property info - handle both new and old format
-            if (data.propertyInfo) {
-                if (data.propertyInfo.streetAddress !== undefined) {
-                    // New format with separate fields
-                    document.getElementById('streetAddress').value = data.propertyInfo.streetAddress || '';
-                    document.getElementById('city').value = data.propertyInfo.city || '';
-                    document.getElementById('state').value = data.propertyInfo.state || '';
-                    document.getElementById('zip').value = data.propertyInfo.zip || '';
-                } else if (data.propertyInfo.address) {
-                    // Old format - try to parse it
-                    const parsed = parseOldAddress(data.propertyInfo.address);
-                    document.getElementById('streetAddress').value = parsed.street;
-                    document.getElementById('city').value = parsed.city;
-                    document.getElementById('state').value = parsed.state;
-                    document.getElementById('zip').value = parsed.zip;
-                }
-                document.getElementById('propertyLink').value = data.propertyInfo.link || '';
-            }
-            
-            // Preparer
-            if (data.preparer) {
-                document.getElementById('preparerName').value = data.preparer.name || '';
-                document.getElementById('preparerEmail').value = data.preparer.email || '';
-                document.getElementById('preparerPhone').value = data.preparer.phone || '';
-            }
-            
-            // Seller
-            if (data.seller) {
-                document.getElementById('sellerName').value = data.seller.name || '';
-                document.getElementById('sellerEmail').value = data.seller.email || '';
-                document.getElementById('sellerPhone').value = data.seller.phone || '';
-            }
-            
-            // Deal terms
-            if (data.dealTerms) {
-                document.getElementById('category').value = data.dealTerms.category || 'DSCR Residential';
-                document.getElementById('purchasePrice').value = data.dealTerms.purchasePrice || '';
-                document.getElementById('askingPrice').value = data.dealTerms.askingPrice || '';
-                document.getElementById('existingDebt').value = data.dealTerms.existingDebt || '0';
-                document.getElementById('rentalRevenue').value = data.dealTerms.rentalRevenue || '';
-                document.getElementById('appreciationRate').value = data.dealTerms.appreciationRate || '';
-            }
-            
-            // Financing
-            if (data.financing) {
-                document.getElementById('firstLoanLTV').value = data.financing.firstLoanLTV || '';
-                document.getElementById('interestOnly').value = data.financing.interestOnly || 'No';
-                document.getElementById('sellerCarryPct').value = data.financing.sellerCarryPct || '';
-                document.getElementById('sellerCarryRate').value = data.financing.sellerCarryRate || '';
-                document.getElementById('sellerCarryAmort').value = data.financing.sellerCarryAmort || '';
-                document.getElementById('interestAtBalloon').value = data.financing.interestAtBalloon || 'No';
-                document.getElementById('yearsToBalloon').value = data.financing.yearsToBalloon || '';
-            }
-            
-            // Stabilization
-            if (data.stabilization) {
-                document.getElementById('monthsToStabilize').value = data.stabilization.monthsToStabilize || '';
-                document.getElementById('revenueDuringStab').value = data.stabilization.revenueDuringStab || '';
-            }
-            
-            // Expenses
-            if (data.expenses) {
-                document.getElementById('propertyTax').value = data.expenses.propertyTax || '';
-                document.getElementById('insurance').value = data.expenses.insurance || '';
-                document.getElementById('hoa').value = data.expenses.hoa || '';
-                document.getElementById('otherExpenses').value = data.expenses.otherExpenses || '';
-                document.getElementById('capexPct').value = data.expenses.capexPct || '';
-                document.getElementById('managementPct').value = data.expenses.managementPct || '';
-                document.getElementById('vacancyPct').value = data.expenses.vacancyPct || '';
-            }
-            
-            // Cash to buyer
-            if (data.cashToBuyer) {
-                document.getElementById('agentFee').value = data.cashToBuyer.agentFee || '';
-                document.getElementById('rehabCost').value = data.cashToBuyer.rehabCost || '';
-                document.getElementById('assignmentFeePct').value = data.cashToBuyer.assignmentFeePct || '';
-                document.getElementById('appraisalCost').value = data.cashToBuyer.appraisalCost || '';
-                document.getElementById('closingCostPct').value = data.cashToBuyer.closingCostPct || '';
-            }
-            
-            // Notes
-            document.getElementById('dealNotes').value = data.notes || '';
-            
-            // Mark all tracked fields as touched since we loaded a deal
-            const trackedFields = ['purchasePrice', 'askingPrice', 'rentalRevenue', 'existingDebt', 'propertyTax', 'insurance', 'hoa', 'otherExpenses', 'agentFee', 'rehabCost', 'appraisalCost'];
-            trackedFields.forEach(fieldId => markFieldTouched(fieldId));
-            
-            // Recalculate
-            calculate();
+    // Property info - handle both new and old format
+    if (data.propertyInfo) {
+        if (data.propertyInfo.streetAddress !== undefined) {
+            document.getElementById('streetAddress').value = data.propertyInfo.streetAddress || '';
+            document.getElementById('city').value = data.propertyInfo.city || '';
+            document.getElementById('state').value = data.propertyInfo.state || '';
+            document.getElementById('zip').value = data.propertyInfo.zip || '';
+        } else if (data.propertyInfo.address) {
+            const parsed = parseOldAddress(data.propertyInfo.address);
+            document.getElementById('streetAddress').value = parsed.street;
+            document.getElementById('city').value = parsed.city;
+            document.getElementById('state').value = parsed.state;
+            document.getElementById('zip').value = parsed.zip;
         }
+        document.getElementById('propertyLink').value = data.propertyInfo.link || '';
+    }
+    
+    // Preparer
+    if (data.preparer) {
+        document.getElementById('preparerName').value = data.preparer.name || '';
+        document.getElementById('preparerEmail').value = data.preparer.email || '';
+        document.getElementById('preparerPhone').value = data.preparer.phone || '';
+    }
+    
+    // Seller
+    if (data.seller) {
+        document.getElementById('sellerName').value = data.seller.name || '';
+        document.getElementById('sellerEmail').value = data.seller.email || '';
+        document.getElementById('sellerPhone').value = data.seller.phone || '';
+    }
+    
+    // Deal terms
+    if (data.dealTerms) {
+        document.getElementById('category').value = data.dealTerms.category || 'DSCR Residential';
+        document.getElementById('purchasePrice').value = data.dealTerms.purchasePrice ?? '';
+        document.getElementById('askingPrice').value = data.dealTerms.askingPrice ?? '';
+        document.getElementById('existingDebt').value = data.dealTerms.existingDebt ?? '0';
+        document.getElementById('rentalRevenue').value = data.dealTerms.rentalRevenue ?? '';
+        document.getElementById('appreciationRate').value = data.dealTerms.appreciationRate ?? '';
+    }
+    
+    // Financing
+    if (data.financing) {
+        document.getElementById('firstLoanLTV').value = data.financing.firstLoanLTV ?? '';
+        document.getElementById('interestOnly').value = data.financing.interestOnly || 'No';
+        document.getElementById('sellerCarryPct').value = data.financing.sellerCarryPct ?? '';
+        document.getElementById('sellerCarryRate').value = data.financing.sellerCarryRate ?? '';
+        document.getElementById('sellerCarryAmort').value = data.financing.sellerCarryAmort ?? '';
+        document.getElementById('interestAtBalloon').value = data.financing.interestAtBalloon || 'No';
+        document.getElementById('yearsToBalloon').value = data.financing.yearsToBalloon ?? '';
+    }
+    
+    // Stabilization
+    if (data.stabilization) {
+        document.getElementById('monthsToStabilize').value = data.stabilization.monthsToStabilize ?? '';
+        document.getElementById('revenueDuringStab').value = data.stabilization.revenueDuringStab ?? '';
+    }
+    
+    // Expenses
+    if (data.expenses) {
+        document.getElementById('propertyTax').value = data.expenses.propertyTax ?? '';
+        document.getElementById('insurance').value = data.expenses.insurance ?? '';
+        document.getElementById('hoa').value = data.expenses.hoa ?? '';
+        document.getElementById('otherExpenses').value = data.expenses.otherExpenses ?? '';
+        document.getElementById('capexPct').value = data.expenses.capexPct ?? '';
+        document.getElementById('managementPct').value = data.expenses.managementPct ?? '';
+        document.getElementById('vacancyPct').value = data.expenses.vacancyPct ?? '';
+    }
+    
+    // Cash to buyer
+    if (data.cashToBuyer) {
+        document.getElementById('agentFee').value = data.cashToBuyer.agentFee ?? '';
+        document.getElementById('rehabCost').value = data.cashToBuyer.rehabCost ?? '';
+        document.getElementById('assignmentFeePct').value = data.cashToBuyer.assignmentFeePct ?? '';
+        document.getElementById('appraisalCost').value = data.cashToBuyer.appraisalCost ?? '';
+        document.getElementById('closingCostPct').value = data.cashToBuyer.closingCostPct ?? '';
+    }
+    
+    // Notes
+    document.getElementById('dealNotes').value = data.notes || '';
+    
+    // Mark all tracked fields as touched since we loaded a deal
+    const trackedFields = ['purchasePrice', 'askingPrice', 'rentalRevenue', 'existingDebt', 'propertyTax', 'insurance', 'hoa', 'otherExpenses', 'agentFee', 'rehabCost', 'appraisalCost'];
+    trackedFields.forEach(fieldId => markFieldTouched(fieldId));
+    
+    // Recalculate
+    calculate();
+}
 
         // PDF Print functionality
         function generatePDF() {
